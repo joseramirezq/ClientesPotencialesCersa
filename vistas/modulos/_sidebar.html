@@ -1,0 +1,181 @@
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+  <ul class="nav">
+    <li class="nav-item nav-profile">
+      <div class="nav-link">
+        <div class="user-wrapper">
+          <div class="profile-image">
+            <img src="<?php echo $_SESSION['foto_srcp'];?>" alt="profile image">
+          </div>
+          <div class="text-wrapper">
+            <p class="profile-name"><?php echo $_SESSION['us_nombre'];?></p>
+            <div>
+              <small class="designation text-muted"><?php echo $_SESSION['us_cargo'];?></small>
+              <span class="status-indicator online"></span>
+            </div>
+          </div>
+        </div>
+        <!--<a href="<?php echo SERVERURL;?>agregarcliente"><button class="btn btn-success btn-block"><i class="fa fa-child"></i> Nuevo Cliente
+          <i class="mdi mdi-plus"></i>
+        </button>
+      </a>-->
+      <a href="<?php echo SERVERURL;?>agregarcurso"><button class="btn btn-success btn-block"><i class="fa fa-book"></i>Nuevo Curso/Dip
+          <i class="mdi mdi-plus"></i>
+        </button>
+      </a> 
+      </div>
+    </li>
+    <!--posible menu-->
+
+     <!--amdinistracion de usuario-->
+     <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#menu-cliente" aria-expanded="false" aria-controls="ui-basic">
+          <i class="menu-icon fa fa-child"></i>
+          <span class="menu-title">Clientes</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="menu-cliente">
+          <ul class="nav flex-column sub-menu">
+           <!-- <li class="nav-item">
+              <a class="nav-link" href="<?php echo SERVERURL;?>agregarcliente"><i class="menu-icon fa fa-plus-circle"></i> Agregar</a>
+            </li>-->
+            <li class="nav-item">
+              <a class="nav-link" href="<?php echo SERVERURL;?>listacliente"><i class="menu-icon fa fa-list"></i>Lista</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+    <!--amdinistracion de cursos-->
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="collapse" href="#menu-curso" aria-expanded="false" aria-controls="ui-basic">
+          
+          <i class="menu-icon  fa fa-desktop"></i>
+          <span class="menu-title">Cursos / Diplomados</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div class="collapse" id="menu-curso">
+          <ul class="nav flex-column sub-menu">
+            <li class="nav-item">
+              <a class="nav-link" href="<?php echo SERVERURL;?>agregarcurso"><i class="menu-icon fa fa-plus-circle"></i> Agregar</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="<?php echo SERVERURL;?>listacurso"><i class="menu-icon fa fa-list"></i>Lista</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <!--admosntracion de reportes-->
+      <li class="nav-item">
+          <a class="nav-link" data-toggle="collapse" href="#menu-reporte" aria-expanded="false" aria-controls="ui-basic">
+           
+            <i class=" menu-icon fa fa-bar-chart-o"></i>
+            <span class="menu-title">Reportes</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <div class="collapse" id="menu-reporte">
+            <ul class="nav flex-column sub-menu">
+              <li class="nav-item">
+               
+                <a class="nav-link" href="<?php echo SERVERURL;?>estadisticascliente">
+                  <i class="menu-icon fa fa-child"></i>Clientes</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="<?php echo SERVERURL;?>estadisticascurso">
+                  <i class="menu-icon fa fa-book"></i>Cursos /Diplomados</a> 
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="<?php echo SERVERURL;?>estadisticasusuario">
+                  <i class="menu-icon fa fa-users"></i>Usuarios</a> 
+              </li>
+              <li class="nav-item">
+                 
+                  <a class="nav-link" href="<?php echo SERVERURL;?>graficos">
+                    <i class="menu-icon fa fa-signal"></i>Graficos Estadísticos</a>
+                </li>
+            </ul>
+          </div>
+        </li>
+
+         <!--Condfiguraciones-->
+      <li class="nav-item">
+          <a class="nav-link" data-toggle="collapse" href="#menu-config" aria-expanded="false" aria-controls="ui-basic">
+        
+            <i class="menu-icon fa fa-gears"></i>
+            <span class="menu-title">Configuraciones</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <?php 
+          
+          if($_SESSION['privilegio_srcp']==3 || $_SESSION['privilegio_srcp']==2){
+          
+          
+          
+          ?>
+          <div class="collapse" id="menu-config">
+            <ul class="nav flex-column sub-menu">
+              
+              <li class="nav-item">
+                <a class="nav-link" href="<?php echo SERVERURL;?>listausuario" disabled="disabled">
+                  <i class="menu-icon  fa fa-vcard-o"></i> Usuarios</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="<?php echo SERVERURL;?>adestados" disabled="disabled">
+                  <i class="menu-icon  fa fa-cubes"></i>Estados</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="<?php echo SERVERURL;?>adpermisos" disabled="disabled">
+                  <i class="menu-icon  fa fa-key"></i>Permisos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="<?php echo SERVERURL;?>adcategoria" disabled="disabled">
+                  <i class="menu-icon  fa fa-institution"></i>Categorias</a>
+              </li>
+            </ul>
+          </div>
+      
+          <?php  }
+          ?>
+
+          <?php 
+          
+          if($_SESSION['privilegio_srcp']==1){
+          
+          
+          
+          ?>
+          <div class="collapse" id="menu-config">
+            <ul class="nav flex-column sub-menu">
+             
+              <li class="nav-item">
+                <a class="nav-link" href="<?php echo SERVERURL;?>listausuario">
+                  <i class="menu-icon  fa fa-vcard-o"></i> Usuarios</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="<?php echo SERVERURL;?>adestados">
+                  <i class="menu-icon  fa fa-cubes"></i>Estados</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="<?php echo SERVERURL;?>adpermisos">
+                  <i class="menu-icon  fa fa-key"></i>Permisos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="<?php echo SERVERURL;?>adcategoria">
+                  <i class="menu-icon  fa fa-institution"></i>Categorias</a>
+              </li>
+            </ul>
+          </div>
+        
+          <?php  }
+          ?>
+
+          <style type="text/css">
+            a[disabled="disabled"] {
+                pointer-events: none;
+            }
+        </style>
+        </li>
+
+  
+  </ul>
+</nav>
