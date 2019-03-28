@@ -108,3 +108,28 @@
               </div>
             </div>
           </div>
+
+
+          <div class="row">
+
+            <div class="col-lg-12 grid-margin">
+              <div class="card">
+                <div class="card-body">
+                  <h3 class="card-title">Tiempo de atencion a clientes potenciales por Usuario</h3>
+               
+                      <?php
+                            require_once("./controladores/estadisticascursoControlador.php");
+                            //INSTANCIOAMOS LA CLASE//
+                            $insInteres = new estadisticascursoControlador();
+                        echo $insInteres->tabla_control_usuarios();
+                        ?>
+                        
+                     
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+         
+</div>

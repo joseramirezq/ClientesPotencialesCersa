@@ -578,9 +578,37 @@
         public function leer_cliente_controlador(){
             $table="";
             $conexion=mainModel::conectar();
-            $datos=$conexion->query("
-            SELECT * FROM cliente ORDER BY idcliente");
 
+            $datoscli=$conexion->query("
+            SELECT COUNT(*) as totalcli FROM cliente ");
+            $datoscli=$datoscli->fetchAll();
+            foreach($datoscli as $rowscli){
+                $totalcli=$rowscli['totalcli'];
+            }
+
+            $table.='  
+            <h4 class="text-primary"> <i class="fa fa-child text-primary icon-lg"></i> Total de clientes  : '.$totalcli.'</h4>
+            <hr>
+                <div class="table-responsive">
+                <table class="table table-hover" id="bootstrap-data-table"
+            class="table table-striped table-bordered">
+                <thead class="bg bg-primary text-white">
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Correo</th>
+                      
+                        <th>Ciudad</th>
+                         <th>Detalle</th>
+                         <th>Detalle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                ';
+            
+            $datos=$conexion->query("
+            SELECT * FROM cliente ORDER BY fecha_registro DESC");
             $datos=$datos->fetchAll();
             foreach($datos as $rows){
                 $table.='
@@ -588,13 +616,155 @@
                 <td>'.$rows['codigocliente'].'</td>
                 <td>'.$rows['nombres_cli'].'</td>
                 <td>'.$rows['apellidos_cli'].'</td>
-                <td>jlramirezq@unc.edu.pe</td>
-                <td class="text-danger"> 964923450</td>
-                <td>Cajamarca</td>
+                <td>'.$rows['correo_cli'].'</td>
+                
+                <td>'.$rows['departamento_cli'].'</td>
+                <td>'.$rows['fecha_registro'].'</td>
                 <td>
-                    <a href="<?php SERVERURL;?>detallecliente" class="btn btn-inverse-dark ">Ver</a>
+                    <button type="button" class="btn btn-inverse-dark" aria-haspopup="true" aria-expanded="false"
+                        data-toggle="modal" data-target="#'.$rows['codigocliente'].'">
+                        <i class="fa fa-drivers-license-o"></i> Ver
+                    </button>
                 </td>
             </tr>
+
+            <!--DETALLE-->  
+            <div class="modal fade" id="'.$rows['codigocliente'].'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                  <!--Header-->
+                  <div class="modal-header bg-dark">
+                      <h4 class="text-light text-center"> <i class="fa fa-child text-white icon-lg"></i> Cliente: &nbsp;'.$rows['nombres_cli'].'</h4>
+
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true" class="text-white">×</span>
+                      </button>
+                  </div>
+
+                  <!--Body-->
+                  <div class="modal-body">
+                      <div class="card">
+                      <div class="card-body">
+                          <div class="row">
+                          <div class="col-md-6">
+                              <address class="">
+                              <p class="font-weight-bold">
+                              Nombres
+                              </p>
+                              <p class="mb-2">
+                              '.$rows['nombres_cli'].' &nbsp; '.$rows['apellidos_cli'].'
+                              </p>
+                              <p class="font-weight-bold">
+                                  Correo
+                              </p>
+                              <p>
+                              '.$rows['correo_cli'].'
+                              </p>
+                              </address>
+                          </div>
+
+
+                          <div class="col-md-6">
+                              <address class="">
+                              <p class="font-weight-bold">
+                             Teléfono
+                              </p>
+                              <p class="mb-2">
+                              '.$rows['telefono_cli'].'
+                              </p>
+                              <p class="font-weight-bold">
+                                  Profesion
+                              </p>
+                              <p>
+                              '.$rows['profesion_cli'].'
+                              </p>
+                              </address>
+                          </div>
+
+                          <div class="col-md-6">
+                                <address class="">
+                                <p class="font-weight-bold">
+                                Grado
+                                </p>
+                                <p class="mb-2">
+                                '.$rows['grado_cli'].'
+                                </p>
+                                <p class="font-weight-bold">
+                                   Departamento
+                                </p>
+                                <p>
+                                '.$rows['departamento_cli'].'
+                                </p>
+                                </address>
+                            </div> 
+                            
+                            <div class="col-md-6">
+                                <address class="">
+                                <p class="font-weight-bold">
+                                Distrito
+                                </p>
+                                <p class="mb-2">
+                                '.$rows['distrito_cli'].'
+                                </p>
+                                <p class="font-weight-bold">
+                                Direccion
+                                </p>
+                                <p>
+                                '.$rows['direccion_cli'].'
+                                </p>
+                                </address>
+                            </div>   
+
+
+
+                         
+
+
+                          </div>
+                      </div>
+                      </div>
+                  </div>
+                  </div>
+              </div>
+           </div>
+           <!--FINDETALLE--> 
+
+                ';
+            }
+            return $table;
+         }
+
+         public function estados_cliente_controlador(){
+            $table="";
+
+            $conexion=mainModel::conectar();
+
+            //selecionados todos los estados
+            $datos=$conexion->query("
+            SELECT * FROM estado ");
+            $datos=$datos->fetchAll();
+            foreach($datos as $rows){
+                $idestado=$rows['idestado'];
+
+                //contamos todos los intereses en el id que me pasan
+                $datosinteres=$conexion->query("
+                SELECT COUNT(*) as intereses FROM interes WHERE idestado=$idestado ");
+                $datosinteres=$datosinteres->fetchAll();
+                foreach($datosinteres as $datosinteres){
+                    $numerointeresados=$datosinteres['intereses'];
+
+                }
+                $table.='
+                <div class="col-md-2" badge style="background-color:'.$rows['color'].'" >
+                    <div class="wrapper d-flex justify-content-between">
+                        <div class="side-left">
+                        <p class="mb-2">'.$rows['nombre_estado'].'</p>
+                        <p class="display-3 mb-4 font-weight-light">'.$numerointeresados.'</p>
+                        </div>
+        
+                    </div>
+                </div>
                 ';
             }
             return $table;

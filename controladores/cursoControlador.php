@@ -46,7 +46,7 @@ class cursoControlador extends cursoModelo
         ];
         $guardarCurso = cursoModelo::agregar_curso_modelo($datosCurso);
         if($guardarCurso->rowCount()>=1){
-            $direccion=SERVERURL."home";
+            $direccion=SERVERURL."listacurso";
            header('location:'.$direccion);
 
           
@@ -159,6 +159,134 @@ class cursoControlador extends cursoModelo
 
 
 
+    public function mostrar_notificaciones_controlador(){
+        $notifiacion="";
+        $clientesnuevos=0;
+        $des=1000000;
+        $fecha=date("Y-m-d");
+        
+
+
+        $conexion = mainModel::conectar();
+
+
+        $datosnuevos = $conexion->query("
+        SELECT idespecialidad FROM interes WHERE idestado=1");
+        $datosnuevos = $datosnuevos->fetchAll();
+        foreach ($datosnuevos as $rowsnuevos) {
+            $nuevos=$rowsnuevos['idespecialidad'];
+
+            $datosEspecia = $conexion->query("
+            SELECT * FROM especialidad WHERE idespecialidad='$nuevos'");
+            $datosEspecia = $datosEspecia->fetchAll();
+            foreach ($datosEspecia as $rowsespe) {
+                $especialidads=$rowsespe['nombre_es'];
+                
+                $datosfinal = $conexion->query("
+                SELECT COUNT(*) AS nuevosfinal FROM interes 
+                WHERE idespecialidad='$nuevos' and idestado=1");
+                $datosfinal = $datosfinal->fetchAll();
+                foreach ($datosfinal as $rowsfinal) {
+                    $nuevosfinal=$rowsfinal['nuevosfinal'];
+                }
+
+            }
+                    if($nuevos==$des){
+                       
+                       
+                    }else{
+                        $des=$nuevos;
+                        $notifiacion.='
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item preview-item">
+                          <div class="preview-thumbnail">
+                            <div class="preview-icon bg-success">
+                            '.$nuevosfinal.'
+                            </div>
+                          </div>
+                          <div class="preview-item-content">
+                            <h6 class="preview-subject font-weight-medium text-dark">'.$especialidads.'</h6>
+                            <p class="font-weight-light small-text">
+                              Clientes nuevos 
+                            </p>
+                          </div>
+                        </a>';
+                  
+                  
+            
+           
+
+        }
+    }
+
+
+      //contado la cantidad de nuevos
+        $datosSesion2 = $conexion->query("
+        SELECT COUNT(*) AS nuevos FROM interes WHERE idestado=1");
+
+        $datosSesion2 = $datosSesion2->fetchAll();
+        foreach ($datosSesion2 as $rowssesion2) {
+            $clientesnuevos=$rowssesion2['nuevos']; }
+
+
+        //cursos con las notificaciones que esta programadas para hoy
+        $datosSesion = $conexion->query("
+        SELECT * FROM interes WHERE DATE_FORMAT(`fecha_notificacion`,'%Y-%m-%d')=curdate()");
+        $datosSesion = $datosSesion->fetchAll();
+        foreach ($datosSesion as $rowssesione) {
+            $idinteres=$rowssesione['idespecialidad'];
+            $hora=$rowssesione['fecha_notificacion'];
+
+            $datosSesiones = $conexion->query("
+            SELECT * FROM especialidad WHERE idespecialidad='$idinteres'");
+            $datosSesiones = $datosSesiones->fetchAll();
+            foreach ($datosSesiones as $rowssesiones) {
+                $especialidad=$rowssesiones['nombre_es'];
+
+                $notifiacion.='   <div class="dropdown-divider"></div>
+                <a class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-warning">
+                   1
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <h6 class="preview-subject font-weight-medium text-dark"> '.$especialidad.' </h6>
+                    <p class="font-weight-light small-text">
+                     llamar '. $hora.' 
+                    </p>
+                  </div>
+                </a>';
+            
+            }
+        
+        }
+
+        $notifiacion.='
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item preview-item">
+          <div class="preview-thumbnail">
+            <div class="preview-icon bg-danger">
+            '.$clientesnuevos.'
+            </div>
+          </div>
+          <div class="preview-item-content">
+            <h6 class="preview-subject font-weight-medium text-dark">Clientes Nuevos</h6>
+            <p class="font-weight-light small-text">
+              Todos los cursos
+            </p>
+          </div>
+        </a>
+
+
+     
+
+
+        
+        ';
+        return $notifiacion;
+
+    }
     //mostrar cursos en el inicio
     public function mostrar_cursos_controlador()
     {
@@ -382,6 +510,8 @@ class cursoControlador extends cursoModelo
             }}
         return $tarjeta;
     }
+
+
 
     /*public function iniciar_sesion_curso(){
         session_start(['name'=>'SRCP']);

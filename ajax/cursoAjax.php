@@ -27,7 +27,7 @@ if(isset($_POST['cerrarcurso'])){
   
 }
 
-else if(isset($_POST['nombre'])){
+else if(isset($_POST['agregarcursobd'])){
      require_once("../controladores/cursoControlador.php");
      
      //INSTANCIOAMOS LA CLASE

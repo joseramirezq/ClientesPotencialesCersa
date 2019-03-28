@@ -76,9 +76,7 @@
     <?php endif;?>
 
     <?php include('vistas/modulos/script.php'); ?>    
-    <script>
-		$.material.init();
-	</script>    
+  
  
 </body>
 </html>

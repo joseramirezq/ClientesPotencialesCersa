@@ -4,6 +4,8 @@
              <div class="card-body">
                <h4 class="card-title">Cantidad de clientes nuevos por mes</h4>
                <canvas id="barChart" style="height:230px"></canvas>
+      
+      
              </div>
            </div>
          </div>

@@ -1,9 +1,9 @@
 <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
-        <a class="navbar-brand brand-logo" href="index.html">
+        <a class="navbar-brand brand-logo" href="<?php SERVERURL;?>home">
           <img src="vistas/images/newlogo.png" alt="logo" class="img-fluid" />
         </a>
-        <a class="navbar-brand brand-logo-mini" href="index.php">
+        <a class="navbar-brand brand-logo-mini" href="<?php SERVERURL;?>home">
           <img src="vistas/images/favicon.ico" alt="logo" class="img-fluid" />
         </a>
       </div>
@@ -25,12 +25,12 @@
           </li>
         </ul>
         <ul class="navbar-nav navbar-nav-right">
-          <li class="nav-item dropdown">
+         <!-- <li class="nav-item dropdown">
             <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
               <i class="mdi mdi-file-document-box"></i>
-              <span class="count">7</span>
+              <span class="count">0</span>
             </a>
-           <!-- DROPDOWN DE LAS NOTIFICACIONES DE MENSAJES 
+            DROPDOWN DE LAS NOTIFICACIONES DE MENSAJES 
              <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
               <div class="dropdown-item">
                 <p class="mb-0 font-weight-normal float-left">Noticicaciones de Emails ejemplo 7
@@ -82,64 +82,32 @@
             </div>
         
         
-            -->
-         </li>
+            
+       </li>-->
 
          <!--NOTIFICACIONES CAMPANITA-->
           <li class="nav-item dropdown">
             <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
               <i class="mdi mdi-bell"></i>
-              <span class="count">4</span>
+              <span class="count"></span>
             </a>
 
              <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
               <a class="dropdown-item">
-                <p class="mb-0 font-weight-normal float-left">Usted tiene 3 notificaciones nuevas
+                <p class="mb-0 font-weight-normal float-left">Notificaciones 
                 </p>
                 <span class="badge badge-pill badge-warning float-right">Llamar a los clientes</span>
+                <span class="badge badge-pill badge-success float-right">Nuevos</span>
               </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <div class="preview-icon bg-success">
-                    5
-                  </div>
-                </div>
-                <div class="preview-item-content">
-                  <h6 class="preview-subject font-weight-medium text-dark">ANÁLISIS Y DISEÑO DE ALBAÑILERÍA </h6>
-                  <p class="font-weight-light small-text">
-                    Hoy
-                  </p>
-                </div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <div class="preview-icon bg-warning">
-                   12
-                  </div>
-                </div>
-                <div class="preview-item-content">
-                  <h6 class="preview-subject font-weight-medium text-dark">GESTIÓN DE LOS RECURSOS HUMANOS</h6>
-                  <p class="font-weight-light small-text">
-                    Hace 1 dias
-                  </p>
-                </div>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <div class="preview-icon bg-danger">
-                    8
-                  </div>
-                </div>
-                <div class="preview-item-content">
-                  <h6 class="preview-subject font-weight-medium text-dark">DISEÑO DE PRESAS</h6>
-                  <p class="font-weight-light small-text">
-                    Hace 3 dias
-                  </p>
-                </div>
-              </a>
+                 <?php
+                require_once("./controladores/cursoControlador.php");
+                 $insEspecialidad = new cursoControlador();
+               echo $insEspecialidad->mostrar_notificaciones_controlador();
+
+              ?>
+            
+            
+             
             </div>
           </li>
 
@@ -154,13 +122,13 @@
             <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
             <!--nombre del usuario que ha iniciado sesion-->  
             <span class="profile-text"><?php echo  $_SESSION['us_nombre'] ;?></span>
-              <img class="img-xs rounded-circle" src="<?php echo $_SESSION['foto_srcp'];?>" alt="Profile image">
+              <img class="img-xs rounded-circle" src="<?php echo $_SESSION['foto_srcp'];?>" alt="Foto Perfil">
             </a>
         
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
           
               <a href="<?php SERVERURL;?>"  class="dropdown-item mt-2">
-                Configuracion
+                Perfil
               </a>
           
               <a   href="<?php echo  $instanciaLogin->encryption($_SESSION['token_srcp']) ;?>" class="dropdown-item  btn-exit-system">
