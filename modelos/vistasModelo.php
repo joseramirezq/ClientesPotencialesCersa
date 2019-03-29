@@ -8,6 +8,7 @@ class vistasModelo
         //lista blanca , menos el login
         $listaBlanca = [
             "home",
+            "homelista",
             "usuario",
 
             //vistas clientes
@@ -16,6 +17,10 @@ class vistasModelo
             "detallecliente",
             "editarcliente",
             "estadisticascliente",
+
+            "clientesmatriculados",
+            "clientesprematriculados"
+            ,
 
             //vistas curso
             "listacurso",

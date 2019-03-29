@@ -3,7 +3,7 @@
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h3 class="text-primary">Cursos / Diplomados
+                <h3 class="text-primary text-center">Cursos / Diplomados
                     <div class="btn-group dropdown float-right">
                         <a href="<?php SERVERURL; ?>agregarcurso"><button type="button" class="btn btn-success  btn-sm">
                                 <i class="fa fa-plus"></i> Agregar nuevo
@@ -31,7 +31,7 @@
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Lista de Cursos/Diplomados</h4>
+                <h4 class="card-title"><i class="fa fa-graduation-cap text-primary icon-lg"></i> Lista de Cursos/Diplomados</h4>
 
                 <!--fin fformulario de bisqueda-->
                 <hr>
@@ -39,7 +39,7 @@
                 <div class="table-responsive">
                     <div class="table-responsive">
                         <table class="table table-hover" id="bootstrap-data-table" class="table table-striped table-bordered">
-                            <thead>
+                            <thead class="bg bg-primary text-white">
                                 <tr>
                                     <th>Codigo</th>
                                     <th>Categoria</th>

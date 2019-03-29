@@ -61,7 +61,7 @@ class cursoControlador extends cursoModelo
         $table = "";
         $conexion = mainModel::conectar();
         $datos = $conexion->query("
-        SELECT * FROM especialidad WHERE estado_actual=0 ORDER BY fecha_registro");
+        SELECT * FROM especialidad WHERE estado_actual=0 ORDER BY `especialidad`.`fecha_inicio` DESC");
 
         $datos = $datos->fetchAll();
         foreach ($datos as $rows) {
@@ -293,6 +293,7 @@ class cursoControlador extends cursoModelo
         
         $tarjeta = "";
         $conexion = mainModel::conectar();
+        $fecha=date("Y-m-d");
 
         //validacion 
         $codigousuario=$_SESSION['codigo_srcp'];
@@ -309,7 +310,7 @@ class cursoControlador extends cursoModelo
 
         if($con==0){
         $datos = $conexion->query("
-            SELECT * FROM especialidad WHERE estado_actual=0  ORDER BY 	fecha_inicio");
+            SELECT * FROM especialidad WHERE estado_actual=0  AND  fecha_fin > CURDATE() ORDER BY sesion<>'disponible' DESC,	fecha_inicio ");
     
         $datos = $datos->fetchAll();
         foreach ($datos as $rows) {
@@ -323,15 +324,16 @@ class cursoControlador extends cursoModelo
                   <h4 class="text-center">'.$rows['nombre_es'].'</h4>
                   <div class="float-left">
                     <div class="d-flex flex-row align-items-center">
-                        <i class="mdi mdi-compass icon-sm text-danger"></i>
+                        <i class="fa fa-calendar-o icon-sm text-danger"></i>
                           <p class="mb-0 ml-1">
-                          '.$rows['fecha_inicio'].'
+                          FI : '.$rows['fecha_inicio'].'
                           </p>
+                          
                       </div>
                       <div class="d-flex flex-row align-items-center">
-                          <i class="mdi mdi-compass icon-sm text-danger"></i>
+                          <i class="fa fa-money icon-sm text-danger"></i>
                           <p class="mb-0 ml-1">
-                          '.$rows['costo_matricula'].'
+                          S/. '.($rows['costo_matricula']+$rows['costo_certi']).'
                           </p>
                       </div>
                     
@@ -347,7 +349,7 @@ class cursoControlador extends cursoModelo
             $datos2 = $datos2->fetchAll();
             foreach ($datos2 as $rows2) {
                 
-            $tarjeta .= '<p> '.$rows2['total'].'</p>';
+            $tarjeta .= '<p><i class="fa fa-list-ul icon-sm text-success"></i> '.$rows2['total'].'</p>';
 
             }
             $tarjeta .= '
@@ -372,7 +374,7 @@ class cursoControlador extends cursoModelo
                 }
 
                 if($rows['sesion']!=$_SESSION['codigo_srcp'] && $rows['sesion']!="disponible"){
-                    $tarjeta .= '<a href="" class="btn btn-warning"><i class="fa fa-star-o"></i> Ocupado</a>
+                    $tarjeta .= '<a href="" class="btn btn-danger"><i class="fa fa-star-o"></i> Ocupado</a>
                    ';
                  }
 
@@ -398,7 +400,7 @@ class cursoControlador extends cursoModelo
                     $datosUSER = $datosUSER->fetchAll();
                     foreach ($datosUSER as $rowsUSER) {
                      $tarjeta .= ' <p class="text-muted mt-3 mb-0">
-                     <i class="mdi mdi-alert-octagon mr-1" aria-hidden="true"></i> '.$rowsUSER['nombre_us'].'</p>';
+                     <i class="fa fa-user-circle-o mr-1" aria-hidden="true"></i> '.$rowsUSER['nombre_us'].'</p>';
                     }
             $tarjeta .= ' 
               </div>
@@ -473,7 +475,7 @@ class cursoControlador extends cursoModelo
                     }
     
                     if($rows['sesion']!=$_SESSION['codigo_srcp'] && $rows['sesion']!="disponible"){
-                        $tarjeta .= '<a href="" class="btn btn-warning"><i class="fa fa-star-o"></i> Ocupado</a>
+                        $tarjeta .= '<a href="" class="btn btn-danger"><i class="fa fa-star-o"></i> Ocupado</a>
                        ';
                      }
                      
@@ -499,15 +501,188 @@ class cursoControlador extends cursoModelo
                 $datosUSER = $datosUSER->fetchAll();
                 foreach ($datosUSER as $rowsUSER) {
                  $tarjeta .= ' <p class="text-muted mt-3 mb-0">
-                 <i class="mdi mdi-alert-octagon mr-1" aria-hidden="true"></i> Usuario:  '.$rowsUSER['nombre_us'].'</p>';
+                 <i class="fa fa-user-circle-o mr-1" aria-hidden="true"></i> Usuario:  '.$rowsUSER['nombre_us'].'</p>';
                 }
         $tarjeta .= ' 
-                  </div>
-                </div>
-              </div>
+               
+               
+        </div>
+        </div>
+        </div>
     
                     ';
             }}
+        return $tarjeta;
+    }
+
+
+
+
+    public function mostrar_tabla_cursos_controlador()
+    {
+        
+        $tarjeta = "";
+        $conexion = mainModel::conectar();
+        $fecha=date("Y-m-d");
+
+        //validacion 
+        $codigousuario=$_SESSION['codigo_srcp'];
+        $con=0;
+        $datosSesion = $conexion->query("
+        SELECT COUNT(*) AS sesiones FROM especialidad WHERE sesion='$codigousuario'");
+
+        $datosSesion = $datosSesion->fetchAll();
+        foreach ($datosSesion as $rowssesion) {
+           if($rowssesion['sesiones']>=1){
+                $con=1;
+           }
+        }
+
+        if($con==0){
+        $datos = $conexion->query("
+            SELECT * FROM especialidad WHERE estado_actual=0 ORDER BY sesion<>'disponible' DESC,	fecha_inicio ");
+    
+        $datos = $datos->fetchAll();
+        foreach ($datos as $rows) {
+
+            $tarjeta .= '  
+                <tr class="bg bg-inverse-primary">
+                    <td>'.$rows['nombre_es'].'</td>
+                    <td>'.$rows['fecha_inicio'].'</td>
+                    <td>'.($rows['costo_matricula']+$rows['costo_certi']).'</td>
+                                  
+                 ';
+
+  
+
+            $idinteres= $rows['idespecialidad'];
+             $datos2 = $conexion->query("
+            SELECT COUNT(*)  AS total FROM interes WHERE idespecialidad=$idinteres");
+            $datos2 = $datos2->fetchAll();
+            foreach ($datos2 as $rows2) {
+
+                $tarjeta .= '  
+              
+                    <td>'.$rows2['total'].'</td>
+                
+                 
+                 ';
+      
+            }
+       
+
+               if($rows['sesion']==$_SESSION['codigo_srcp']){
+                $tarjeta .= '<td><a href="sesioncurso" class="btn btn-success"><i class="fa fa-star-o"></i> En linea</a></td>
+               ';
+             }
+                if($rows['sesion']=="disponible"){
+                  $tarjeta .= '<td><form action="'.SERVERURL.'ajax/cursoAjax.php" method="POST">
+                    <input type="hidden" name="codigocurso" value="'.$rows['idespecialidad'].'">
+                    <input type="hidden" name="codigousuario" value="'.$_SESSION['codigo_srcp'].'">
+                    <button type="submit" name="ocuparcurso"  class="btn btn-primary"><i class="fa fa-star-o"></i> Disponible </button>
+                   </form></td>  ';
+                }
+
+                if($rows['sesion']!=$_SESSION['codigo_srcp'] && $rows['sesion']!="disponible"){
+                    $tarjeta .= '<td><a href="" class="btn btn-danger"><i class="fa fa-star-o"></i> Ocupado</a></td>
+                   ';
+                 }
+
+                
+            
+            $tarjeta .= '<td><form action="'.SERVERURL.'ajax/cursoAjax.php" method="POST">
+            <input type="hidden" name="codigocursover" value="'.$rows['idespecialidad'].'">
+            <button type="submit" name="verinfocurso"  class="btn btn-dark"><i class="fa fa-eye"></i> Ver </button>
+             </form> </td>
+             
+             <td><i class="fa fa-user-o"></i> 
+            
+                 
+              
+                ';
+                  
+                    $codigouser=$rows['sesion'];
+                    $datosUSER = $conexion->query("
+                        SELECT nombre_us FROM usuario WHERE codigousuario='$codigouser'");
+                
+                    $datosUSER = $datosUSER->fetchAll();
+                    foreach ($datosUSER as $rowsUSER) {
+                     
+                            $tarjeta .= '
+                            '.$rowsUSER['nombre_us'].'';
+
+                    }
+
+                    $tarjeta .= '</td></tr>';
+        
+        }}
+
+        if($con==1){
+            $datos = $conexion->query("
+                SELECT * FROM especialidad WHERE sesion!='disponible'  ORDER BY 	fecha_inicio");
+        
+            $datos = $datos->fetchAll();
+            foreach ($datos as $rows) {
+    
+    
+                $tarjeta .= '  
+                <tr>
+                    <td>'.$rows['nombre_es'].'</td>
+                    <td>'.$rows['fecha_inicio'].'</td>
+                    <td>'.($rows['costo_matricula']+$rows['costo_certi']).'</td>
+                                  
+                 ';
+
+    
+                $idinteres= $rows['idespecialidad'];
+                 $datos2 = $conexion->query("
+                SELECT COUNT(*)  AS total FROM interes WHERE idespecialidad=$idinteres");
+                $datos2 = $datos2->fetchAll();
+                foreach ($datos2 as $rows2) {
+                    
+                $tarjeta .= '<td> '.$rows2['total'].'</td>';
+    
+                }
+                  
+                   if($rows['sesion']==$_SESSION['codigo_srcp']){
+                    $tarjeta .= '<td> <a href="sesioncurso" class="btn btn-success"><i class="fa fa-star-o"></i> En linea</a></td> 
+                   ';
+                 }
+                    if($rows['sesion']=="disponible"){
+                      $tarjeta .= '<td><form action="'.SERVERURL.'ajax/cursoAjax.php" method="POST">
+                        <input type="hidden" name="codigocurso" value="'.$rows['idespecialidad'].'">
+                        <input type="hidden" name="codigousuario" value="'.$_SESSION['codigo_srcp'].'">
+                        <button type="submit" name="ocuparcurso"  class="btn btn-primary"><i class="fa fa-star-o"></i> Disponible </button>
+                       </form></td>   ';
+                    }
+    
+                    if($rows['sesion']!=$_SESSION['codigo_srcp'] && $rows['sesion']!="disponible"){
+                        $tarjeta .= '<td><a href="" class="btn btn-danger"><i class="fa fa-star-o"></i> Ocupado</a></td>
+                       ';
+                     }
+                     
+
+                     $tarjeta .= '<td><form action="'.SERVERURL.'ajax/cursoAjax.php" method="POST">
+            <input type="hidden" name="codigocursover" value="'.$rows['idespecialidad'].'">
+            <button type="submit" name="verinfocurso"  class="btn btn-dark"><i class="fa fa-eye"></i> Ver </button>
+             </form></td>  
+                    
+                   
+                  
+                    
+                ';
+                  
+                $codigouser=$rows['sesion'];
+                $datosUSER = $conexion->query("
+                    SELECT nombre_us FROM usuario WHERE codigousuario='$codigouser'");
+            
+                $datosUSER = $datosUSER->fetchAll();
+                foreach ($datosUSER as $rowsUSER) {
+                 $tarjeta .= '<td>  Usuario:  '.$rowsUSER['nombre_us'].'</td></tr>';
+                }
+     
+            }}
+            
         return $tarjeta;
     }
 

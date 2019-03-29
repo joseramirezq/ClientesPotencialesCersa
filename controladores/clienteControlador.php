@@ -574,7 +574,194 @@
 
             //insertar datos para el control usuario
 
-        }      //mostrar tabla estados
+        }    
+        
+        
+        public function leer_cliente_prematriculado_controlador(){
+            $table="";
+            $conexion=mainModel::conectar();
+
+            $datoscli=$conexion->query("
+            SELECT COUNT(*) as totalcli FROM interes WHERE idestado=5");
+            $datoscli=$datoscli->fetchAll();
+            foreach($datoscli as $rowscli){
+                $totalcli=$rowscli['totalcli'];
+            }
+
+            $table.='  
+            <h4 class="text-primary"> <i class="fa fa-child text-primary icon-lg"></i> Total de clientes  : '.$totalcli.'</h4>
+            <hr>
+                <div class="table-responsive">
+                <table class="table table-hover" id="bootstrap-data-table"
+            class="table table-striped table-bordered">
+                <thead class="bg bg-primary text-white">
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Curso</th>
+                        <th>Nombre</th>
+                     
+                        <th>Correo</th>
+                      
+                        <th>Telefono</th>
+                         <thFecha registro</th>
+                         <th>Detalle</th>
+                         <th>Matricular</th>
+                    </tr>
+                </thead>
+                <tbody>
+                ';
+            $datosclinte=$conexion->query("
+            SELECT codigocliente, idespecialidad FROM interes WHERE idestado=5");
+            $datosclinte=$datosclinte->fetchAll();
+            foreach($datosclinte as $rowscliente){
+                    $idcliente=$rowscliente['codigocliente'];
+                    $codigocurso=$rowscliente['idespecialidad'];
+            
+            $datoscurso=$conexion->query("
+            SELECT nombre_es FROM especialidad WHERE idespecialidad=$codigocurso");
+            $datoscurso=$datoscurso->fetchAll();
+            foreach($datoscurso as $rowscurso){
+                    $nombrecurso=$rowscurso['nombre_es'];
+                  
+                }
+
+            $datos=$conexion->query("
+            SELECT * FROM cliente WHERE codigocliente='$idcliente'");
+            $datos=$datos->fetchAll();
+            foreach($datos as $rows){
+                $table.='
+                <tr>
+                <td>'.$rows['codigocliente'].'</td>
+                <td>'.$nombrecurso.'</td>
+                <td>'.$rows['nombres_cli'].' '.$rows['apellidos_cli'].'</td>
+                
+                <td>'.$rows['correo_cli'].'</td>
+                
+                <td>'.$rows['telefono_cli'].'</td>
+                
+                <td>
+                    <button type="button" class="btn btn-inverse-dark" aria-haspopup="true" aria-expanded="false"
+                        data-toggle="modal" data-target="#'.$rows['codigocliente'].'">
+                        <i class="fa fa-drivers-license-o"></i> Ver
+                    </button>
+                </td>
+
+                <td>
+                    <button type="button" class="btn btn-danger" aria-haspopup="true" aria-expanded="false"
+                        data-toggle="modal" data-target="#'.$rows['codigocliente'].'">
+                        <i class="fa fa-drivers-license-o"></i> Matricular
+                    </button>
+                </td>
+            </tr>
+
+            <!--DETALLE-->  
+            <div class="modal fade" id="'.$rows['codigocliente'].'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                  <!--Header-->
+                  <div class="modal-header bg-dark">
+                      <h4 class="text-light text-center"> <i class="fa fa-child text-white icon-lg"></i> Cliente: &nbsp;'.$rows['nombres_cli'].'</h4>
+
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true" class="text-white">×</span>
+                      </button>
+                  </div>
+
+                  <!--Body-->
+                  <div class="modal-body">
+                      <div class="card">
+                      <div class="card-body">
+                          <div class="row">
+                          <div class="col-md-6">
+                              <address class="">
+                              <p class="font-weight-bold">
+                              Nombres
+                              </p>
+                              <p class="mb-2">
+                              '.$rows['nombres_cli'].' &nbsp; '.$rows['apellidos_cli'].'
+                              </p>
+                              <p class="font-weight-bold">
+                                  Correo
+                              </p>
+                              <p>
+                              '.$rows['correo_cli'].'
+                              </p>
+                              </address>
+                          </div>
+
+
+                          <div class="col-md-6">
+                              <address class="">
+                              <p class="font-weight-bold">
+                             Teléfono
+                              </p>
+                              <p class="mb-2">
+                              '.$rows['telefono_cli'].'
+                              </p>
+                              <p class="font-weight-bold">
+                                  Profesion
+                              </p>
+                              <p>
+                              '.$rows['profesion_cli'].'
+                              </p>
+                              </address>
+                          </div>
+
+                          <div class="col-md-6">
+                                <address class="">
+                                <p class="font-weight-bold">
+                                Grado
+                                </p>
+                                <p class="mb-2">
+                                '.$rows['grado_cli'].'
+                                </p>
+                                <p class="font-weight-bold">
+                                   Departamento
+                                </p>
+                                <p>
+                                '.$rows['departamento_cli'].'
+                                </p>
+                                </address>
+                            </div> 
+                            
+                            <div class="col-md-6">
+                                <address class="">
+                                <p class="font-weight-bold">
+                                Distrito
+                                </p>
+                                <p class="mb-2">
+                                '.$rows['distrito_cli'].'
+                                </p>
+                                <p class="font-weight-bold">
+                                Direccion
+                                </p>
+                                <p>
+                                '.$rows['direccion_cli'].'
+                                </p>
+                                </address>
+                            </div>   
+
+
+
+                         
+
+
+                          </div>
+                      </div>
+                      </div>
+                  </div>
+                  </div>
+              </div>
+           </div>
+           <!--FINDETALLE--> 
+
+                ';
+            }
+            }
+            return $table;
+         }
+         //mostrar tabla estados
         public function leer_cliente_controlador(){
             $table="";
             $conexion=mainModel::conectar();
