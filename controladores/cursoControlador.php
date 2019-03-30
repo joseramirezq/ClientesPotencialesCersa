@@ -1021,7 +1021,7 @@ class cursoControlador extends cursoModelo
                                 //$estado=$rows['idestado'];
                                 $to=0;
                                 $datosEstado = $conexion->query("
-                                SELECT * FROM estado");
+                                SELECT * FROM estado WHERE estado_actual=1");
                                 $datosEstado = $datosEstado->fetchAll();
                                 foreach ($datosEstado as $rowsEstado) {
 

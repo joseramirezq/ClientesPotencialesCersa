@@ -297,11 +297,17 @@
         }
 
         public function tabla_control_usuarios(){
+
+          date_default_timezone_set('Europe/Madrid');
+         setlocale(LC_TIME, 'spanish');
+         
          
           $table="";
           $idusuario=0;
           $porcentaje=0;
           $fecha=date("Y-m-d");
+          $fechaactual=strftime(" %d de %B de %Y ");
+          
 
           $conexion=mainModel::conectar();
           //contador de segundos en total
@@ -309,6 +315,129 @@
           $datostotal = $conexion->query("
           SELECT TIMESTAMPDIFF(SECOND, `fecha_inicio`,`fecha_fin`) as segundos
           FROM `controlusuario` WHERE fecha='$fecha'");
+          $datostotal = $datostotal->fetchAll();
+          foreach ($datostotal as $rowstotal) {
+        
+            $contadortotal=$contadortotal+$rowstotal['segundos'];
+          }
+
+         
+            $hours=floor($contadortotal / 3600);
+            $minutos= floor(($contadortotal % 3600)/60);
+            $segundos=(($contadortotal % 3600)%60);
+          
+
+          $table.=' 
+          <h4 class="text-primary text-center">'. $fechaactual.'</h4>
+          <h3><i class="fa fa-clock-o text-danger icon-lg"></i> '.$hours.' h '.$minutos.' m '.$segundos.' s </h3>
+          <div class="table-responsive">
+          <table class="table table-hover dataTable no-footer" id="bootstrap-data-table" role="grid" aria-describedby="bootstrap-data-table_info">
+              <thead class="table-danger">
+             
+                <tr>
+                  <th>
+                   Codigo Usuario
+                  </th>
+                  <th>
+                    Nombre Usuario
+                  </th>
+                  <th>
+                    Interaciones
+                  </th>
+                  <th>
+                   Tiempo
+                  </th>
+                  <th>
+                    Porcentaje
+                  </th>
+
+                  
+                 
+                </tr>
+              </thead>
+              <tbody>
+              ';
+          
+          //mostrar todos los usuarios activos
+            
+            $datosusuario = $conexion->query("
+            SELECT * FROM usuario WHERE estado_us=1");
+            $datosusuario = $datosusuario->fetchAll();
+            foreach ($datosusuario as $rowsusuario) {
+              $idusuario=$rowsusuario['idusuario'];
+
+
+              //funcion contar segundos por cada usuario
+              $contadorsegundo=0;
+              $datoscontrol = $conexion->query("
+              SELECT TIMESTAMPDIFF(SECOND, `fecha_inicio`,`fecha_fin`) as segundos
+              FROM `controlusuario` WHERE codigousuario='$idusuario' AND 	fecha='$fecha'");
+              $datoscontrol = $datoscontrol->fetchAll();
+              foreach ($datoscontrol as $rowscontrol) {
+            
+                $contadorsegundo=$contadorsegundo+$rowscontrol['segundos'];
+              }
+
+              $hours2=floor($contadorsegundo / 3600);
+              $minutos2= floor(($contadorsegundo % 3600)/60);
+              $segundos2=(($contadorsegundo % 3600)%60);
+              if($contadortotal>0){
+              $porcentaje= ($contadorsegundo*100)/$contadortotal;}
+           
+            
+            $table.='
+           
+            <tr>
+                <td class="font-weight-medium">
+                  '.$rowsusuario['codigousuario'].'
+                </td>
+                <td class="font-weight-medium">
+                '.$rowsusuario['nombre_us'].'
+                </td>
+
+                <td class="font-weight-medium">
+                '.$rowsusuario['nombre_us'].'
+                </td>
+                
+                <td>
+                '.$hours2.' h '.$minutos2.' m '.$segundos2.' s
+                </td>
+                <td>
+                '.round($porcentaje,2).'%
+                </td>
+
+                
+
+                
+
+          </tr> 
+          ';
+         }
+
+            
+                return $table;
+
+        }
+
+        public function tabla_semana_control_usuarios(){
+
+          date_default_timezone_set('Europe/Madrid');
+          setlocale(LC_TIME, 'spanish');
+
+         
+         
+          $table="";
+          $idusuario=0;
+          $porcentaje=0;
+          $fecha=date("Y-m-d");
+          $SemanaPasada = date('Y-m-d', strtotime('-1 week')) ; // resta 1 semana
+
+          $conexion=mainModel::conectar();
+          //contador de segundos en total
+          $contadortotal=0;
+          $datostotal = $conexion->query("
+          SELECT TIMESTAMPDIFF(SECOND, `fecha_inicio`,`fecha_fin`) as segundos
+          FROM `controlusuario` WHERE fecha BETWEEN '$SemanaPasada' AND '$fecha'");
           $datostotal = $datostotal->fetchAll();
           foreach ($datostotal as $rowstotal) {
         
@@ -365,7 +494,7 @@
               $contadorsegundo=0;
               $datoscontrol = $conexion->query("
               SELECT TIMESTAMPDIFF(SECOND, `fecha_inicio`,`fecha_fin`) as segundos
-              FROM `controlusuario` WHERE codigousuario='$idusuario' AND 	fecha='$fecha'");
+              FROM `controlusuario` WHERE codigousuario='$idusuario' AND 	fecha BETWEEN '$SemanaPasada' AND '$fecha'");
               $datoscontrol = $datoscontrol->fetchAll();
               foreach ($datoscontrol as $rowscontrol) {
             
@@ -401,7 +530,7 @@
                 </td>
 
                 <td>
-                '.$fecha.'
+                Desde '.$fecha.' hasta'.$SemanaPasada.'
                 </td>
 
                 
@@ -414,6 +543,138 @@
                 return $table;
 
         }
+
+        public function tabla_mes_control_usuarios(){
+
+         // date_default_timezone_set('Europe/Madrid');
+
+         // setlocale(LC_TIME, 'spanish');
+
+
+          $table="";
+          $idusuario=0;
+          $porcentaje=0;
+          $fecha=date("Y-m-d");
+          $elMesPasado = date('Y-m-d', strtotime('-1 month')) ;
+        // $fechaactual=strftime(" %d de %B de %Y %H:%M");
+          
+          
+         // $fecha1=date("Y/m/d");
+         // $elMesPasado1 = date('Y/m/d', strtotime('-1 month')) ;// rest // resta 1 semana
+
+          $conexion=mainModel::conectar();
+          //contador de segundos en total
+          $contadortotal=0;
+          $datostotal = $conexion->query("
+          SELECT TIMESTAMPDIFF(SECOND, `fecha_inicio`,`fecha_fin`) as segundos
+          FROM `controlusuario` WHERE fecha BETWEEN '$elMesPasado' AND '$fecha'");
+          $datostotal = $datostotal->fetchAll();
+          foreach ($datostotal as $rowstotal) {
+        
+            $contadortotal=$contadortotal+$rowstotal['segundos'];
+          }
+
+         
+            $hours=floor($contadortotal / 3600);
+            $minutos= floor(($contadortotal % 3600)/60);
+            $segundos=(($contadortotal % 3600)%60);
+          
+
+          $table.=' <p class="text-danger">Tiempo total de atencion al cliente ('. $fecha.') :</p><h3><i class="fa fa-clock-o text-danger icon-lg"></i> '.$hours.' h '.$minutos.' m '.$segundos.' s </h3>
+          <div class="table-responsive">
+          <table class="table table-hover dataTable no-footer" id="bootstrap-data-tablee" role="grid" aria-describedby="bootstrap-data-table_info">
+              <thead class="table-danger">
+             
+                <tr>
+                  <th>
+                   Codigo Usuario
+                  </th>
+                  <th>
+                    Nombre Usuario
+                  </th>
+                  <th>
+                    Interaciones
+                  </th>
+                  <th>
+                   Tiempo
+                  </th>
+                  <th>
+                    Porcentaje
+                  </th>
+
+                  <th>
+                    Fecha (Hoy)
+                  </th>
+                 
+                </tr>
+              </thead>
+              <tbody>
+              ';
+          
+          //mostrar todos los usuarios activos
+            
+            $datosusuario = $conexion->query("
+            SELECT * FROM usuario WHERE estado_us=1");
+            $datosusuario = $datosusuario->fetchAll();
+            foreach ($datosusuario as $rowsusuario) {
+              $idusuario=$rowsusuario['idusuario'];
+
+
+              //funcion contar segundos por cada usuario
+              $contadorsegundo=0;
+              $datoscontrol = $conexion->query("
+              SELECT TIMESTAMPDIFF(SECOND, `fecha_inicio`,`fecha_fin`) as segundos
+              FROM `controlusuario` WHERE codigousuario='$idusuario' AND 	fecha BETWEEN '$elMesPasado' AND '$fecha'");
+              $datoscontrol = $datoscontrol->fetchAll();
+              foreach ($datoscontrol as $rowscontrol) {
+            
+                $contadorsegundo=$contadorsegundo+$rowscontrol['segundos'];
+              }
+
+              $hours2=floor($contadorsegundo / 3600);
+              $minutos2= floor(($contadorsegundo % 3600)/60);
+              $segundos2=(($contadorsegundo % 3600)%60);
+              if($contadortotal>0){
+              $porcentaje= ($contadorsegundo*100)/$contadortotal;}
+           
+            
+            $table.='
+           
+            <tr>
+                <td class="font-weight-medium">
+                  '.$rowsusuario['codigousuario'].'
+                </td>
+                <td class="font-weight-medium">
+                '.$rowsusuario['nombre_us'].'
+                </td>
+
+                <td class="font-weight-medium">
+                '.$rowsusuario['nombre_us'].'
+                </td>
+                
+                <td>
+                '.$hours2.' h '.$minutos2.' m '.$segundos2.' s
+                </td>
+                <td>
+                '.round($porcentaje,2).'%
+                </td>
+
+                <td>
+                Desde '.$fecha.' hasta '.$elMesPasado.'
+                </td>
+
+                
+
+          </tr> 
+          ';
+         }
+
+            
+                return $table;
+
+        }
+
+
 
         public function tabla_busqueda_control_usuarios(){
 
