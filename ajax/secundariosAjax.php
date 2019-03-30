@@ -48,8 +48,13 @@ if(isset($_POST['insertar_estados'])){
    else if(isset($_POST['elimnar_estados'])){
       echo $instancia->eliminar_estados_controlador();
    }
-   else
-   {
+   else if(isset($_POST['editar_puesto'])){
+    echo $instancia->editar_puesto_controlador();
+   }
+   elseif(isset($_POST['eliminar_puesto'])){
+    echo $instancia->eliminar_puesto_controlador();
+   }
+    else{
     session_start();
     session_destroy();
     echo '<script> window.location.href="'.SERVERURL.'login" </script>';

@@ -270,6 +270,37 @@
             $datosIntre = $datosIntre->fetchAll();
             foreach ($datosIntre as $rowsInte) {
               $codigocliente=$rowsInte['codigocliente'];
+              $idespecialidad=$rowsInte['idespecialidad'];
+              $idusuario=$rowsInte['idusuario'];
+              $idestado=$rowsInte['idestado'];
+    
+
+              //ESPECIALIDAD
+              $datosespecialidad = $conexion->query("
+              SELECT nombre_es FROM especialidad WHERE idespecialidad='$idespecialidad'");
+              $datosespecialidad = $datosespecialidad->fetchAll();
+              foreach ($datosespecialidad as $rowsespe) {
+                $nombrees=$rowsespe['nombre_es'];
+              }
+
+                 //usuario
+                 $datosus= $conexion->query("
+                 SELECT nombre_us FROM usuario WHERE idusuario=$idusuario");
+                 $datosus = $datosus->fetchAll();
+                 foreach ($datosus as $rowsus) {
+                   $nombreus=$rowsus['nombre_us'];
+                 }
+
+
+                 //estado
+                 $datoestado= $conexion->query("
+                 SELECT nombre_estado FROM estado WHERE idestado=$idestado");
+                 $datoestado = $datoestado->fetchAll();
+                 foreach ($datoestado as $rowsestado) {
+                   $nombreestado=$rowsestado['nombre_estado'];
+                 }
+   
+
 
                 $datosCli = $conexion->query("
               SELECT * FROM cliente WHERE codigocliente='$codigocliente'");
@@ -304,15 +335,15 @@
                 </td>
 
                 <td>
-                '.$rowsInte['idespecialidad'].'
+                '.$nombrees.'
                 </td>
 
                 <td>
-                '.$rowsInte['idusuario'].'
+                '.$nombreus.'
                 </td>
 
                 <td>
-                '.$rowsInte['idestado'].'
+                '.$nombreestado.'
                 </td>
 
               </tr>

@@ -36,6 +36,32 @@ class secundariosModelo extends mainModel
         return $sql;
     }
 
+    protected function actualizar_cargo_modelo($datos)
+    {   $sql=self::conectar()->prepare("UPDATE cargo
+      SET puesto=:Nombre, descripcion=:Descripcion
+       WHERE idcargo=:Idcargo");
+    
+        $sql->bindParam(":Nombre", $datos['Nombre']);
+        $sql->bindParam(":Descripcion", $datos['Descripcion']);
+  
+        $sql->bindParam(":Idcargo", $datos['Idcargo']);
+     
+        $sql->execute();
+        return $sql;
+    }
+
+    protected function eliminar_cargo_modelo($datos)
+    {   $sql=self::conectar()->prepare("UPDATE cargo 
+    SET estado_actual=:Estado WHERE idcargo=:Idcargo");
+    
+        $sql->bindParam(":Estado", $datos['Estado']);
+        $sql->bindParam(":Idcargo", $datos['Idcargo']);
+     
+     
+        $sql->execute();
+        return $sql;
+    }
+
     //eliminar estado modelo
     
      protected function eliminar_estados_modelo($datos)

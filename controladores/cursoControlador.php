@@ -45,12 +45,32 @@ class cursoControlador extends cursoModelo
 
         ];
         $guardarCurso = cursoModelo::agregar_curso_modelo($datosCurso);
-        if($guardarCurso->rowCount()>=1){
-            $direccion=SERVERURL."listacurso";
-           header('location:'.$direccion);
+       
+       /* if($guardarCurso->rowCount()>=1){
+            $alerta=[
+                "Alerta"=>"limpiar",
+                "Titulo"=>"Usuario Registrado",
+                "Texto"=>"El usuario se ha registrado con exito en el sistema",
+                "Tipo"=>"success"
+            ];
+        }else{
+            $alerta=[
+                "Alerta"=>"simple",
+                "Titulo"=>"Ocurrio un error inesperado",
+                "Texto"=>"No hemos podido insertar el usuario en el sistema",
+                "Tipo"=>"error"
+            ];
+        }
+       */
+       
+      if($guardarCurso->rowCount()>=1){
+           $direccion=SERVERURL."listacurso";
+          header('location:'.$direccion);
 
           
-        }
+      }
+
+          //  return mainModel::sweet_alert($alerta);
 
     }
 

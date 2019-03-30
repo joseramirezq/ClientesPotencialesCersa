@@ -32,7 +32,7 @@
 
                 <div class="table-responsive">
                     <table class="table table-hover" id="bootstrap-data-table" class="table table-striped table-bordered">
-                        <thead>
+                        <thead class="bg bg-primary text-white">
                             <tr>
                                 <th>Codigo</th>
                                 <th>Usuario</th>
@@ -207,7 +207,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group">
-                            <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Agregar</button>
+                            <button type="submit" name="insertarusuario" class="btn btn-success"><i class="fa fa-check"></i> Agregar</button>
                             <button type="button" class=" btn btn-info" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true" class=""><i class="fa fa-meh-o"></i> Cancel</a></span>
                             </button>

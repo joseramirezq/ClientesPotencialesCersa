@@ -114,6 +114,51 @@
           //  }
               
             }
+
+
+             //ACTUALIZAR
+        public function editar_puesto_controlador(){
+            $idcargo=mainModel::limpiar_cadena($_POST['idcargo']);
+            $nombre=mainModel::limpiar_cadena($_POST['nombre']);
+            $descripcion=mainModel::limpiar_cadena($_POST['descripcion']);
+            
+
+            $datosEstado=[
+                "Nombre"=>$nombre,
+                "Descripcion"=>$descripcion,
+                "Idcargo"=>$idcargo
+              
+            ];
+            $actualizarpuesto=secundariosModelo::actualizar_cargo_modelo($datosEstado);
+           // if($guardarEstado->rowCount()>=1){
+            $direccion=SERVERURL."adpermisos";
+               header('location:'.$direccion);
+   
+              
+          //  }
+              
+            }
+
+            public function eliminar_puesto_controlador(){
+                $idcargo=mainModel::limpiar_cadena($_POST['idcargo']);
+                $estado=0;         
+    
+                $datosEstado=[
+                    "Estado"=>$estado,
+                    "Idcargo"=>$idcargo
+                  
+                ];
+                $elimipuesto=secundariosModelo::eliminar_cargo_modelo($datosEstado);
+               // if($guardarEstado->rowCount()>=1){
+                $direccion=SERVERURL."adpermisos";
+                   header('location:'.$direccion);
+       
+                  
+              //  }
+                  
+                }
+        
+
         
 
 
@@ -125,7 +170,7 @@
             $tableper="";
             $conexion=mainModel::conectar();
             $datos=$conexion->query("
-            SELECT * FROM cargo");
+            SELECT * FROM cargo where estado_actual=1");
 
             $datos=$datos->fetchAll();
             foreach($datos as $rows){
@@ -136,21 +181,117 @@
                             <td>'.$rows['descripcion'].'</td>
 
                             <td>
-                                <button type="button" class="btn btn-warning btn-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#nusereditar">
+                                <button type="button" class="btn btn-warning btn-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#'.$rows['idcargo'].'">
                                     <i class="fa fa-pencil"></i> Editar
                                 </button>
                             </td>
                             <td>
-                                <button type="button" class="btn btn-danger btn-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#nusereliminar">
+                                <button type="button" class="btn btn-danger btn-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#'.$rows['idcargo'].'1">
                                     <i class="fa fa-trash-o"></i> Eliminar
                                 </button>
                             </td>
-                            <td>
-                                <button type="button" class="btn btn-dark btn-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#nuserdetalle">
-                                    <i class="fa fa-drivers-license-o"></i> Ver
-                                </button>
-                            </td>
+                           
                         </tr>
+                ';
+                //EDITAR
+                $tableper.='
+                <div class="modal fade" id="'.$rows['idcargo'].'" tabindex=" -1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <!--Header-->
+                                <div class="modal-header bg-warning text-center">
+                                    <h4 class="text-light text-center">
+                                        <button class="btn btn-icons btn-rounded btn-light"><i class="fa fa-pencil text-warning"></i></button>
+
+                                        Editar </h4>
+
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true" class="text-white">×</span>
+                                    </button>
+                                </div>
+
+                                <!--Body-->
+                                <div class="modal-body">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h1 class="card-title"> Verifique todos los datos ingresados antes de confirmar</h1>
+                                            <hr>
+                                            <form  action="'.SERVERURL.'ajax/secundariosAjax.php" method="POST" class="forms-sample" autocomplete="off">
+                                                <div class="row">
+                                                    <div class="row">
+                                                        <div class="col-md-12 form-group">
+                                                            <label for="exampleInputEmail1">Nombres</label>
+                                                            <input type="hidden" class="form-control" name="idcargo" id="idcargo" value="'.$rows['idcargo'].'" placeholder="Nombre">
+                                                
+                                                            <input type="text" class="form-control" name="nombre" id="nombre" value="'.$rows['puesto'].'" placeholder="Nombre">
+                                                        </div>
+
+                                                        <div class="col-md-12 form-group">
+                                                            <label for="exampleInputPassword1">Descripcion</label>
+                                                            <input type="text" class="form-control" name="descripcion" value="'.$rows['descripcion'].'" id="descripcion" placeholder="Apellidos">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="form-group">
+                                                        <button type="submit"  name="editar_puesto" id="editar_puesto" class="btn btn-warning"><i class="fa fa-check"></i> Actualizar</button>
+                                                    
+                                                        <button type="button" class=" btn btn-info" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true" class=""><i class="fa fa-meh-o"></i> Cancel</a></span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                ';
+
+
+                //ELIMINAR
+                $tableper.='
+                <div class="modal fade" id="'.$rows['idcargo'].'1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <!--Header-->
+                        <div class="modal-header bg-danger text-center">
+                            <h4 class="text-light text-center">
+                                <button class="btn btn-icons btn-rounded btn-light"><i class="fa fa-exclamation text-danger"></i></button>
+
+                                ¿Esta seguro de eliminar el estado</h4>
+
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="text-white">×</span>
+                            </button>
+                        </div>
+
+                        <!--Body-->
+                        <div class="modal-body bg-center">
+                            <div class="row">
+                              <form action="'.SERVERURL.'ajax/secundariosAjax.php" method="POST" class="forms-sample" autocomplete="off">
+                                                         
+                                <div class="col-md-2">
+                                    <input type="hidden" class="form-control" name="idcargo" id="idcargo" value="'.$rows['idcargo'].'" readonly="readonly">
+                                </div>
+                                <div class="col-md-8 form-group">
+                                <button type="submit" name="eliminar_puesto" id="eliminar_puesto" class="btn btn-danger"><i class="fa fa-check"></i>Eliminar</button>
+
+                                <button type="button" class=" btn btn-info" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true" class=""><i class="fa fa-meh-o"></i> Cancel</a></span>
+                                    </button>
+                                </div>
+                                <div class="col-md-2"></div>
+                            </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
                 ';
             }
             return $tableper;
@@ -172,22 +313,41 @@
                             <td>'.$rows['descripcion_cat'].'</td>
 
                             <td>
-                                <button type="button" class="btn btn-warning btn-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#nusereditar">
+                                <button type="button" class="btn btn-warning btn-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#sinpermisos">
                                     <i class="fa fa-pencil"></i> Editar
                                 </button>
                             </td>
                             <td>
-                                <button type="button" class="btn btn-danger btn-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#nusereliminar">
+                                <button type="button" class="btn btn-danger btn-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#sinpermisos">
                                     <i class="fa fa-trash-o"></i> Eliminar
                                 </button>
                             </td>
-                            <td>
-                                <button type="button" class="btn btn-dark btn-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#nuserdetalle">
-                                    <i class="fa fa-drivers-license-o"></i> Ver
-                                </button>
-                            </td>
+                           
                         </tr>
                 ';
+
+                $tablecat.='
+                <div class="modal fade" id="sinpermisos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <!--Header-->
+                        <div class="modal-header bg-danger text-center">
+                            <h4 class="text-light text-center">
+                                <button class="btn btn-icons btn-rounded btn-light"><i class="fa fa-exclamation text-danger"></i></button>
+
+                                Usetd no puede editar ni eliminar esta seccion</h4>
+
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="text-white">×</span>
+                            </button>
+                        </div>
+
+                     
+                    </div>
+                </div>
+            </div>
+
+            ';
             }
             return $tablecat;
          }

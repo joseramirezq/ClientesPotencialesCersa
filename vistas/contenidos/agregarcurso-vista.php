@@ -21,7 +21,7 @@
                 <h4 class="card-title text-primary"> <i class="fa fa-bullhorn text-danger icon-lg"></i> LLene el formulario correctamente </h4>
 
                 <hr>
-                <form data-form="save" action="<?php echo SERVERURL; ?>ajax/cursoAjax.php" method="POST" class="forms-sample " autocomplete="off">
+                <form data-form="save" action="<?php echo SERVERURL; ?>ajax/cursoAjax.php" method="POST" class="forms-sample" autocomplete="off">
 
                     <div class="row">
                         <div class="form-group col-md-4">
@@ -115,9 +115,9 @@
                         </div>
                     </div>
 
-
+                   <!-- <div class="RespuestaAjax"></div>-->
                 </form>
-                <div class="RespuestaAjax"></div>
+               
             </div>
 
 

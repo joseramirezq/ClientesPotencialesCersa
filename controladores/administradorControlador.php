@@ -148,6 +148,72 @@
         }
 
 
+        public function eliminar_administrador_controlador(){
+            $codigo=mainModel::limpiar_cadena($_POST['codigo']);
+            $datosEstado=[
+                "Codigo"=>$codigo,
+                "Estado"=>2
+    
+              
+            ];
+            $eliminaradmin=administradorModelo::eliminar_usuario_modelo($datosEstado);
+           // if($guardarEstado->rowCount()>=1){
+            $direccion=SERVERURL."listausuario";
+               header('location:'.$direccion);
+    
+              
+          //  }
+        }
+
+        public function editar_administrador_controlador()
+        {
+            $codigo=mainModel::limpiar_cadena($_POST['codigo']);
+
+            $cargo=mainModel::limpiar_cadena($_POST['cargo']);
+            $nombre=mainModel::limpiar_cadena($_POST['nombre']);
+            $apellidos=mainModel::limpiar_cadena($_POST['apellidos']);
+            $usuario=mainModel::limpiar_cadena($_POST['usuario']);
+            $pass1=mainModel::limpiar_cadena($_POST['pass1']);
+            $pass2=mainModel::limpiar_cadena($_POST['pass2']);
+            $telefono=mainModel::limpiar_cadena($_POST['telefono']);
+            $correo=mainModel::limpiar_cadena($_POST['correo']);
+            $permiso=mainModel::limpiar_cadena($_POST['permiso']);
+
+            $foto =$_FILES['foto']['name'];
+            $ruta =$_FILES['foto']['tmp_name'];
+            $destino=SERVERURL."vistas/images/usuarios/".$foto;
+            copy($ruta,$destino);
+            
+
+         
+                $dataUsuario=[
+                    "Idcargo"=>$cargo,
+                    "Codigo"=>$codigo, 
+                    "Nombre"=>$nombre,
+                    "Apellidos"=>$apellidos,
+                    "Correo"=>$correo, 
+                    "Telefono"=>$telefono,            
+                    "Usuario"=>$usuario, 
+                    "Pass"=>$pass1, 
+                    "Estado"=>"1", 
+                    "Permiso"=>"$permiso",
+                    "Foto"=>"$destino"
+                    
+                   
+                ];
+                $actualizarUsuario=administradorModelo::actualizar_administrador_modelo($dataUsuario);
+               
+                    $direccion=SERVERURL."listausuario";
+                   header('location:'.$direccion);
+       
+                  
+           
+            
+        }
+
+
+
+
           //mostrar tabla estados
           public function leer_usuarios_controlador(){
             $tableuser="";
@@ -186,7 +252,7 @@
                     </button>
 
                     <button type="button" class="btn btn-danger btn-sm" aria-haspopup="true" aria-expanded="false"
-                        data-toggle="modal" data-target="#nusereliminar">
+                        data-toggle="modal" data-target="#'.$rows['codigousuario'].'">
                         <i class="fa fa-trash-o"></i> Eliminar
                     </button>
                     </td>
@@ -308,6 +374,7 @@
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label for="exampleInputEmail1">Nombres</label>
+                                <input type="hidden" class="form-control" name="codigo" id="codigo" placeholder="Nombre" value="'.$rows['codigousuario'].'" required>
                                 <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre" value="'.$rows['nombre_us'].'" required>
                             </div>
 
@@ -407,7 +474,7 @@
                                         </div>
                                         <div class="row">
                                             <div class="form-group">
-                                                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Agregar</button>
+                                                <button type="submit" name="editarusuario" class="btn btn-warning"><i class="fa fa-check"></i> Actualizar</button>
                                                 <button type="button" class=" btn btn-info" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true" class=""><i class="fa fa-meh-o"></i> Cancel</a></span>
                                                 </button>
@@ -425,6 +492,54 @@
                             </div>
                         </div>
                         </div> 
+
+                        <!--Eliminar-->
+
+                        <div class="modal fade" id="'.$rows['codigousuario'].'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <!--Header-->
+                                    <div class="modal-header bg-danger text-center">
+                                        <h4 class="text-light text-center">
+                                            <button class="btn btn-icons btn-rounded btn-light"><i class="fa fa-exclamation text-danger"></i></button>
+
+                                            ¿Esta seguro de eliminar al usuario : '.$rows['nombre_us'].'</h4>
+
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true" class="text-white">×</span>
+                                        </button>
+                                    </div>
+
+                                    <!--Body-->
+                                    <div class="modal-body bg-center">
+                                        <div class="row">
+                                          <form action="'.SERVERURL.'ajax/administradorAjax.php" method="POST" class="forms-sample" autocomplete="off">
+                                                                     
+                                            <div class="col-md-2">
+                                                <input type="hidden" class="form-control" name="codigo" id="codigo" value="'.$rows['codigousuario'].'" readonly="readonly">
+                                            </div>
+                                            <div class="col-md-8 form-group">
+                                            <button type="submit" name="eliminar_usuario" id="eliminar_usuario" class="btn btn-danger"><i class="fa fa-check"></i>Eliminar</button>
+
+                                            <button type="button" class=" btn btn-info" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true" class=""><i class="fa fa-meh-o"></i> Cancel</a></span>
+                                                </button>
+                                            </div>
+                                            <div class="col-md-2"></div>
+                                        </form>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+
+                        
 
                 ';
             }

@@ -27,7 +27,7 @@
 
                 <div class="table-responsive">
                     <table class="table table-hover" id="bootstrap-data-table" class="table table-striped table-bordered">
-                        <thead>
+                        <thead class="bg bg-primary text-white">
                             <tr>
                                 <th>Codigo</th>
                                 <th>Nombre</th>
@@ -35,7 +35,7 @@
 
                                 <th>Editar</th>
                                 <th>Eliminar</th>
-                                <th>Detalle</th>
+                              
                             </tr>
                         </thead>
                         <tbody>
