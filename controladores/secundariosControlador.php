@@ -291,7 +291,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+                </div>
                 ';
             }
             return $tableper;

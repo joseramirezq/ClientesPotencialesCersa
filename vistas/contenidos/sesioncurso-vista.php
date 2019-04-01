@@ -47,7 +47,6 @@
                                 <th>Fecha Cambio Estado</th>
 
 
-                                <th>Detalle</th>
                             </tr>
                         </thead>
                         <tbody>

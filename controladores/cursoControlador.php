@@ -81,7 +81,7 @@ class cursoControlador extends cursoModelo
         $table = "";
         $conexion = mainModel::conectar();
         $datos = $conexion->query("
-        SELECT * FROM especialidad WHERE estado_actual=0 ORDER BY `especialidad`.`fecha_inicio` DESC");
+        SELECT * FROM especialidad WHERE estado_actual=0  and fecha_fin>curdate() ORDER BY `especialidad`.`fecha_inicio` DESC ");
 
         $datos = $datos->fetchAll();
         foreach ($datos as $rows) {
@@ -95,84 +95,205 @@ class cursoControlador extends cursoModelo
             }
 
 
-            //total de interesados
-            $ides = $rows['idespecialidad'];
-            $datos3 = $conexion->query("
-            SELECT COUNT(*) as total FROM interes WHERE idespecialidad='$ides'");
-
-            foreach ($datos3 as $rows3) {
-                $cat = $rows3['total'];
-            }
-
-            //cantidad de clientes por estados
-            //$ides=$rows['idespecialidad'];
-            $datos4 = $conexion->query("
-             SELECT COUNT(*) as totales FROM interes WHERE idespecialidad='$ides' AND idestado=30");
-
-            foreach ($datos4 as $rows4) {
-                $cant = $rows4['totales'];
-            }
-
             $table .= '
                 <tr>
                             <td>' . $rows['idespecialidad'] . '</td>
                             <td>' . $categoria . '</td>
-                            <td>' . $rows['nombre_es'] . '</td>
-                            <td>' . $cat . '</td>
+                            <td>' . $rows['nombre_es'] . '</td>                  
                             <td>' . $rows['fecha_inicio'] . '</td>
-                            <td class="text-danger">
-                                <div class="btn-group dropdown">
-                                    <button type="button" class="btn btn-inverse-warning btn-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#' . $rows['idespecialidad'] . '">
-                                        Detalle
-                                    </button>
-
-                                </div>
-                            </td>
-
                             <td>
-                                <a href="cursodetalle.php" class="btn btn-inverse-dark ">Ver</a>
+                                <button type="button" class="btn btn-warning btn-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#'.$rows['idespecialidad'].'">
+                                    <i class="fa fa-pencil"></i> Editar
+                                </button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#'.$rows['idespecialidad'].'1">
+                                    <i class="fa fa-trash-o"></i> Eliminar
+                                </button>
                             </td>
                 </tr>
 
-                <!--nodal de la tabla de curos-->
-                <div class="modal fade" id="' . $rows['idespecialidad'] . '" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <!--Header-->
-                            <div class="modal-header bg-dark">
-                                <h3 class="text-light text-center">Detalle de clientes por estado: ' . $rows['nombre_es'] . '</h3>
-            
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true" class="text-white">×</span>
-                                </button>
-                            </div>
-            
-                            <!--Body-->
-                            <div class="modal-body">
-                                <div class="row ">
-                                
-                                    <div class="col-md-3 badge badge-warning">
-                                        <div class="wrapper d-flex justify-content-between">
-                                            <div class="side-left">
-                                                <p class="mb-2">Estado 1</p>
-                                                <p class="display-3 mb-4 font-weight-light">40</p>
-                                            </div>
-            
+              ';
+
+                //EDITAR
+                $table.='
+                <div class="modal fade" id="'.$rows['idespecialidad'].'" tabindex=" -1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <!--Header-->
+                                <div class="modal-header bg-warning text-center">
+                                    <h4 class="text-light text-center">
+                                        <button class="btn btn-icons btn-rounded btn-light"><i class="fa fa-pencil text-warning"></i></button>
+
+                                        Editar </h4>
+
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true" class="text-white">×</span>
+                                    </button>
+                                </div>
+
+                                <!--Body-->
+                                <div class="modal-body">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h1 class="card-title"> Verifique todos los datos ingresados antes de confirmar</h1>
+                                            <hr>
+                                            <form  action="'.SERVERURL.'ajax/cursoAjax.php" method="POST" class="forms-sample" autocomplete="off">
+                                                        <div class="row">
+                                                            <div class="form-group col-md-4">
+                                                                <label for="exampleFormControlSelect1">Tipo</label>
+                                                                <select class="form-control form-control-lg" name="categoria" id="categoria">
+                                                                    <option value="'.$rows['idcategoria'].'">'.$categoria.'</option>
+                                                                    <option value="1">Curso</option>
+                                                                    <option value="2">Diplomado</option>
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="form-group col-md-8">
+                                                                <label>Nombre</label>
+                                    
+                                                                <input type="text" class="form-control form-control-lg" name="nombre" id="nombre" value="'.$rows['nombre_es'].'" placeholder="Nombre del curso o diplomado" required>
+                                                            </div>
+                                    
+                                                        </div>
+                                    
+                                                        <div class="row">
+                                    
+                                                           
+                                    
+                                                            <div class="form-group col-md-12">
+                                                                <label>Descripcion</label>
+                                                                <input type="text" class="form-control form-control-lg" name="descripcion" id="descripcion" value="'.$rows['descripcion_es'].'" placeholder="Corta descripcion del curso" required>
+                                                            </div>
+                                    
+                                                                    
+                                                            <div class="form-group col-md-6">
+                                                                <label>Fecha Inicio</label>
+                                                                <div class="input-group date border-primary form_date col-md-12 input-group-append" >
+                                                                    <input class="form-control" type="date"  name="fechainicio" id="fechainicio"  value="'.$rows['fecha_inicio'].'" required>
+                                                                
+                                                                </div>
+                                    
+                                                            </div>
+                                    
+                                    
+                                    
+                                                            <div class="form-group col-md-6">
+                                                                <label>Fecha Fin</label>
+                                                                <div class="input-group date border-primary form_date col-md-12 input-group-append">
+                                                                    <input class="form-control" type="date" name="fechafin" id="fechafin" value="'.$rows['fecha_fin'].'" required>
+                                                                </div>
+                                    
+                                                            </div>
+                                    
+                                                            <div class="form-group col-md-4">
+                                                                <label>Duracion</label>
+                                                                <input type="text" class="form-control form-control-lg" name="duracion" id="duracion" value="'.$rows['duracion_es'].'" placeholder="Duracion" required>
+                                                            </div>
+                                                            <div class="form-group col-md-4">
+                                                                <label>Horario</label>
+                                                                <input type="text" class="form-control" name="horario" id="horario" value="'.$rows['horario'].'" placeholder="Horario de clases" aria-label="Horario" required>
+                                                            </div>
+                                                            <div class="form-group col-md-4">
+                                                                <label>Costo Matricula</label>
+                                                                <input type="number" class="form-control" name="costomatricula" id="costomatricula" value="'.$rows['costo_matricula'].'" placeholder="Costo matricula" aria-label="Costo Matricula" required>
+                                                            </div>
+                                                            <div class="form-group col-md-4">
+                                                                <label>Costo Certificado</label>
+                                                                <input type="number" class="form-control" name="costocertificado" id="costocertificado" value="'.$rows['costo_certi'].'" placeholder="Costo certificado" aria-label="Costo Certificado" required>
+                                                            </div>
+                                                            <div class="form-group col-md-4">
+                                                                <label>Costo Alternativo</label>
+                                                                <input type="number" class="form-control" name="costoalternativo" id="costoalternativo" value="'.$rows['costo_alternativo'].'" placeholder="Costo alternativo" aria-label="Costo alternativo" required>
+                                                            </div>
+                                                            <div class="form-group col-md-4">
+                                                                <label>Horas de certificación</label>
+                                                                <input type="text" class="form-control form-control-lg" name="horascertificado" id="horascertificado" value="'.$rows['horas_certificado'].'" placeholder="Horas de certificacion" aria-label="Horas de certificacion" required>
+                                                            </div>
+                                                            <div class="form-group col-md-4">
+                                                                <label for="exampleFormControlSelect1">Modalidad</label>
+                                                                <select class="form-control form-control-lg" name="modalidad" id="modalidad" required>
+                                                                    <option value="'.$rows['modalidad'].'">Virtual en Vivo</option>
+                                                                    <option value="1">Virtual en Vivo</option>
+                                                                    <option value="2">Virtual /Solo accesos </option>
+                                                                    <option value="3">Presencial </option>
+                                    
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group col-md-8">
+                                                                <label>Docente</label>
+                                                                <input type="text" class="form-control" name="docente" id="docente" value="'.$rows['docente'].'" placeholder="Nombre del docente" aria-label="Nombre del Docente" required>
+                                                            </div>
+                                    
+                                                        </div>
+                                    
+                                    
+                                                        <div class="row">
+
+                                                      
+                                                            <div class="form-group">
+                                                                <button type="submit" name="actualizarcurso" class="btn btn-warning"><i class="fa fa-check"></i> Actualizar</button>
+                                                                
+                                                                <button type="button" class="btn btn-info" data-dismiss="modal" >
+                                                                    <i class="fa fa-meh-o"></i> Cancel
+                                                                </button>
+
+                                                            
+                                    
+                                                            </div>
+                                                        </div>
+                                            </form>
                                         </div>
                                     </div>
-            
-            
-                                    
                                 </div>
-            
-            
-            
                             </div>
                         </div>
                     </div>
-                </div> 
 
-            ';
+                ';
+
+
+                //ELIMINAR
+                $table.='
+                <div class="modal fade" id="'.$rows['idespecialidad'].'1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <!--Header-->
+                        <div class="modal-header bg-danger text-center">
+                            <h4 class="text-light text-center">
+                                <button class="btn btn-icons btn-rounded btn-light"><i class="fa fa-exclamation text-danger"></i></button>
+
+                                ¿Esta seguro de eliminar el estado</h4>
+
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="text-white">×</span>
+                            </button>
+                        </div>
+
+                        <!--Body-->
+                        <div class="modal-body bg-center">
+                            <div class="row">
+                              <form action="'.SERVERURL.'ajax/cursoAjax.php" method="POST" class="forms-sample" autocomplete="off">
+                                                         
+                                <div class="col-md-2">
+                                    <input type="hidden" class="form-control" name="idcurso" id="idcurso" value="'.$rows['idespecialidad'].'" readonly="readonly">
+                                </div>
+                                <div class="col-md-8 form-group">
+                                <button type="submit" name="eliminar_curso" id="eliminar_curso" class="btn btn-danger"><i class="fa fa-check"></i>Eliminar</button>
+
+                                <button type="button" class=" btn btn-info" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true" class=""><i class="fa fa-meh-o"></i> Cancel</a></span>
+                                    </button>
+                                </div>
+                                <div class="col-md-2"></div>
+                            </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+                ';
         }
         return $table;
     }
@@ -1301,9 +1422,7 @@ class cursoControlador extends cursoModelo
                         <td>
                         '.$rows['fecha_cambio_estado'].'
                         </td>
-                        <td>
-                            <a href="alumnodetalle.php" class="btn btn-inverse-dark ">Ver</a>
-                        </td>
+                     
                      </tr>';
         }}
         return $tarjeta;

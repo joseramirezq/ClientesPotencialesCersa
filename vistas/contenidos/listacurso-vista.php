@@ -44,12 +44,9 @@
                                     <th>Codigo</th>
                                     <th>Categoria</th>
                                     <th>Nombre</th>
-                                    <th>Clientes</th>
-
                                     <th>Fecha I.</th>
-                                    <th>Estados</th>
-
-                                    <th>Detalle</th>
+                                    <th>Editar</th>
+                                    <th>Eliminar</th>
 
                                 </tr>
                             </thead>

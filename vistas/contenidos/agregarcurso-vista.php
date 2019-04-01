@@ -110,7 +110,7 @@
                     <div class="row">
                         <div class="form-group">
                             <button type="submit" name="agregarcursobd" class="btn btn-success"><i class="fa fa-check"></i> Agregar</button>
-                            <a href="<?php echo SERVERURL ?>/home" class="btn btn-info"><i class="fa fa-meh-o"></i> Cancel</a>
+                            <a href="<?php echo SERVERURL ?>home" class="btn btn-info"><i class="fa fa-meh-o"></i> Cancel</a>
 
                         </div>
                     </div>

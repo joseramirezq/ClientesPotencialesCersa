@@ -39,6 +39,35 @@ else if(isset($_POST['agregarcursobd'])){
 
      }
 
- }else{
+ }else if(isset($_POST['actualizarcurso'])){
+
+   require_once("../controladores/cursoControlador.php");
+     
+   //INSTANCIOAMOS LA CLASE
+   $instanciaCurso= new cursoControlador();
+  //valida los campos requeridos
+   if(isset($_POST['nombre'])){
+      echo  $instanciaCurso->actualizar_curso_controlador();
+   }else{
+
+   }
+
+ }
+
+ else if(isset($_POST['eliminar_curso'])){
+
+   require_once("../controladores/cursoControlador.php");
+     
+   //INSTANCIOAMOS LA CLASE
+   $instanciaCurso= new cursoControlador();
+  //valida los campos requeridos
+   if(isset($_POST['nombre'])){
+      echo  $instanciaCurso->eliminar_curso_controlador();
+   }else{
+
+   }
+
+ }
+   else{
 }
  

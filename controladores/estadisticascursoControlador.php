@@ -301,7 +301,7 @@
           date_default_timezone_set('Europe/Madrid');
          setlocale(LC_TIME, 'spanish');
          
-         
+      
           $table="";
           $idusuario=0;
           $porcentaje=0;
@@ -317,6 +317,7 @@
           FROM `controlusuario` WHERE fecha='$fecha'");
           $datostotal = $datostotal->fetchAll();
           foreach ($datostotal as $rowstotal) {
+          
         
             $contadortotal=$contadortotal+$rowstotal['segundos'];
           }
@@ -364,10 +365,12 @@
             SELECT * FROM usuario WHERE estado_us=1");
             $datosusuario = $datosusuario->fetchAll();
             foreach ($datosusuario as $rowsusuario) {
+
               $idusuario=$rowsusuario['idusuario'];
 
 
               //funcion contar segundos por cada usuario
+              $cont=0;
               $contadorsegundo=0;
               $datoscontrol = $conexion->query("
               SELECT TIMESTAMPDIFF(SECOND, `fecha_inicio`,`fecha_fin`) as segundos
@@ -376,6 +379,7 @@
               foreach ($datoscontrol as $rowscontrol) {
             
                 $contadorsegundo=$contadorsegundo+$rowscontrol['segundos'];
+                $cont++;
               }
 
               $hours2=floor($contadorsegundo / 3600);
@@ -396,7 +400,7 @@
                 </td>
 
                 <td class="font-weight-medium">
-                '.$rowsusuario['nombre_us'].'
+                '.$cont.'
                 </td>
                 
                 <td>
@@ -421,16 +425,14 @@
 
         public function tabla_semana_control_usuarios(){
 
-          date_default_timezone_set('Europe/Madrid');
-          setlocale(LC_TIME, 'spanish');
-
-         
-         
+                 
           $table="";
           $idusuario=0;
           $porcentaje=0;
           $fecha=date("Y-m-d");
           $SemanaPasada = date('Y-m-d', strtotime('-1 week')) ; // resta 1 semana
+          $SemanaPas = date('d/m/Y', strtotime('-1 week')) ; // resta 1 semana
+          $fech=date("d/m/Y");
 
           $conexion=mainModel::conectar();
           //contador de segundos en total
@@ -450,7 +452,9 @@
             $segundos=(($contadortotal % 3600)%60);
           
 
-          $table.=' <p class="text-danger">Tiempo total de atencion al cliente ('. $fecha.') :</p><h3><i class="fa fa-clock-o text-danger icon-lg"></i> '.$hours.' h '.$minutos.' m '.$segundos.' s </h3>
+          $table.=' 
+          <h4 class="text-primary text-center">Desde '. $SemanaPas.' hasta '.$fech.' </h4>
+          <h3><i class="fa fa-clock-o text-danger icon-lg"></i> '.$hours.' h '.$minutos.' m '.$segundos.' s </h3>
           <div class="table-responsive">
           <table class="table table-hover dataTable no-footer" id="bootstrap-data-table" role="grid" aria-describedby="bootstrap-data-table_info">
               <thead class="table-danger">
@@ -472,9 +476,7 @@
                     Porcentaje
                   </th>
 
-                  <th>
-                    Fecha (Hoy)
-                  </th>
+                
                  
                 </tr>
               </thead>
@@ -529,10 +531,6 @@
                 '.round($porcentaje,2).'%
                 </td>
 
-                <td>
-                Desde '.$fecha.' hasta'.$SemanaPasada.'
-                </td>
-
                 
 
           </tr> 
@@ -556,6 +554,9 @@
           $porcentaje=0;
           $fecha=date("Y-m-d");
           $elMesPasado = date('Y-m-d', strtotime('-1 month')) ;
+
+          $fech=date("d/m/Y");
+          $elMesPasad = date('d/m/Y', strtotime('-1 month')) ;
         // $fechaactual=strftime(" %d de %B de %Y %H:%M");
           
           
@@ -580,7 +581,9 @@
             $segundos=(($contadortotal % 3600)%60);
           
 
-          $table.=' <p class="text-danger">Tiempo total de atencion al cliente ('. $fecha.') :</p><h3><i class="fa fa-clock-o text-danger icon-lg"></i> '.$hours.' h '.$minutos.' m '.$segundos.' s </h3>
+          $table.='
+          <h4 class="text-primary text-center">Desde '. $elMesPasad.' hasta '.$fech.' </h4>
+          <h3><i class="fa fa-clock-o text-danger icon-lg"></i> '.$hours.' h '.$minutos.' m '.$segundos.' s </h3>
           <div class="table-responsive">
           <table class="table table-hover dataTable no-footer" id="bootstrap-data-tablee" role="grid" aria-describedby="bootstrap-data-table_info">
               <thead class="table-danger">
@@ -602,9 +605,6 @@
                     Porcentaje
                   </th>
 
-                  <th>
-                    Fecha (Hoy)
-                  </th>
                  
                 </tr>
               </thead>
@@ -657,10 +657,6 @@
                 </td>
                 <td>
                 '.round($porcentaje,2).'%
-                </td>
-
-                <td>
-                Desde '.$fecha.' hasta '.$elMesPasado.'
                 </td>
 
                 
