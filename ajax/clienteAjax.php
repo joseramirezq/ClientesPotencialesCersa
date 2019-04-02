@@ -32,7 +32,16 @@ if (isset($_POST['agregar_cliente'])) {
     } else { }
 }
 
-    else if(isset($_POST['actualizar_cliente'])){
+else if(isset($_POST['matricular'])){
+    require_once('../controladores/clienteControlador.php');
+    $instanciaMatri = new clienteControlador();
+    if (isset($_POST['idinteres'])) {
+        echo $instanciaMatri->matri_cliente_controlador();
+    }
+   
+
+}
+else if(isset($_POST['actualizar_cliente'])){
 
         require_once('../controladores/clienteControlador.php');
         $instanciaClienteActualizar = new clienteControlador();
@@ -43,7 +52,7 @@ if (isset($_POST['agregar_cliente'])) {
                 //echo $instanciaCliente->agregar_cliente_controlador();
             } else { }
 
-    }
+}
     else{
     //aqui debemos votar al login porque ha ocurido quizas una insercion
 }

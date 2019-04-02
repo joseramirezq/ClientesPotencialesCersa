@@ -20,7 +20,7 @@
             <i class="fa fa-child"></i>Clientes</a>
           </li>
           <li class="nav-item">
-            <a href="<?php SERVERURL;?>graficos" class="nav-link">
+            <a href="<?php SERVERURL;?>estadisticasusuario" class="nav-link">
             <i class="fa fa-bar-chart-o"></i>Reportes</a>
           </li>
         </ul>

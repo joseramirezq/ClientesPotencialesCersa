@@ -17,6 +17,15 @@
                  $cursointeres=$_POST['idespecialidad'];
                 $codigodeusuario=$_POST['codigousuario'];
 
+                $conexion=mainModel::conectar();
+                $datosEs = $conexion->query("
+                SELECT fecha_fin FROM especialidad WHERE idespecialidad=$cursointeres ");
+                $datosEs = $datosEs->fetchAll();
+                foreach ($datosEs as $rowsEs) {
+                    $fincurso=$rowsEs['fecha_fin'];
+                
+                }
+
 
                 $nombre=mainModel::limpiar_cadena($_POST['nombre']);
                 $apellidos=mainModel::limpiar_cadena($_POST['apellidos']);
@@ -49,6 +58,7 @@
                       "Usuario"=>$codigodeusuario,
                       "Curso"=>$cursointeres, //aqui debemos pasar el parametro del curso
                       "Cliente"=>$codigo,
+                      "Fincurso"=>$fincurso,
                       "Descripcion"=>"Cliente nuevo",
                   ];
                   clienteModelo::agregar_interes_modelo($datosInteres);
@@ -69,6 +79,7 @@
                     "Dni"=>$dni,
                     "Fecha"=>$fecha,
                     "Detalle"=>$detalle,
+                    "Fincurso"=>$fincurso,
                     "Alumno"=>$alumno
 
                 ];
@@ -145,7 +156,24 @@
                     //MOSTRAR CLIENTES EN ESTADO CLIENTE 
     
                     
-     public function cliente_actualizacion_estado(){
+public function matri_cliente_controlador(){
+
+    $idinteres=mainModel::limpiar_cadena($_POST['idinteres']);
+    $des_interes=mainModel::limpiar_cadena($_POST['des_interes']);
+    $datosClienteA=[
+        "Idinteres"=>$idinteres,
+        "Des_interes"=>$des_interes
+    ];
+    $actualizarCliente=clienteModelo::matri_cliente_modelo($datosClienteA);
+    $direccion=SERVERURL."clientesprematriculados";
+    header('location:'.$direccion);
+                    
+                    
+
+
+   }
+   
+public function cliente_actualizacion_estado(){
         //
         $idespecialidad=0;
         $tarjetaEstado="";
@@ -174,7 +202,10 @@
 
             $descriestado=$rowsInt['descri_estado'];
             $fechacambio=$rowsInt['fecha_cambio_estado'];
+            $fechanotifi=$rowsInt['fecha_notificacion'];
             $idinteres=$rowsInt['idinteres'];
+            $idusuario=$rowsInt['idusuario'];
+            
         }
 
         //selecionando cliente
@@ -184,10 +215,15 @@
        
         foreach($datosCliente as $rows){
             $tarjetaEstado.='
-            <h3 class="text-primary">Cliente:'.$rows['nombres_cli'].' '.$rows['apellidos_cli'].'</h3>
-            <button type="button" class="btn btn-warning" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#'.$rows['nombres_cli'].'">
-                            Editar Cliente
-                        </button><br><hr>
+            <h3 class="text-primary">Cliente:'.$rows['nombres_cli'].' '.$rows['apellidos_cli'].'
+            
+            <div class="btn-group dropdown float-right">
+                        <button type="button" class="btn btn-success" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#'.$rows['nombres_cli'].'">
+                        Editar Cliente
+                        </button>
+              </div>
+              </h3>
+            <br><hr>
                 <div class="btn-group dropdown ">
                     ';
 
@@ -198,8 +234,11 @@
                     SELECT * FROM estado WHERE 	idestado='$estado' ");
                     $datosEstado = $datosEstado->fetchAll();
                     foreach ($datosEstado as $rowsEstado) {
-                        $tarjetaEstado.=' <mark style="background-color:'.$rowsEstado['color'].';" class=" text-white" >'.$rowsEstado['nombre_estado'].' </mark>
-                         <mark  class="bg-inverse-danger " > '.$descriestado.'</mark>';
+                        $tarjetaEstado.=' <mark style="color:'.$rowsEstado['color'].';"><i class="menu-icon  fa fa-cubes"></i>'.$rowsEstado['nombre_estado'].' </mark>&nbsp; 
+                         <mark class="text-white bg-primary">  &nbsp; &nbsp; <i class="fa fa-clipboard"></i> '.$descriestado.'</mark>&nbsp; 
+                         <mark class="text-white bg-primary" > &nbsp; &nbsp; <i class="fa fa-calendar"></i> '.$fechacambio.'</mark>&nbsp; 
+                         <mark class="text-white bg-primary">  &nbsp; &nbsp; <i class="fa fa-bell-o"></i>  '.$fechanotifi.'</mark>&nbsp; 
+                         <mark class="text-white bg-primary">  &nbsp; &nbsp; <i class="fa fa-user"></i> '.$idusuario.'</mark>';
                     } 
                     $tarjetaEstado.='
                 </div>
@@ -343,7 +382,7 @@
                                                                 </div>
                                                                 <div class=" col-md-6 form-group">
                                                                     <label for="exampleInputEmail1">Teléfono</label>
-                                                                    <input type="text" class="form-control" name="telefono" id="telefono" required="" placeholder="Telefono" value="'.$rows['telefono_cli'].'">
+                                                                    <input type="text" class="form-control" name="telefono" id="telefono"  placeholder="Telefono" value="'.$rows['telefono_cli'].'">
                                                                 </div>
                                                             </div>
 
@@ -442,7 +481,7 @@
                                                             <!--modelo de estado que se cambiara-->
                                                            ';
                                                                     $datosE=$conexion->query("
-                                                                    SELECT * FROM estado WHERE estado_actual=1 ORDER BY codigoestado");
+                                                                    SELECT * FROM estado WHERE estado_actual=1 AND idestado<>1 ORDER BY codigoestado");
                                                            
                                                                     $datosE=$datosE->fetchAll();
                                                                     foreach($datosE as $rowsE){
@@ -582,7 +621,7 @@
             $conexion=mainModel::conectar();
 
             $datoscli=$conexion->query("
-            SELECT COUNT(*) as totalcli FROM interes WHERE idestado=5");
+            SELECT COUNT(*) as totalcli FROM interes WHERE idestado=3 and fincurso>curdate()");
             $datoscli=$datoscli->fetchAll();
             foreach($datoscli as $rowscli){
                 $totalcli=$rowscli['totalcli'];
@@ -600,20 +639,19 @@
                         <th>Curso</th>
                         <th>Nombre</th>
                      
-                        <th>Correo</th>
-                      
-                        <th>Telefono</th>
-                         <thFecha registro</th>
+                        
                          <th>Detalle</th>
+                         <th>Des/Deuda</th>
                          <th>Matricular</th>
                     </tr>
                 </thead>
                 <tbody>
                 ';
             $datosclinte=$conexion->query("
-            SELECT codigocliente, idespecialidad FROM interes WHERE idestado=5");
+            SELECT idinteres,codigocliente, idespecialidad FROM interes WHERE idestado=3 and fincurso>curdate()");
             $datosclinte=$datosclinte->fetchAll();
             foreach($datosclinte as $rowscliente){
+                     $idinteres=$rowscliente['idinteres']; 
                     $idcliente=$rowscliente['codigocliente'];
                     $codigocurso=$rowscliente['idespecialidad'];
             
@@ -635,9 +673,7 @@
                 <td>'.$nombrecurso.'</td>
                 <td>'.$rows['nombres_cli'].' '.$rows['apellidos_cli'].'</td>
                 
-                <td>'.$rows['correo_cli'].'</td>
-                
-                <td>'.$rows['telefono_cli'].'</td>
+            
                 
                 <td>
                     <button type="button" class="btn btn-inverse-dark" aria-haspopup="true" aria-expanded="false"
@@ -645,12 +681,20 @@
                         <i class="fa fa-drivers-license-o"></i> Ver
                     </button>
                 </td>
-
+                <form action="'.SERVERURL.'ajax/clienteAjax.php"   method="post">
+              
                 <td>
-                    <button type="button" class="btn btn-danger" aria-haspopup="true" aria-expanded="false"
-                        data-toggle="modal" data-target="#'.$rows['codigocliente'].'">
+                
+                <input type="text"  name="des_interes">
+
+               </td>
+                <td>
+                <input type="hidden"   name="idinteres" value="'.$idinteres.'">
+                   
+                    <button type="submit" name="matricular" class="btn btn-danger">
                         <i class="fa fa-drivers-license-o"></i> Matricular
                     </button>
+                    </form>
                 </td>
             </tr>
 
@@ -762,12 +806,198 @@
             return $table;
          }
          //mostrar tabla estados
+
+
+         public function leer_cliente_matriculado_controlador(){
+            $table="";
+            $conexion=mainModel::conectar();
+
+            $datoscli=$conexion->query("
+            SELECT COUNT(*) as totalcli FROM interes WHERE idestado=7 and fincurso>curdate()");
+            $datoscli=$datoscli->fetchAll();
+            foreach($datoscli as $rowscli){
+                $totalcli=$rowscli['totalcli'];
+            }
+
+            $table.='  
+            <h4 class="text-primary"> <i class="fa fa-child text-primary icon-lg"></i> Total de clientes  : '.$totalcli.'</h4>
+            <hr>
+                <div class="table-responsive">
+                <table class="table table-hover" id="bootstrap-data-table"
+            class="table table-striped table-bordered">
+                <thead class="bg bg-primary text-white">
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Curso</th>
+                        <th>Nombre</th>
+                     
+                        
+                         <th>Detalle</th>
+                         <th>Descripcion</th>
+                       
+                    </tr>
+                </thead>
+                <tbody>
+                ';
+            $datosclinte=$conexion->query("
+            SELECT idinteres,codigocliente,descri_estado, idespecialidad FROM interes WHERE idestado=7 and fincurso>curdate()");
+            $datosclinte=$datosclinte->fetchAll();
+            foreach($datosclinte as $rowscliente){
+                     $idinteres=$rowscliente['idinteres']; 
+                    $idcliente=$rowscliente['codigocliente'];
+                    $descri_estado=$rowscliente['descri_estado'];
+                    $codigocurso=$rowscliente['idespecialidad'];
+            
+            $datoscurso=$conexion->query("
+            SELECT nombre_es FROM especialidad WHERE idespecialidad=$codigocurso");
+            $datoscurso=$datoscurso->fetchAll();
+            foreach($datoscurso as $rowscurso){
+                    $nombrecurso=$rowscurso['nombre_es'];
+                  
+                }
+
+            $datos=$conexion->query("
+            SELECT * FROM cliente WHERE codigocliente='$idcliente'");
+            $datos=$datos->fetchAll();
+            foreach($datos as $rows){
+                $table.='
+                <tr>
+                <td>'.$rows['codigocliente'].'</td>
+                <td>'.$nombrecurso.'</td>
+                <td>'.$rows['nombres_cli'].' '.$rows['apellidos_cli'].'</td>
+                
+            
+                
+                <td>
+                    <button type="button" class="btn btn-inverse-dark" aria-haspopup="true" aria-expanded="false"
+                        data-toggle="modal" data-target="#'.$rows['codigocliente'].'">
+                        <i class="fa fa-drivers-license-o"></i> Ver
+                    </button>
+                </td>
+
+
+                <td>
+                    '.$descri_estado.'
+                 </td>
+              
+              
+         
+                
+            </tr>
+
+            <!--DETALLE-->  
+            <div class="modal fade" id="'.$rows['codigocliente'].'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                  <!--Header-->
+                  <div class="modal-header bg-dark">
+                      <h4 class="text-light text-center"> <i class="fa fa-child text-white icon-lg"></i> Cliente: &nbsp;'.$rows['nombres_cli'].'</h4>
+
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true" class="text-white">×</span>
+                      </button>
+                  </div>
+
+                  <!--Body-->
+                  <div class="modal-body">
+                      <div class="card">
+                      <div class="card-body">
+                          <div class="row">
+                          <div class="col-md-6">
+                              <address class="">
+                              <p class="font-weight-bold">
+                              Nombres
+                              </p>
+                              <p class="mb-2">
+                              '.$rows['nombres_cli'].' &nbsp; '.$rows['apellidos_cli'].'
+                              </p>
+                              <p class="font-weight-bold">
+                                  Correo
+                              </p>
+                              <p>
+                              '.$rows['correo_cli'].'
+                              </p>
+                              </address>
+                          </div>
+
+
+                          <div class="col-md-6">
+                              <address class="">
+                              <p class="font-weight-bold">
+                             Teléfono
+                              </p>
+                              <p class="mb-2">
+                              '.$rows['telefono_cli'].'
+                              </p>
+                              <p class="font-weight-bold">
+                                  Profesion
+                              </p>
+                              <p>
+                              '.$rows['profesion_cli'].'
+                              </p>
+                              </address>
+                          </div>
+
+                          <div class="col-md-6">
+                                <address class="">
+                                <p class="font-weight-bold">
+                                Grado
+                                </p>
+                                <p class="mb-2">
+                                '.$rows['grado_cli'].'
+                                </p>
+                                <p class="font-weight-bold">
+                                   Departamento
+                                </p>
+                                <p>
+                                '.$rows['departamento_cli'].'
+                                </p>
+                                </address>
+                            </div> 
+                            
+                            <div class="col-md-6">
+                                <address class="">
+                                <p class="font-weight-bold">
+                                Distrito
+                                </p>
+                                <p class="mb-2">
+                                '.$rows['distrito_cli'].'
+                                </p>
+                                <p class="font-weight-bold">
+                                Direccion
+                                </p>
+                                <p>
+                                '.$rows['direccion_cli'].'
+                                </p>
+                                </address>
+                            </div>   
+
+
+
+                         
+
+
+                          </div>
+                      </div>
+                      </div>
+                  </div>
+                  </div>
+              </div>
+           </div>
+           <!--FINDETALLE--> 
+
+                ';
+            }
+            }
+            return $table;
+         }
         public function leer_cliente_controlador(){
             $table="";
             $conexion=mainModel::conectar();
 
             $datoscli=$conexion->query("
-            SELECT COUNT(*) as totalcli FROM cliente ");
+            SELECT COUNT(*) as totalcli FROM cliente where fincurso>curdate() ");
             $datoscli=$datoscli->fetchAll();
             foreach($datoscli as $rowscli){
                 $totalcli=$rowscli['totalcli'];
@@ -795,7 +1025,7 @@
                 ';
             
             $datos=$conexion->query("
-            SELECT * FROM cliente ORDER BY fecha_registro DESC");
+            SELECT * FROM cliente where fincurso>curdate() ORDER BY fecha_registro DESC");
             $datos=$datos->fetchAll();
             foreach($datos as $rows){
                 $table.='
@@ -929,7 +1159,7 @@
 
             //selecionados todos los estados
             $datos=$conexion->query("
-            SELECT * FROM estado ");
+            SELECT * FROM estado where estado_actual=1");
             $datos=$datos->fetchAll();
             foreach($datos as $rows){
                 $idestado=$rows['idestado'];

@@ -43,19 +43,43 @@ class cursoModelo  extends mainModel
         return $sql;
     }
 
-   /* protected function iniciar_sesion_curso_modelo($datos){
-        
-         $SesionMain=mainModel::actualizar_curso_sesion($datos['Usuario'], $datos['Curso']);
-      if ($SesionMain->rowCount()==1) {
-                $_SESSION['sesioncurso']="ocupado";
-                $respuesta="true";
-           } else {
-            $respuesta="false";
-           }
-           
-      
-        return $respuesta;
-    }*/
+    protected function actualizar_curso_modelo($datos)
+    {   $sql=self::conectar()->prepare("UPDATE especialidad  SET
+        idcategoria=:Categoria, nombre_es=:Nombre, descripcion_es=:Descripcion, duracion_es=:Duracion,
+        fecha_inicio=:FechaI, fecha_fin=:FechaF,horas_certificado=:Horascerti, costo_matricula=:Costomatricula,
+         costo_certi=:Costocerti, costo_alternativo=:Costoalternativo, horario=:Horario, docente=:Docente, 
+         modalidad=:Modalidad WHERE idespecialidad=:Idespecialidad");
+    
+        $sql->bindParam(":Idespecialidad", $datos['Idespecialidad']);
+        $sql->bindParam(":Categoria", $datos['Categoria']);
+        $sql->bindParam(":Nombre", $datos['Nombre']);
+        $sql->bindParam(":Descripcion", $datos['Descripcion']);
+       $sql->bindParam(":Duracion", $datos['Duracion']);
+        $sql->bindParam(":FechaI", $datos['FechaI']);
+        $sql->bindParam(":FechaF", $datos['FechaF']);
+        $sql->bindParam(":Horascerti", $datos['Horascerti']);
+        $sql->bindParam(":Costomatricula", $datos['Costomatricula']);
+        $sql->bindParam(":Costocerti", $datos['Costocerti']);
+        $sql->bindParam(":Costoalternativo", $datos['Costoalternativo']);
+        $sql->bindParam(":Horario", $datos['Horario']);
+        $sql->bindParam(":Docente", $datos['Docente']);
+        $sql->bindParam(":Modalidad", $datos['Modalidad']);
+
+        $sql->execute();
+        return $sql;
+    }
+
+    protected function eliminar_curso_modelo($datos)
+    {   $sql=self::conectar()->prepare("UPDATE especialidad  SET
+        estado_actual=:Estadoactual WHERE idespecialidad=:Idespecialidad");
+    
+        $sql->bindParam(":Idespecialidad", $datos['Idespecialidad']);
+        $sql->bindParam(":Estadoactual", $datos['Estadoactual']);
+   
+
+        $sql->execute();
+        return $sql;
+    }
     protected function agregar_sesion_curso_modelo($datos){
 
         $sql=self::conectar()->prepare("UPDATE especialidad SET sesion=:Usuario WHERE idespecialidad=:Curso");

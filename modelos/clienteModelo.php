@@ -9,8 +9,12 @@ class clienteModelo  extends mainModel{
     protected function agregar_cliente_modelo($datos){
    
         $sql=self::conectar()->prepare("INSERT INTO 
-         cliente(codigocliente,nombres_cli, apellidos_cli ,correo_cli, telefono_cli, profesion_cli, grado_cli, pais_cli, departamento_cli, distrito_cli, direccion_cli, 	dni_cli, fechanacimiento_cli, detalle_cli, alumno_cli)
-         VALUES(:Codigo, :Nombre, :Apellidos, :Correo, :Telefono, :Profesion, :Grado, :Pais, :Departamento, :Distrito, :Direccion, :Dni, :Fecha, :Detalle, :Alumno )");
+         cliente(codigocliente,nombres_cli, apellidos_cli ,correo_cli, telefono_cli, 
+         profesion_cli, grado_cli, pais_cli, departamento_cli, distrito_cli, direccion_cli, 
+        dni_cli, fechanacimiento_cli, detalle_cli, alumno_cli, fincurso)
+         VALUES(:Codigo, :Nombre, :Apellidos, :Correo, :Telefono, :Profesion, :Grado, :Pais, 
+         :Departamento, :Distrito, :Direccion, :Dni, :Fecha, :Detalle, :Alumno, :Fincurso  )");
+         
         $sql->bindParam(":Codigo",$datos['Codigo']);
         $sql->bindParam(":Nombre",$datos['Nombre']);
         $sql->bindParam(":Apellidos",$datos['Apellidos']);
@@ -27,6 +31,7 @@ class clienteModelo  extends mainModel{
         $sql->bindParam(":Fecha",$datos['Fecha']);
         $sql->bindParam(":Detalle",$datos['Detalle']);
         $sql->bindParam(":Alumno",$datos['Alumno']);
+        $sql->bindParam(":Fincurso",$datos['Fincurso']);
 
         $sql->execute();
         return $sql;
@@ -60,12 +65,28 @@ class clienteModelo  extends mainModel{
         $sql->execute();
         return $sql;
     }
+
+    protected function matri_cliente_modelo($datos){
+   
+        $sql=self::conectar()->prepare("UPDATE
+         interes SET idestado=:Idestado, descri_estado=:Des_interes
+          WHERE idinteres=:Idinteres");
+        $estado=7;
+        $sql->bindParam(":Idestado",$estado);
+        $sql->bindParam(":Idinteres",$datos['Idinteres']);
+        $sql->bindParam(":Des_interes",$datos['Des_interes']);
+      
+
+        $sql->execute();
+        return $sql;
+    }
+
     protected function agregar_interes_modelo($datos)
     {
     
         $sql=self::conectar()->prepare("INSERT INTO 
-        interes(idestado, idusuario, idespecialidad, codigocliente, descri_estado, 	fecha_cambio_estado)
-        VALUES(:Estado, :Usuario, :Curso, :Cliente, :Descripcion, :Fecha)");
+        interes(idestado, idusuario, idespecialidad, codigocliente, descri_estado, 	fecha_cambio_estado, fincurso)
+        VALUES(:Estado, :Usuario, :Curso, :Cliente, :Descripcion, :Fecha, :Fincurso)");
         $sql->bindParam(":Estado",$datos['Estado']);
         $sql->bindParam(":Usuario",$datos['Usuario']);
         $sql->bindParam(":Curso",$datos['Curso']);
@@ -73,6 +94,7 @@ class clienteModelo  extends mainModel{
         $sql->bindParam(":Descripcion",$datos['Descripcion']);
         $fechaactual= date('Y-m-d H:i:s');
         $sql->bindParam(":Fecha",$fechaactual);
+        $sql->bindParam(":Fincurso",$datos['Fincurso']);
         
         
         $sql->execute();

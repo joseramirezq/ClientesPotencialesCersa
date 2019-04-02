@@ -21,22 +21,13 @@
 
                     //cantidad de clientes en total
                     $datosCli = $conexion->query("
-                    SELECT COUNT(*) AS TOTAL FROM cliente");
+                    SELECT COUNT(*) AS TOTAL FROM cliente where fincurso>curdate()");
                     $datosCli = $datosCli->fetchAll();
                     foreach ($datosCli as $rowsCli) {
                     $cantidadCli=$rowsCli['TOTAL'];
                 }
 
-        
-                //cantidad de nuevos REVISAR NO FUNCIONA ESTA FUNCION
-                $totalhoy="";
-                $datosClifecha = $conexion->query("
-                
-                SELECT COUNT(*) AS TOTALHOY FROM cliente WHERE fecha_registro < NOW();");
-                $datosClifecha = $datosClifecha->fetchAll();
-                foreach ($datosClifecha as $rows) {
-                $totalhoy=$rows['TOTALHOY'];
-            }
+      
 
             $table.=' 
             <p class="card-description">
@@ -120,16 +111,8 @@
 
             </tr> ';
             
-
             }
-
-
-
-                
-                
-            
-                    
-                        return $table;
+             return $table;
 
         }
 
@@ -142,7 +125,7 @@
 
                     //cantidad de clientes en total
                     $datosCli = $conexion->query("
-                    SELECT COUNT(*) AS TOTAL FROM cliente");
+                    SELECT COUNT(*) AS TOTAL FROM cliente where DATE_FORMAT(fecha_registro,'Y-m-d')=curdate()");
                     $datosCli = $datosCli->fetchAll();
                     foreach ($datosCli as $rowsCli) {
                     $cantidadCli=$rowsCli['TOTAL'];
@@ -153,7 +136,7 @@
                 $totalhoy="";
                 $datosClifecha = $conexion->query("
                 
-                SELECT COUNT(*) AS TOTALHOY FROM cliente WHERE fecha_registro < NOW();");
+                SELECT COUNT(*) AS TOTALHOY FROM cliente WHERE DATE_FORMAT(fecha_registro,'Y-m-d')=curdate()");
                 $datosClifecha = $datosClifecha->fetchAll();
                 foreach ($datosClifecha as $rows) {
                 $totalhoy=$rows['TOTALHOY'];
@@ -266,7 +249,7 @@
 
             //cantidad de clientes en total
             $datosIntre = $conexion->query("
-            SELECT * FROM interes");
+            SELECT * FROM interes WHERE fincurso>curdate()");
             $datosIntre = $datosIntre->fetchAll();
             foreach ($datosIntre as $rowsInte) {
               $codigocliente=$rowsInte['codigocliente'];

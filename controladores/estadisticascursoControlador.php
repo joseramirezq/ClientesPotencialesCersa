@@ -25,7 +25,7 @@
             //cantidad total de interesados
             $cantTotal=0;
             $datoscantestado = $conexion->query("
-            SELECT COUNT(*) AS total FROM interes");
+            SELECT COUNT(*) AS total FROM interes where fincurso>curdate()");
             $datoscantestado = $datoscantestado->fetchAll();
             foreach ($datoscantestado as $rowsestadocant) {
             $cantTotal=$rowsestadocant['total'];
@@ -37,7 +37,7 @@
             //estados de cada interes
             $idcat=0;
             $datosespe = $conexion->query("
-            SELECT *  FROM especialidad LIMIT 10");
+            SELECT *  FROM especialidad  where estado_actual=0 and fecha_fin>curdate()");
             $datosespe = $datosespe->fetchAll();
             foreach ($datosespe as $rowsespecialidad) {
             $idespecialidad=$rowsespecialidad['idespecialidad'];
@@ -142,7 +142,7 @@
             //cantidad de clientes en total
             $totalcursos=0;
             $datosCur= $conexion->query("
-            SELECT COUNT(*) as total FROM especialidad");
+            SELECT COUNT(*) as total FROM especialidad WHERE estado_actual=0 and fecha_fin>curdate()");
             $datosCur = $datosCur->fetchAll();
             foreach ($datosCur as $datosCur) {
               $totalcursos=$datosCur['total'];
@@ -150,7 +150,7 @@
             }
             $totalcursos2=0;
             $datosCurso= $conexion->query("
-            SELECT COUNT(*) as totalcursos FROM especialidad WHERE idcategoria='1'");
+            SELECT COUNT(*) as totalcursos FROM especialidad WHERE idcategoria='1' and estado_actual=0 and fecha_fin>curdate() ");
             $datosCurso = $datosCurso->fetchAll();
             foreach ($datosCurso as $datosCurso) {
               $totalcursos2=$datosCurso['totalcursos'];
@@ -159,7 +159,7 @@
 
             $totaldiplomados=0;
             $datosDiplomados= $conexion->query("
-            SELECT COUNT(*) as total FROM especialidad WHERE idcategoria='2'");
+            SELECT COUNT(*) as total FROM especialidad WHERE idcategoria='2' and estado_actual=0 and fecha_fin>curdate()");
             $datosDiplomados = $datosDiplomados->fetchAll();
             foreach ($datosDiplomados as $datosDip) {
               $totaldiplomados=$datosDip['total'];
@@ -168,7 +168,7 @@
 
 
             $datosCur= $conexion->query("
-            SELECT COUNT(*) as total FROM especialidad");
+            SELECT COUNT(*) as total FROM especialidad WHERE estado_actual=0 and fecha_fin>curdate()");
             $datosCur = $datosCur->fetchAll();
             foreach ($datosCur as $datosCur) {
               $totalcursos=$datosCur['total'];
@@ -181,7 +181,7 @@
             $nombrecursomayor="";
             $idespecialidad=0;
             $datosespe = $conexion->query("
-            SELECT *  FROM especialidad");
+            SELECT *  FROM especialidad WHERE estado_actual=0 and fecha_fin>curdate() ");
             $datosespe = $datosespe->fetchAll();
             foreach ($datosespe as $rowsespecialidad) {
             $idespecialidad=$rowsespecialidad['idespecialidad'];
@@ -298,7 +298,7 @@
 
         public function tabla_control_usuarios(){
 
-          date_default_timezone_set('Europe/Madrid');
+          date_default_timezone_set('America/Lima');
          setlocale(LC_TIME, 'spanish');
          
       

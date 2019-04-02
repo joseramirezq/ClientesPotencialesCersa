@@ -5,6 +5,7 @@
             <div class="card-body">
                 <h3 class="card-title text-center text-primary">Estados de Clientes </h3>
                 <h2 class="text-center text-primary">Total </h2>
+                <h4 class="text-center text-primary">(Cursos en linea)</h4>
                         <?php
                             require_once("./controladores/estadisticasControlador.php");
                             //INSTANCIOAMOS LA CLASE//
@@ -24,6 +25,7 @@
             <div class="card-body">
                 <h3 class="card-title text-center text-primary">Estados de Clientes </h3>
                 <h2 class="text-center text-primary">Hoy </h2>
+               
                         <?php
                             require_once("./controladores/estadisticasControlador.php");
                             //INSTANCIOAMOS LA CLASE//

@@ -61,7 +61,7 @@ else if(isset($_POST['agregarcursobd'])){
    //INSTANCIOAMOS LA CLASE
    $instanciaCurso= new cursoControlador();
   //valida los campos requeridos
-   if(isset($_POST['nombre'])){
+   if(isset($_POST['idespecialidad'])){
       echo  $instanciaCurso->eliminar_curso_controlador();
    }else{
 

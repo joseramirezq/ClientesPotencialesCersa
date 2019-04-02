@@ -75,6 +75,68 @@ class cursoControlador extends cursoModelo
     }
 
 
+    public function actualizar_curso_controlador()
+    {   
+        $idespecialidad = mainModel::limpiar_cadena($_POST['idespecialidad']);
+        $categoria = mainModel::limpiar_cadena($_POST['categoria']);
+        $nombre = mainModel::limpiar_cadena($_POST['nombre']);
+        $duracion = mainModel::limpiar_cadena($_POST['duracion']);
+        $descripcion = mainModel::limpiar_cadena($_POST['descripcion']);
+        $fechainicio = mainModel::limpiar_cadena($_POST['fechainicio']);
+        $fechafin = mainModel::limpiar_cadena($_POST['fechafin']);
+        $horario = mainModel::limpiar_cadena($_POST['horario']);
+        $costomatricula = mainModel::limpiar_cadena($_POST['costomatricula']);
+        $costocertificado = mainModel::limpiar_cadena($_POST['costocertificado']);
+        $costoalternativo = mainModel::limpiar_cadena($_POST['costoalternativo']);
+        $horascertificado = mainModel::limpiar_cadena($_POST['horascertificado']);
+        $modalidad = mainModel::limpiar_cadena($_POST['modalidad']);
+        $docente = mainModel::limpiar_cadena($_POST['docente']);
+
+        $datosCurso = [
+            "Idespecialidad" => $idespecialidad,
+            "Categoria" => $categoria,
+            "Nombre" => $nombre,
+            "Descripcion" => $descripcion,
+            "Duracion" => $duracion,
+            "FechaI" => $fechainicio,
+            "FechaF" => $fechafin,
+            "Horario" => $horario,
+            "Costomatricula" => $costomatricula,
+            "Costocerti" => $costocertificado,
+            "Costoalternativo" => $costoalternativo,
+            "Horascerti" => $horascertificado,
+            "Modalidad" => $modalidad,
+            "Docente" => $docente
+
+        ];
+        $ActualizarCurso = cursoModelo::actualizar_curso_modelo($datosCurso);
+           $direccion=SERVERURL."listacurso";
+          header('location:'.$direccion);
+    }
+
+    
+    public function eliminar_curso_controlador()
+    {
+        $idespecialidad = mainModel::limpiar_cadena($_POST['idespecialidad']);
+        $estadoactual = 1;
+       
+
+        $datosCurso = [
+            "Idespecialidad" => $idespecialidad,
+            "Estadoactual" => $estadoactual
+          
+
+        ];
+        $ActualizarCurso = cursoModelo::eliminar_curso_modelo($datosCurso);
+           $direccion=SERVERURL."listacurso";
+          header('location:'.$direccion);
+
+
+
+
+    }
+
+
     //mostrar tabla estados
     public function leer_cursos_controlador()
     {
@@ -89,7 +151,7 @@ class cursoControlador extends cursoModelo
             //nombre de la categoia
             $idcat = $rows['idcategoria'];
             $datos2 = $conexion->query("
-            SELECT * FROM categoria WHERE idcategoria='$idcat'");
+            SELECT nombre_cat FROM categoria WHERE idcategoria='$idcat'");
             foreach ($datos2 as $rows2) {
                 $categoria = $rows2['nombre_cat'];
             }
@@ -151,7 +213,7 @@ class cursoControlador extends cursoModelo
 
                                                             <div class="form-group col-md-8">
                                                                 <label>Nombre</label>
-                                    
+                                                                <input type="hidden" class="form-control form-control-lg" name="idespecialidad" id="idespecialidad" value="'.$rows['idespecialidad'].'" placeholder="Nombre del curso o diplomado" required>
                                                                 <input type="text" class="form-control form-control-lg" name="nombre" id="nombre" value="'.$rows['nombre_es'].'" placeholder="Nombre del curso o diplomado" required>
                                                             </div>
                                     
@@ -276,7 +338,7 @@ class cursoControlador extends cursoModelo
                               <form action="'.SERVERURL.'ajax/cursoAjax.php" method="POST" class="forms-sample" autocomplete="off">
                                                          
                                 <div class="col-md-2">
-                                    <input type="hidden" class="form-control" name="idcurso" id="idcurso" value="'.$rows['idespecialidad'].'" readonly="readonly">
+                                    <input type="hidden" class="form-control" name="idespecialidad" id="idespecialidad" value="'.$rows['idespecialidad'].'" readonly="readonly">
                                 </div>
                                 <div class="col-md-8 form-group">
                                 <button type="submit" name="eliminar_curso" id="eliminar_curso" class="btn btn-danger"><i class="fa fa-check"></i>Eliminar</button>
@@ -1339,6 +1401,7 @@ class cursoControlador extends cursoModelo
             SELECT * FROM interes WHERE idespecialidad='$idespecialidad' ORDER by idestado ");
         $datosInteres = $datosInteres->fetchAll();
         foreach ($datosInteres as $rows) {
+            $interes_des=$rows['descri_estado'];
 
         //SELECIONAR cliente
         $codigoCliente=$rows['codigocliente'];
@@ -1377,39 +1440,15 @@ class cursoControlador extends cursoModelo
                     SELECT * FROM estado WHERE 	idestado='$estado' ");
                     $datosEstado = $datosEstado->fetchAll();
                     foreach ($datosEstado as $rowsEstado) {
-                     $tarjeta .= '<button type="button" style="background-color:'.$rowsEstado['color'].';" class="btn  btn-sm white-text " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                     $tarjeta .= '<button type="button" style="color:'.$rowsEstado['color'].';" class="btn  btn-sm white-text " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
                                  '.$rowsEstado['nombre_estado'].'
                                 </button>
 
                                 <button type="button" style="background-color:'.$rowsEstado['color'].';" class=" btn btn-inverse btn-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#'.$rowsEstado['idestado'].'">
-                                      <i class="fa fa-comments-o"></i>
+                             
                                 </button>
 
-                                <!--NODAL DESCRIPCION DE ESTADO ACTUAL-->
-
-                                <div class="modal fade" id="'.$rowsEstado['idestado'].'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <!--Header-->
-                                        <div class="modal-header " style="background-color:'.$rowsEstado['color'].';">
-                                            <h3 class="text-white text-center">Estado 1</h3>
-
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true" class="white-text">×</span>
-                                            </button>
-                                        </div>
-
-                                        <!--Body-->
-                                        <div class="modal-body">
-                                            <div class="form-group">
-                                                <p class="text-center">Fecha 01/02/2019</p>
-                                                <hr />
-                                                <p>'.$rows['descri_estado'].'
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>';
+                            ';
 
                     }
 
@@ -1546,7 +1585,7 @@ class cursoControlador extends cursoModelo
         //SELECIONADO CURSO
         $usuario=$_SESSION['codigo_srcp'];
         $datosEs = $conexion->query("
-            SELECT * FROM especialidad WHERE sesion='$usuario' ");
+            SELECT * FROM especialidad WHERE sesion='$usuario' and estado_actual=0");
         $datosEs = $datosEs->fetchAll();
         foreach ($datosEs as $rowsEs) {
             $idespecialidad=$rowsEs['idespecialidad'];
@@ -1586,11 +1625,11 @@ class cursoControlador extends cursoModelo
                                                                     <input type="hidden" class="form-control" name="idespecialidad" id="idespecialidad" value="'.$idespecialidad.'" >
                                                                     <input type="hidden" class="form-control" name="codigousuario" id="codigousuario" value="'. $usuario.'">
                                                                
-                                                                    <input type="text" class="form-control" name="dni" id="dni" placeholder="Nombre" required>
+                                                                    <input type="text" class="form-control" name="dni" id="dni" placeholder="Nombre" >
                                                                 </div>
                                                                 <div class="col-md-5 form-group">
                                                                     <label for="exampleInputEmail1">Fecha Nacimiento</label>
-                                                                    <input type="date" class="form-control" name="fechanacimiento" id="fechanacimiento" placeholder="Nombre" required>
+                                                                    <input type="date" class="form-control" name="fechanacimiento" id="fechanacimiento" >
                                                                 </div>
                                                                 <div class="col-md-4 form-group">
                                                                     <label for="exampleInputEmail1">Alumno</label>
@@ -1615,7 +1654,7 @@ class cursoControlador extends cursoModelo
                                                                 </div>
                                                                 <div class=" col-md-6 form-group">
                                                                     <label for="exampleInputEmail1">Teléfono</label>
-                                                                    <input type="text" class="form-control" name="telefono" id="telefono" required placeholder="Telefono">
+                                                                    <input type="text" class="form-control" name="telefono" id="telefono"  placeholder="Telefono">
                                                                 </div>
                                                             </div>
 
