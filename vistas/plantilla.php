@@ -21,13 +21,13 @@
         $vist= new vistasControlador();
         $vistasRespuesta=$vist->obtener_vistas_controlador();
 
-        if($vistasRespuesta=="login" || $vistasRespuesta=="404" || $vistasRespuesta=="prematricula"  || $vistasRespuesta=="formularioinfo"):
+        if($vistasRespuesta=="login" || $vistasRespuesta=="404" || $vistasRespuesta=="informacion"  || $vistasRespuesta=="gracias"):
             if ($vistasRespuesta=="login" ) {
               require_once('./vistas/contenidos/login-vista.php');
-            } else if($vistasRespuesta=="prematricula"){
-              require_once('./vistas/contenidos/prematricula-vista.php');
-            }else if($vistasRespuesta=="formularioinfo"){
-              require_once('./vistas/contenidos/formularioinfo-vista.php');
+            } else if($vistasRespuesta=="informacion"){
+              require_once('./vistas/contenidos/informacion/seguridadsalud-vista.php');
+            }else if($vistasRespuesta=="gracias"){
+              require_once('./vistas/contenidos/informacion/gracias-vista.php');
             }else{
               require_once('./vistas/contenidos/404-vista.php');
             }

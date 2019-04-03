@@ -66,10 +66,10 @@ class vistasModelo
             $contenido = "login";
         } elseif ($vistas == "index") {
             $contenido = "login";
-        } elseif($vistas == "prematricula") {
-            $contenido = "prematricula";
-        }else if($vistas=="formularioinfo"){
-            $contenido = "formularioinfo";
+        } elseif($vistas == "informacion") {
+            $contenido = "informacion";
+        }else if($vistas=="gracias"){
+            $contenido = "gracias";
         }else{
             $contenido = "404";
         }

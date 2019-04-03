@@ -86,7 +86,7 @@ class loginControlador extends loginModelo{
         }
             else{
                 $error='<script> function myFunction() {
-                    alert("Hello! I am an alert box!");
+                    alert("Usuario y contraseña Incorrecta");
                     
                   }
                   myFunction();
