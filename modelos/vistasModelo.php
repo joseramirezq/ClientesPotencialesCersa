@@ -68,8 +68,13 @@ class vistasModelo
             $contenido = "login";
         } elseif($vistas == "informacion") {
             $contenido = "informacion";
+        }
+        elseif($vistas == "obrasporimpuestos") {
+            $contenido = "obrasporimpuestos";
         }else if($vistas=="gracias"){
             $contenido = "gracias";
+        } else if($vistas=="cursogracias"){
+            $contenido = "cursogracias";
         }else{
             $contenido = "404";
         }

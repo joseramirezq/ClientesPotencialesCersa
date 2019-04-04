@@ -1563,9 +1563,7 @@ class cursoControlador extends cursoModelo
                         '.$nombreusuario.'
                         </td>
                        
-                        <td>
-                            <a href="alumnodetalle.php" class="btn btn-inverse-dark ">Ver</a>
-                        </td>
+                        
                      </tr>';
         }}
         return $tarjeta;

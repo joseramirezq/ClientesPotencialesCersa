@@ -1,4 +1,9 @@
 <!--titulo del curso-->
+<?php
+
+if($_SESSION['privilegio_srcp']==1){
+ 
+?>
 <div class="row ">
   <div class="col-md-12 grid-margin stretch-card">
     <div class="card">
@@ -169,3 +174,4 @@
         </div>
     </div>
 </div> 
+<?php }?>

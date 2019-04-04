@@ -362,7 +362,7 @@
           //mostrar todos los usuarios activos
             
             $datosusuario = $conexion->query("
-            SELECT * FROM usuario WHERE estado_us=1");
+            SELECT * FROM usuario WHERE estado_us=1 AND permisos=3");
             $datosusuario = $datosusuario->fetchAll();
             foreach ($datosusuario as $rowsusuario) {
 
@@ -486,7 +486,7 @@
           //mostrar todos los usuarios activos
             
             $datosusuario = $conexion->query("
-            SELECT * FROM usuario WHERE estado_us=1");
+            SELECT * FROM usuario WHERE estado_us=1 AND permisos=3");
             $datosusuario = $datosusuario->fetchAll();
             foreach ($datosusuario as $rowsusuario) {
               $idusuario=$rowsusuario['idusuario'];
@@ -614,7 +614,7 @@
           //mostrar todos los usuarios activos
             
             $datosusuario = $conexion->query("
-            SELECT * FROM usuario WHERE estado_us=1");
+            SELECT * FROM usuario WHERE estado_us=1 AND permisos=3");
             $datosusuario = $datosusuario->fetchAll();
             foreach ($datosusuario as $rowsusuario) {
               $idusuario=$rowsusuario['idusuario'];
@@ -734,7 +734,7 @@
           //mostrar todos los usuarios activos
             
             $datosusuario = $conexion->query("
-            SELECT * FROM usuario WHERE estado_us=1");
+            SELECT * FROM usuario WHERE estado_us=1 AND permisos=3");
             $datosusuario = $datosusuario->fetchAll();
             foreach ($datosusuario as $rowsusuario) {
               $idusuario=$rowsusuario['idusuario'];

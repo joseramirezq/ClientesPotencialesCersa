@@ -164,7 +164,7 @@
             }
 
             if($cantestados==0){
-              $cantestados=454564;
+              $cantestados=1000;
             }
 
             $table.='
@@ -306,7 +306,7 @@
                  </td>
 
                 <td>
-                '.$rowsCli['nombres_cli'].' '.$rowsCli['nombres_cli'].'
+                '.$rowsCli['nombres_cli'].' '.$rowsCli['apellidos_cli'].'
                 </td>
 
                 <td>

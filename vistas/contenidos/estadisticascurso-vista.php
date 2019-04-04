@@ -1,3 +1,8 @@
+<?php
+
+if($_SESSION['privilegio_srcp']==1){
+ 
+?>
 <div class="row">
                     <?php
                             require_once("./controladores/estadisticascursoControlador.php");
@@ -61,5 +66,5 @@
             </div>
          
 </div>
-
+<?php }?>
 

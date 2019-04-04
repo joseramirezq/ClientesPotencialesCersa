@@ -1,3 +1,8 @@
+<?php
+
+if($_SESSION['privilegio_srcp']==1){
+ 
+?>
 <div class="row">
 
             <div class="col-lg-12 grid-margin">
@@ -105,3 +110,4 @@
              
 </div>     
 </div>
+<?php } ?>

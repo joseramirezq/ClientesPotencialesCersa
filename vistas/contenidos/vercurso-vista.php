@@ -48,7 +48,7 @@
                                 <th>Atendico por</th>
 
 
-                                <th>Detalle</th>
+                              
                             </tr>
                         </thead>
                         <tbody>

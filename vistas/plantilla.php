@@ -8,6 +8,84 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <?php include('vistas/modulos/script1.php'); ?>   
     <title><?php echo COMPANY;?></title>
+   
+    <!-- Facebook Pixel Code --><script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '259226141222886');
+  fbq('track', 'PageView');
+</script><noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=259226141222886&ev=PageView&noscript=1"
+/></noscript><!-- End Facebook Pixel Code --><script>
+  fbq('track', 'Purchase');
+</script><script>
+  fbq('track', 'Lead');
+</script><script>
+  fbq('track', 'CompleteRegistration');
+</script><script>
+  fbq('track', 'AddToCart');
+</script><script>
+  fbq('track', 'Search');
+</script><script>
+  fbq('track', 'Contact');
+</script><script>
+  fbq('track', 'FindLocation');
+</script><script>
+  fbq('track', 'Subscribe');
+</script><script>
+  fbq('track', 'Purchase');
+</script><script>
+  fbq('track', 'Purchase', {
+    value: 1,
+    currency: 'PEN',
+  });
+</script><!-- Facebook Pixel Code --><script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '550768331977025');
+  fbq('track', 'PageView');
+</script><noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=550768331977025&ev=PageView&noscript=1"
+/></noscript><!-- End Facebook Pixel Code --><script>
+  fbq('track', 'Purchase');
+</script><script>
+  fbq('track', 'Purchase', {
+    value: 1,
+    currency: '1',
+  });
+</script><script>
+  fbq('track', 'Lead');
+</script><script>
+  fbq('track', 'CompleteRegistration');
+</script><script>
+  fbq('track', 'AddPaymentInfo');
+</script><script>
+  fbq('track', 'AddToCart');
+</script><script>
+  fbq('track', 'ViewContent');
+</script><script>
+  fbq('track', 'Contact');
+</script><script>
+  fbq('track', 'Subscribe');
+</script>
+
+
+
+
+
+
 </head>
 <body>
  
@@ -21,14 +99,20 @@
         $vist= new vistasControlador();
         $vistasRespuesta=$vist->obtener_vistas_controlador();
 
-        if($vistasRespuesta=="login" || $vistasRespuesta=="404" || $vistasRespuesta=="informacion"  || $vistasRespuesta=="gracias"):
+        if($vistasRespuesta=="login" || $vistasRespuesta=="404" || $vistasRespuesta=="informacion" || $vistasRespuesta=="obrasporimpuestos"   || $vistasRespuesta=="gracias" || $vistasRespuesta=="cursogracias"):
             if ($vistasRespuesta=="login" ) {
               require_once('./vistas/contenidos/login-vista.php');
             } else if($vistasRespuesta=="informacion"){
               require_once('./vistas/contenidos/informacion/seguridadsalud-vista.php');
             }else if($vistasRespuesta=="gracias"){
               require_once('./vistas/contenidos/informacion/gracias-vista.php');
-            }else{
+            }else if($vistasRespuesta=="cursogracias"){
+              require_once('./vistas/contenidos/informacion/cursogracias-vista.php');
+            }
+          else if($vistasRespuesta=="obrasporimpuestos"){
+            require_once('./vistas/contenidos/informacion/obrasporimpuesto-vista.php');
+          }
+          else{
               require_once('./vistas/contenidos/404-vista.php');
             }
             
