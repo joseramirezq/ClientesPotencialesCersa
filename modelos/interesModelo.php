@@ -34,21 +34,21 @@ class interesModelo extends mainModel
        // WHERE idinteres=:Idinteres ");
 
         $sql=self::conectar()->prepare("UPDATE 
-        interes SET  idestado=:Estado, descri_estado=:Descripcion, fecha_notificacion=:Fechanotificacion, 	fecha_cambio_estado=:Fechaactual 
+        interes SET  idestado=:Estado, idusuario=:Codigousuario, descri_estado=:Descripcion, fecha_notificacion=:Fechanotificacion, 	fecha_cambio_estado=:Fechaactual , baucher=:Baucher
         WHERE idinteres=:Idinteres ");
 
 
       
         $sql->bindParam(":Idinteres", $datos['Idinteres']);
        // $sql->bindParam(":Idespecialidad",$datos['Idespecialidad']);
-       // $sql->bindParam(":Codigousuario", $datos['Codigousuario']);
+        $sql->bindParam(":Codigousuario", $datos['Codigousuario']);
         //$sql->bindParam(":Codigocliente",$datos['Codigocliente']);
         $sql->bindParam(":Estado" ,$datos['Estado']);
         $sql->bindParam(":Fechanotificacion", $datos['Fechanotificacion']);
         $sql->bindParam(":Fechaactual", $datos['Fechaactual']);
         
        $sql->bindParam(":Descripcion", $datos['Descripcion']);
-      //  $sql->bindParam(":Baucher",$datos['Baucher']);
+        $sql->bindParam(":Baucher",$datos['Baucher']);
         
         
         

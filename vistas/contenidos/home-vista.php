@@ -1,24 +1,11 @@
 <!--CONTENIDO DEL LA PAGINA-->  
 
 <div class="row">
-              <div class="col-md-6">
-
-                <!--formulario de busqueda-->
-                <form action="">
-                      <div class="input-group ">
-                          <input type="text" class="form-control" placeholder="Escribe nombre curso o diplomado">
-                          <span class="input-group-append">
-                              <button class="file-upload-browse btn btn-inverse-primary" type="button"> <i class="fa fa-search"></i> Buscar</button>
-                          </span>
-                      </div>
-                  </form>
-
-                  <!--fin fformulario de bisqueda-->
-              </div>
+            
 
              
 
-              <div class="col-md-2">
+              <div class="col-md-12">
                <a href="<?php SERVERURL ?>homelista"><button type="button" class="mb-0 btn btn-dark btn-fw"> <i class="fa fa-list-ol"></i> Ver lista</button></a> 
               </div>
 

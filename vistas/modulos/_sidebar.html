@@ -10,7 +10,11 @@
             <p class="profile-name"><?php echo $_SESSION['us_nombre'];?></p>
             <div>
               <small class="designation text-muted"><?php echo $_SESSION['us_cargo'];?></small>
-              <span class="status-indicator online"></span>
+              <span class="status-indicator online">
+                  
+              </span>
+            
+              
             </div>
           </div>
         </div>
@@ -91,14 +95,18 @@
                   <i class="menu-icon fa fa-book"></i>Cursos /Diplomados</a> 
               </li>
               <li class="nav-item">
+                <a class="nav-link" href="<?php echo SERVERURL;?>estadisticasestadoscurso">
+                  <i class="menu-icon  fa fa-cubes"></i>Estados</a> 
+              </li>
+              <li class="nav-item">
                 <a class="nav-link" href="<?php echo SERVERURL;?>estadisticasusuario">
                   <i class="menu-icon fa fa-users"></i>Usuarios</a> 
               </li>
-              <li class="nav-item">
+            <!--  <li class="nav-item">
                  
                   <a class="nav-link" href="<?php echo SERVERURL;?>graficos">
                     <i class="menu-icon fa fa-signal"></i>Graficos Estadísticos</a>
-                </li>
+                </li>-->
             </ul>
           </div>
         </li>
@@ -181,6 +189,7 @@
             }
         </style>
         </li>
+      
 
   
   </ul>

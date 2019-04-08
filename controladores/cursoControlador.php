@@ -365,40 +365,175 @@ class cursoControlador extends cursoModelo
     public function mostrar_notificaciones_controlador(){
         $notifiacion="";
         $clientesnuevos=0;
+        $cursorepetido=8000;
         $des=1000000;
         $fecha=date("Y-m-d");
-        
+        $nuevosfinal=0;
+        $especialidads="";
+        $cont=0;
+     
 
 
         $conexion = mainModel::conectar();
+       //session_start(['name'=>'SRCP']);
+
+               
+
+        $cursoocupado=$_SESSION['codigo_srcp'];
+        $cursos=$_SESSION['sesioncurso'];
+        $curso=$_SESSION['curso'];
 
 
-        $datosnuevos = $conexion->query("
-        SELECT idespecialidad FROM interes WHERE idestado=1");
-        $datosnuevos = $datosnuevos->fetchAll();
-        foreach ($datosnuevos as $rowsnuevos) {
-            $nuevos=$rowsnuevos['idespecialidad'];
+        $datosEspeciass = $conexion->query("
+        SELECT * FROM especialidad where estado_actual=0 and fecha_fin>curdate()");
+        $datosEspeciass = $datosEspeciass->fetchAll();
+        foreach ($datosEspeciass as $rowssespes) {
+            $cursoensesion=$rowssespes['sesion'];
+          if($cursoensesion==$cursoocupado){
+           
+            $cont=1;
+          }
+          else{
+            //$cont=0;
+          }
+
+        }
+
+        if($cont==0){
+
+            $datosnuevos = $conexion->query("
+            SELECT idespecialidad FROM interes WHERE idestado=1 ORDER BY idespecialidad");
+            $datosnuevos = $datosnuevos->fetchAll();
+            foreach ($datosnuevos as $rowsnuevos) {
+                $nuevos=$rowsnuevos['idespecialidad'];
+    
+               if($nuevos!=$cursorepetido) {
+                $cursorepetido=$nuevos;
+    
+                $datosEspecia = $conexion->query("
+                SELECT * FROM especialidad WHERE idespecialidad='$nuevos'");
+                $datosEspecia = $datosEspecia->fetchAll();
+                foreach ($datosEspecia as $rowsespe) {
+                    $especialidads=$rowsespe['nombre_es'];
+                    
+                    $datosfinal = $conexion->query("
+                    SELECT COUNT(*) AS nuevosfinal FROM interes 
+                    WHERE idespecialidad='$nuevos' and idestado=1");
+                    $datosfinal = $datosfinal->fetchAll();
+                    foreach ($datosfinal as $rowsfinal) {
+                        $nuevosfinal=$rowsfinal['nuevosfinal'];
+                    }
+    
+                }
+                }
+                        if($nuevos==$des){
+                           
+                           
+                        }else{
+                            $des=$nuevos;
+                            $notifiacion.='
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item preview-item">
+                              <div class="preview-thumbnail">
+                                <div class="preview-icon bg-success">
+                                '.$nuevosfinal.'
+                                </div>
+                              </div>
+                              <div class="preview-item-content">
+                                <h6 class="preview-subject font-weight-medium text-dark">'.$especialidads.'</h6>
+                                <p class="font-weight-light small-text">
+                                  Clientes nuevos 
+                                </p>
+                              </div>
+                            </a>';
+                      
+                      
+                
+               
+    
+            }
+        }
+    
+    
+         
+    
+    
+            //cursos con las notificaciones que esta programadas para hoy
+            $cursoactual=0;
+            $contador=0;
+            $contaws=0;
+            $datosSesion = $conexion->query("
+            SELECT * FROM interes WHERE DATE_FORMAT(`fecha_notificacion`,'%Y-%m-%d')=curdate() ORDER BY idespecialidad ");
+            $datosSesion = $datosSesion->fetchAll();
+            foreach ($datosSesion as $rowssesione) {
+                $idinteres=$rowssesione['idespecialidad'];
+                $hora=$rowssesione['fecha_notificacion'];
+
+                if($idinteres!=$cursoactual){
+                   $cursoactual=$idinteres;
+                    $contador=0;
+                }
+                if($idinteres==$cursoactual){
+                    $contaws=1;
+                    $cursoactual=$idinteres;
+                    $contador++;
+                }
+                
+                if( $contaws==1 && $contador>0){
+                $datosSesiones = $conexion->query("
+                SELECT * FROM especialidad WHERE idespecialidad='$idinteres'");
+                $datosSesiones = $datosSesiones->fetchAll();
+                foreach ($datosSesiones as $rowssesiones) {
+                    $especialidad=$rowssesiones['nombre_es'];
+    
+                    $notifiacion.='   <div class="dropdown-divider"></div>
+                    <a class="dropdown-item preview-item">
+                      <div class="preview-thumbnail">
+                        <div class="preview-icon bg-warning">
+                       1
+                        </div>
+                      </div>
+                      <div class="preview-item-content">
+                        <h6 class="preview-subject font-weight-medium text-dark"> '.$especialidad.' </h6>
+                        <p class="font-weight-light small-text">
+                         llamar '. $contador.' 
+                        </p>
+                      </div>
+                    </a>';
+
+                }
+                
+                }
+            
+            }
+    
+            $notifiacion.='';
+    
+
+        }
+      
+        if($cont==1 ){
+        
 
             $datosEspecia = $conexion->query("
-            SELECT * FROM especialidad WHERE idespecialidad='$nuevos'");
+            SELECT * FROM especialidad WHERE sesion='$cursoocupado'");
             $datosEspecia = $datosEspecia->fetchAll();
             foreach ($datosEspecia as $rowsespe) {
-                $especialidads=$rowsespe['nombre_es'];
+                $ides=$rowsespe['idespecialidad'];
+                //$especialidads=$rowsespe['nombre_es'];
                 
                 $datosfinal = $conexion->query("
                 SELECT COUNT(*) AS nuevosfinal FROM interes 
-                WHERE idespecialidad='$nuevos' and idestado=1");
+                WHERE idespecialidad='$ides' and idestado=1");
                 $datosfinal = $datosfinal->fetchAll();
                 foreach ($datosfinal as $rowsfinal) {
                     $nuevosfinal=$rowsfinal['nuevosfinal'];
                 }
 
+
+            
             }
-                    if($nuevos==$des){
                        
-                       
-                    }else{
-                        $des=$nuevos;
                         $notifiacion.='
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item preview-item">
@@ -408,21 +543,16 @@ class cursoControlador extends cursoModelo
                             </div>
                           </div>
                           <div class="preview-item-content">
-                            <h6 class="preview-subject font-weight-medium text-dark">'.$especialidads.'</h6>
+                            <h6 class="preview-subject font-weight-medium text-dark">Clientes Nuevos</h6>
                             <p class="font-weight-light small-text">
-                              Clientes nuevos 
+                              Deben ser atendidos cuanto antes 
                             </p>
                           </div>
                         </a>';
+
+
+
                   
-                  
-            
-           
-
-        }
-    }
-
-
       //contado la cantidad de nuevos
         $datosSesion2 = $conexion->query("
         SELECT COUNT(*) AS nuevos FROM interes WHERE idestado=1");
@@ -434,17 +564,24 @@ class cursoControlador extends cursoModelo
 
         //cursos con las notificaciones que esta programadas para hoy
         $datosSesion = $conexion->query("
-        SELECT * FROM interes WHERE DATE_FORMAT(`fecha_notificacion`,'%Y-%m-%d')=curdate()");
+        SELECT * FROM interes WHERE DATE_FORMAT(`fecha_notificacion`,'%Y-%m-%d')=curdate() AND idespecialidad=$ides");
         $datosSesion = $datosSesion->fetchAll();
         foreach ($datosSesion as $rowssesione) {
             $idinteres=$rowssesione['idespecialidad'];
+            $codigoclientee=$rowssesione['codigocliente'];
             $hora=$rowssesione['fecha_notificacion'];
+            $fechanotificacion=$rowssesione['fecha_notificacion'];
+
+            $resultado=explode(" ",$fechanotificacion);
+
+
 
             $datosSesiones = $conexion->query("
-            SELECT * FROM especialidad WHERE idespecialidad='$idinteres'");
+            SELECT * FROM cliente WHERE codigocliente='$codigoclientee'");
             $datosSesiones = $datosSesiones->fetchAll();
             foreach ($datosSesiones as $rowssesiones) {
-                $especialidad=$rowssesiones['nombre_es'];
+                $codcliente=$rowssesiones['codigocliente'];
+                $nombreCli=$rowssesiones['nombres_cli'];
 
                 $notifiacion.='   <div class="dropdown-divider"></div>
                 <a class="dropdown-item preview-item">
@@ -454,9 +591,9 @@ class cursoControlador extends cursoModelo
                     </div>
                   </div>
                   <div class="preview-item-content">
-                    <h6 class="preview-subject font-weight-medium text-dark"> '.$especialidad.' </h6>
+                    <h6 class="preview-subject font-weight-medium text-dark"> '.$codcliente.' : '.$nombreCli.' </h6>
                     <p class="font-weight-light small-text">
-                     llamar '. $hora.' 
+                     Llamar a las  '. $resultado[1].' 
                     </p>
                   </div>
                 </a>';
@@ -465,26 +602,48 @@ class cursoControlador extends cursoModelo
         
         }
 
+
+        $datosSesion2 = $conexion->query("
+        SELECT * FROM interes WHERE DATE_FORMAT(`fecha_notificacion`,'%Y-%m-%d')<curdate() AND  DATE_FORMAT(`fecha_notificacion`,'%Y-%m-%d')<>'0000-00-00'  AND idespecialidad=$ides");
+        $datosSesion2 = $datosSesion2->fetchAll();
+        foreach ($datosSesion2 as $rowssesione2) {
+            $codigoclientees=$rowssesione2['codigocliente'];
+            $idinteres=$rowssesione2['idespecialidad'];
+            $hora=$rowssesione2['fecha_notificacion'];
+            $fechanotificacion=$rowssesione2['fecha_notificacion'];
+
+            $resultado=explode(" ",$fechanotificacion);
+
+
+
+            $datosSesiones = $conexion->query("
+            SELECT * FROM cliente WHERE codigocliente='$codigoclientees'");
+            $datosSesiones = $datosSesiones->fetchAll();
+            foreach ($datosSesiones as $rowssesiones) {
+                $codclientes=$rowssesiones['codigocliente'];
+                $nombreClis=$rowssesiones['nombres_cli'];
+
+                $notifiacion.='   <div class="dropdown-divider"></div>
+                <a class="dropdown-item preview-item">
+                  <div class="preview-thumbnail">
+                    <div class="preview-icon bg-danger">
+                   1
+                    </div>
+                  </div>
+                  <div class="preview-item-content">
+                    <h6 class="preview-subject font-weight-medium text-dark">'.$codclientes.' : '.$nombreClis.'  </h6>
+                    <p class="font-weight-light small-text">
+                    Debio llamar el '. $resultado[0].'  a las  '. $resultado[1].' 
+                    </p>
+                  </div>
+                </a>';
+            
+            }
+        
+        }
+
+    }
         $notifiacion.='
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item preview-item">
-          <div class="preview-thumbnail">
-            <div class="preview-icon bg-danger">
-            '.$clientesnuevos.'
-            </div>
-          </div>
-          <div class="preview-item-content">
-            <h6 class="preview-subject font-weight-medium text-dark">Clientes Nuevos</h6>
-            <p class="font-weight-light small-text">
-              Todos los cursos
-            </p>
-          </div>
-        </a>
-
-
-     
-
-
         
         ';
         return $notifiacion;
@@ -1247,6 +1406,93 @@ class cursoControlador extends cursoModelo
         }
         return $tarjeta;
     }
+    public function datoscurso_controlador()
+    {
+       //session_start(['name'=>'SRCP']);
+       //$categoria = mainModel::limpiar_cadena($_GET['Curso']);    
+       
+       
+        
+       date_default_timezone_set('America/Lima');
+       setlocale(LC_TIME, 'spanish');
+       setlocale(LC_TIME,"es_ES");
+
+     
+        
+       
+       
+       $tarjeta = "";
+        
+        $contadorestados=array();
+        $conexion = mainModel::conectar();
+        $usuario=$_SESSION['codigo_srcp'];
+        $datosd = $conexion->query("
+            SELECT * FROM especialidad WHERE sesion='$usuario' ");
+
+        $datosd = $datosd->fetchAll();
+        foreach ($datosd as $rows) {
+
+            $fechaactua=$rows['fecha_inicio'];
+            // $new_date=date('Ym-d', strtotime(str_replace('-','/', $fechaactua)));
+            //$fechaactua=$rows['fecha_inicio'];
+          
+          // $new_date = date_format(date_create($fechaactua), 'Y-m-d');
+            $fechaactual=date($fechaactua);
+
+
+            $costototal=$rows['costo_matricula']+$rows['costo_certi'];
+
+            $tarjeta .= '<h3 class="text-primary">'.$rows['nombre_es'].'
+                  
+                    </h3>
+                ';
+
+                //Descripcion del curso 
+                $tarjeta .= '
+                <div class="row">
+                    <div class="col-4 p-3">
+                        <h4 class="mb-2 text-primary">Horario</h4>
+                        <p class="mb-1"><strong> Inicio : </strong> '.$fechaactual.' </p>
+                        <p class="mb-2 text"> <strong>Fin : </strong>  '.$rows['fecha_fin'].'</p>
+                        <p class="mb-1 text"> <strong>Duración : </strong>'.$rows['duracion_es'].'</p>
+                        <p class="mb-2 text"> <strong>Horario  : </strong> '.$rows['horario'].'</p>
+                    </div>
+                    <div class="col-2 p-3">
+                        <h4 class="mb-2 text-primary">Costo</h4>
+                        <p class="mb-1 text"> <strong>Matricula :</strong> S/. '.$rows['costo_matricula'].' </p>
+                        <p class="mb-2 text"> <strong>Certificado :</strong>  S/. '.$rows['costo_certi'].' </p>
+                        <p class="mb-1 text"> <strong>Alternativo : </strong>S/.'.$costototal.'   </p>
+                       
+                    </div>
+                    <div class="col-6 p-3">
+                        <h4 class="mb-2 text-primary">Beneficios</h4>
+                        <ul class="list-ticked">
+                            <li>Acceso a nuestra aula virtual las 24 horas.</li>
+                            <li>Videotutoriales didácticos para que los pueda visualizar desde su celular.</li>
+                            '; 
+                                             
+                            if($rows['modalidad']==1){
+                            $tarjeta .='
+                                <li>Asesoramiento constante de parte del docente vía correo y WhatsApp.</li>
+                            ';}
+                            $tarjeta .=' <li>';
+
+                            if($rows['idcategoria']==1){
+                                $tarjeta .='
+                                Certificado  &nbsp; ';}
+                                else{
+                                $tarjeta .='Diploma  &nbsp;';
+                                }
+                            $tarjeta .='con '.$rows['horas_certificado'].' horas pedagógicas en digital autenticado mediante código QR.</li>
+                            <li>Material de las clases en digital.</li>
+                        </ul>
+                     
+                    </div>
+                </div>
+                ';
+        }
+        return $tarjeta;
+    }
 
     public function ver_sesion_curso_controlador(){
         $tarjeta = "";
@@ -1440,7 +1686,7 @@ class cursoControlador extends cursoModelo
                     SELECT * FROM estado WHERE 	idestado='$estado' ");
                     $datosEstado = $datosEstado->fetchAll();
                     foreach ($datosEstado as $rowsEstado) {
-                     $tarjeta .= '<button type="button" style="color:'.$rowsEstado['color'].';" class="btn  btn-sm white-text " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                     $tarjeta .= '<button type="button"  class="btn  btn-sm  " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
                                  '.$rowsEstado['nombre_estado'].'
                                 </button>
 
@@ -1623,7 +1869,7 @@ class cursoControlador extends cursoModelo
                                                                     <input type="hidden" class="form-control" name="idespecialidad" id="idespecialidad" value="'.$idespecialidad.'" >
                                                                     <input type="hidden" class="form-control" name="codigousuario" id="codigousuario" value="'. $usuario.'">
                                                                
-                                                                    <input type="text" class="form-control" name="dni" id="dni" placeholder="Nombre" >
+                                                                    <input type="text" class="form-control" name="dni" id="dni" placeholder="DNI" >
                                                                 </div>
                                                                 <div class="col-md-5 form-group">
                                                                     <label for="exampleInputEmail1">Fecha Nacimiento</label>

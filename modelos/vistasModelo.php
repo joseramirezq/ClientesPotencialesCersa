@@ -28,7 +28,7 @@ class vistasModelo
             "detallecurso",
             "editarcurso",
             "estadisticascurso",
-
+            "estadisticasestadoscurso",
             //vista usuarios
             "listausuario",
             "agregarusuario",

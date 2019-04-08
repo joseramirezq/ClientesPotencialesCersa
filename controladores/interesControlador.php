@@ -17,12 +17,21 @@ class interesControlador extends interesModelo
         $idespecialidad = mainModel::limpiar_cadena($_POST['idespecialidad']);
         $codigousuario = mainModel::limpiar_cadena($_POST['codigousuario']);
        // $codigocliente = mainModel::limpiar_cadena($_POST['codigocliente']);
-        $estado = mainModel::limpiar_cadena($_POST['estado']);
+       $codigousuario=$_SESSION['id_usuario'];
+       $estado = mainModel::limpiar_cadena($_POST['estado']);
         $fechanotificacion = mainModel::limpiar_cadena($_POST['fechanotificacion']);
         $descripcion = mainModel::limpiar_cadena($_POST['descripcion']);
         $fechaactual= date('Y-m-d H:i:s');
-      //  $boucher = mainModel::limpiar_cadena($_POST['boucher']);
-        
+        $imagen = $_POST['imagen'];
+
+        $target_path = SERVERURL."vistas/images/baucher/";
+        $target_path = $target_path . basename( $_FILES['imagen']['name']); 
+        if(move_uploaded_file($_FILES['imagen']['tmp_name'], $target_path)) {
+            echo "El archivo ".  basename( $_FILES['imagen']['name']). 
+            " ha sido subido";
+        } else{
+            echo "Ha ocurrido un error, trate de nuevo!";
+        }
       
       //Datos para actualizar control de usuario 
       $codigocontrol=$_SESSION['controlusuario'];
@@ -42,8 +51,8 @@ class interesControlador extends interesModelo
             "Estado" => $estado,
             "Fechanotificacion" => $fechanotificacion,
             "Fechaactual"=>$fechaactual,
-            "Descripcion" => $descripcion
-          // "Baucher" => $boucher
+            "Descripcion" => $descripcion,
+            "Baucher" =>   $target_path
           
 
         ];

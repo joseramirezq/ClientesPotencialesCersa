@@ -28,10 +28,10 @@ if($_SESSION['privilegio_srcp']==1){
                             Posicion
                           </th>
                           <th>
-                            Estados
+                            Codigo
                           </th>
                           <th>
-                            Codigo
+                            Categoria
                           </th>
                           <th>
                             Nombre
@@ -66,5 +66,7 @@ if($_SESSION['privilegio_srcp']==1){
             </div>
          
 </div>
+
+
 <?php }?>
 

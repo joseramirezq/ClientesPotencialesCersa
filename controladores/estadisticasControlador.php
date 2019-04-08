@@ -116,6 +116,79 @@
 
         }
 
+        public function total_estados_cursos_controlador()
+        {
+                    $cantidadCli="";
+                    $table="";
+                    
+                    $conexion=mainModel::conectar();
+
+                    //cantidad de clientes en total
+                    $datosCli = $conexion->query("
+                    SELECT COUNT(*) AS TOTAL FROM cliente where fincurso>curdate()");
+                    $datosCli = $datosCli->fetchAll();
+                    foreach ($datosCli as $rowsCli) {
+                    $cantidadCli=$rowsCli['TOTAL'];
+                }
+
+    
+            $cantestados="";
+            $datoscantestado = $conexion->query("
+            SELECT COUNT(*) AS totalestado FROM interes");
+            $datoscantestado = $datoscantestado->fetchAll();
+            foreach ($datoscantestado as $rowsestadocant) {
+            $cantestados=$rowsestadocant['totalestado'];
+            }
+
+            $table.='
+
+           
+              ';
+
+
+            //estados de cada interes
+            $idestado=0;
+            $datosestadoG = $conexion->query("
+            SELECT *  FROM estado");
+            $datosestadoG = $datosestadoG->fetchAll();
+            foreach ($datosestadoG as $rowsestadog) {
+            $idestado=$rowsestadog['idestado'];
+        
+
+            $porcentaje=0;
+            $estados="";
+            $datosestado = $conexion->query("
+            SELECT COUNT(*) AS totalestado FROM interes WHERE idestado='$idestado'");
+            $datosestado = $datosestado->fetchAll();
+            foreach ($datosestado as $rowsestado) {
+            $estados=$rowsestado['totalestado'];
+            }
+            $porcentaje=($estados*100)/$cantestados;
+
+            $table.='
+
+            <div class="weakly-weather-item">
+            <p class="mb-0">
+            '.$rowsestadog['nombre_estado'].'
+            </p>
+            <i class="menu-icon  fa fa-cubes " style="color: '.$rowsestadog['color'].'; "></i>
+            <p class="mb-0">
+            '.$estados.'/ '.$cantestados.' - '.round($porcentaje,2).'%
+            </p>
+            <div class="progress">
+                <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated" role="progressbar" style="width: '.$porcentaje.'%" aria-valuenow="'.$estados.'" aria-valuemin="0" aria-valuemax="'.$cantestados.'">
+                </div>
+            </div>
+          </div>
+
+            ';
+            
+            }
+      
+             return $table;
+
+        }
+
         public function total_clientes_hoy_controlador()
         {
                     $cantidadCli="";

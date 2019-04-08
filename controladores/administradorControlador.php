@@ -25,10 +25,19 @@
             $numero=($consulta3->rowCount())+1;
             $codigo=mainModel::generar_codigo_aleatorio("US", 3, $numero);
 
-            $foto =$_FILES['foto']['name'];
-            $ruta =$_FILES['foto']['tmp_name'];
-            $destino=SERVERURL."vistas/images/usuarios/".$foto;
-            copy($ruta,$destino);
+           // $foto =$_FILES['foto']['name'];
+          //  $ruta =$_FILES['foto']['tmp_name'];
+          //  $destino=SERVERURL."vistas/images/usuarios/".$foto;
+//copy($ruta,$destino);
+
+            $target_path = SERVERURL."vistas/images/usuarios/";
+                    $target_path = $target_path . basename( $_FILES['foto']['name']); 
+                    if(move_uploaded_file($_FILES['foto']['tmp_name'], $target_path)) {
+                        echo "El archivo ".  basename( $_FILES['foto']['name']). 
+                        " ha sido subido";
+                    } else{
+                        echo "Ha ocurrido un error, trate de nuevo!";
+                    }
             
 
            if($pass1!=$pass2){
@@ -56,7 +65,7 @@
                     "Pass"=>$pass1, 
                     "Estado"=>"1", 
                     "Permiso"=>"$permiso",
-                    "Foto"=>"$destino"
+                    "Foto"=>"$target_path"
                     
                    
                 ];

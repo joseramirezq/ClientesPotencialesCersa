@@ -96,8 +96,8 @@
                   '.$contador.'
                 </td>
                 <td class="font-weight-medium">
-                 <button class="btn btn-dark ">Detalle</button>
-                </td>
+                '.$rowsespecialidad['idespecialidad'].'
+              </td>
 
                 <td class="font-weight-medium">
                   '.$nombrecat.'
@@ -127,6 +127,107 @@
             
 
             }
+                return $table;
+
+        }
+
+        public function total_estados_interes_controlador()
+        {
+                    $porcentaje=0;
+                    $table="";
+                    
+                    $conexion=mainModel::conectar();
+
+                    //cantidad de clientes en total
+            
+           
+
+           
+            $table.='
+               <thead class="bg bg-primary text-white">
+                    <tr>
+                   
+                        <th>
+                         Curso
+                        </th>
+                       ';
+
+           $datosEstado = $conexion->query("
+            SELECT * FROM estado "); 
+             $datosEstado = $datosEstado->fetchAll();
+            foreach ($datosEstado as $rowsEstado) {
+           
+                         $table.=' <th>
+                                   '.$rowsEstado['nombre_estado'].'
+                                 </th>';
+                               }
+
+            //estados de cada interes
+
+            $table.=' 
+                <th>
+                Total
+                </th>
+              </tr>
+            </thead>
+            <tbody>';
+
+
+            $idcat=0;
+           
+            $datosespe = $conexion->query("
+            SELECT *  FROM especialidad  where estado_actual=0 and fecha_fin>curdate()");
+            $datosespe = $datosespe->fetchAll();
+            foreach ($datosespe as $rowsespecialidad) {
+            $sumadeestados=0;
+            $idespecialidad=$rowsespecialidad['idespecialidad'];
+            $idcat=$rowsespecialidad['idcategoria'];
+
+            $table.='
+            <tr>
+                <td class="font-weight-medium">
+                '.$rowsespecialidad['nombre_es'].'
+                </td>';
+            $datosEstado = $conexion->query("
+            SELECT * FROM estado  ORDER BY idestado"); 
+             $datosEstado = $datosEstado->fetchAll();
+            foreach ($datosEstado as $rowsEstado) {
+              $idestado=$rowsEstado['idestado'];
+            
+
+            
+            //interesados por curso
+           
+            $totalinterescurso=0;
+            $datosinteres = $conexion->query("
+            SELECT COUNT(*) AS totalint FROM interes WHERE idespecialidad='$idespecialidad' AND idestado=$idestado ORDER BY idestado");
+            $datosinteres = $datosinteres->fetchAll();
+            foreach ($datosinteres as $rowsinteres) {
+              $cantidadestado=$rowsinteres['totalint'];
+              $sumadeestados+= $cantidadestado;
+
+
+              $table.='
+           
+              <td class="font-weight-medium">
+              '.$cantidadestado.'
+            </td>';
+            
+            }
+           }
+
+  
+            $table.='
+           
+            
+                <td class="bg">
+                '.$sumadeestados.'
+                  </td>
+          </tr> 
+          ';
+            
+        }
+            
                 return $table;
 
         }

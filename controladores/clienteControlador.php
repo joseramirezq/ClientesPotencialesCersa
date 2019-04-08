@@ -361,6 +361,7 @@ public function cliente_actualizacion_estado(){
         $fechacambio="";
         //SELECIONADO CURSO
         $usuario=$_SESSION['codigo_srcp'];
+        //$usuario=$_SESSION['codigo_srcp'];
         $datosEs = $conexion->query("
             SELECT * FROM especialidad WHERE sesion='$usuario' ");
         $datosEs = $datosEs->fetchAll();
@@ -717,7 +718,7 @@ public function cliente_actualizacion_estado(){
                                                             <div class="form-group">
                                                             
                                                                 <div class="input-group">
-                                                                    <input class="form-control" type="file" name="boucher" id="boucher>
+                                                                    <input class="form-control" type="file" name="imagen" id="imagen>
                                                                     <div class="input-group-append bg-primary border-primary">
                                                                         <span class="input-group-text bg-transparent">
                                                                         <i class="fa fa-file-text-o text-white"></i>
