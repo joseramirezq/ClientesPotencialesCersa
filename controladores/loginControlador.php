@@ -60,7 +60,8 @@ class loginControlador extends loginModelo{
                 $_SESSION['codigocliente']="";
                 $_SESSION['estadocliente']="";
                 $_SESSION['cursover']=0;
-               
+                $_SESSION['idestado']=0;
+             
                 $_SESSION['privilegio_srcp']=$row['permisos'];
                 $_SESSION['foto_srcp']=$row['foto_us'];
                 $_SESSION['token_srcp']=md5(uniqid(mt_rand(),true));

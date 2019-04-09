@@ -455,57 +455,7 @@ class cursoControlador extends cursoModelo
         }
     
     
-         
-    
-    
-            //cursos con las notificaciones que esta programadas para hoy
-            $cursoactual=0;
-            $contador=0;
-            $contaws=0;
-            $datosSesion = $conexion->query("
-            SELECT * FROM interes WHERE DATE_FORMAT(`fecha_notificacion`,'%Y-%m-%d')=curdate() ORDER BY idespecialidad ");
-            $datosSesion = $datosSesion->fetchAll();
-            foreach ($datosSesion as $rowssesione) {
-                $idinteres=$rowssesione['idespecialidad'];
-                $hora=$rowssesione['fecha_notificacion'];
 
-                if($idinteres!=$cursoactual){
-                   $cursoactual=$idinteres;
-                    $contador=0;
-                }
-                if($idinteres==$cursoactual){
-                    $contaws=1;
-                    $cursoactual=$idinteres;
-                    $contador++;
-                }
-                
-                if( $contaws==1 && $contador>0){
-                $datosSesiones = $conexion->query("
-                SELECT * FROM especialidad WHERE idespecialidad='$idinteres'");
-                $datosSesiones = $datosSesiones->fetchAll();
-                foreach ($datosSesiones as $rowssesiones) {
-                    $especialidad=$rowssesiones['nombre_es'];
-    
-                    $notifiacion.='   <div class="dropdown-divider"></div>
-                    <a class="dropdown-item preview-item">
-                      <div class="preview-thumbnail">
-                        <div class="preview-icon bg-warning">
-                       1
-                        </div>
-                      </div>
-                      <div class="preview-item-content">
-                        <h6 class="preview-subject font-weight-medium text-dark"> '.$especialidad.' </h6>
-                        <p class="font-weight-light small-text">
-                         llamar '. $contador.' 
-                        </p>
-                      </div>
-                    </a>';
-
-                }
-                
-                }
-            
-            }
     
             $notifiacion.='';
     
@@ -568,6 +518,8 @@ class cursoControlador extends cursoModelo
         $datosSesion = $datosSesion->fetchAll();
         foreach ($datosSesion as $rowssesione) {
             $idinteres=$rowssesione['idespecialidad'];
+            $idesinteres=$rowssesione['idinteres'];
+            $idestado=$rowssesione['idestado'];
             $codigoclientee=$rowssesione['codigocliente'];
             $hora=$rowssesione['fecha_notificacion'];
             $fechanotificacion=$rowssesione['fecha_notificacion'];
@@ -584,7 +536,15 @@ class cursoControlador extends cursoModelo
                 $nombreCli=$rowssesiones['nombres_cli'];
 
                 $notifiacion.='   <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
+                <form action="'.SERVERURL.'ajax/clienteAjax.php" method="POST">
+                <input type="hidden" name="enlacecliente" value="'.$codcliente.'">
+                <input type="hidden" name="idenestado" value="'.$idestado.'">
+                <input type="hidden" name="idinterescontrol" value="'.$idesinteres.'">
+               
+                             
+                
+                <button  type="submit" name="vistacambioestado" class="dropdown-item preview-item">
+                
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-warning">
                    1
@@ -596,7 +556,8 @@ class cursoControlador extends cursoModelo
                      Llamar a las  '. $resultado[1].' 
                     </p>
                   </div>
-                </a>';
+                </button>
+                </form>';
             
             }
         
@@ -611,6 +572,8 @@ class cursoControlador extends cursoModelo
             $idinteres=$rowssesione2['idespecialidad'];
             $hora=$rowssesione2['fecha_notificacion'];
             $fechanotificacion=$rowssesione2['fecha_notificacion'];
+            $idesinteresr=$rowssesione2['idinteres'];
+            $idestador=$rowssesione2['idestado'];
 
             $resultado=explode(" ",$fechanotificacion);
 
@@ -624,7 +587,13 @@ class cursoControlador extends cursoModelo
                 $nombreClis=$rowssesiones['nombres_cli'];
 
                 $notifiacion.='   <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
+                <form action="'.SERVERURL.'ajax/clienteAjax.php" method="POST">
+                <input type="hidden" name="enlacecliente" value="'.$codigoclientees.'">
+                <input type="hidden" name="idenestado" value="'.$idestador.'">
+                <input type="hidden" name="idinterescontrol" value="'.$idesinteresr.'">
+               
+                  
+                <button  type="submit" name="vistacambioestado" class="dropdown-item preview-item">
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-danger">
                    1
@@ -636,7 +605,8 @@ class cursoControlador extends cursoModelo
                     Debio llamar el '. $resultado[0].'  a las  '. $resultado[1].' 
                     </p>
                   </div>
-                </a>';
+                </button>
+                </form>';
             
             }
         
@@ -1261,111 +1231,59 @@ class cursoControlador extends cursoModelo
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h2 class="card-title text-success mb-2">
-                                    Detalle del Curso/Diplomado
-                                </h2>
+                               
 
                                 <div class="row">
-                                    <div class="col-md-3">
-                                        <address class="">
-                                            <p class="font-weight-bold">
-                                                Fecha
-                                            </p>
-                                            <p class="mb-2">
-                                            '.$rows['fecha_inicio'].'
-                                            </p>
-                                            <p class="font-weight-bold">
-                                                Duración
-                                            </p>
-                                            <p>
-                                            '.$rows['duracion_es'].'
-                                            </p>
-                                        </address>
-                                    </div>
+                                    
 
-                                    <div class="col-md-3">
-                                        <address class="">
-                                            <p class="font-weight-bold">
-                                                Modalidad
-                                            </p>
-                                           
-                                             '; 
-                                             
-                                    if($rows['modalidad']==1){
-                                        $tarjeta .= '<p class="mb-2">Virtual en Vivo</p>';
-                                            }
-                                          else  if($rows['modalidad']==2){
-                                                $tarjeta .= '<p class="mb-2">Solo Accesos</p>';
-                                                    }else{
-                                                        $tarjeta .= '<p class="mb-2">Presencial</p>';
-                                              
-                                                    }
-                                    $tarjeta .= ' 
-                                            <p class="font-weight-bold">
-                                                Certificacion
-                                            </p>
-                                            <p>
-                                            '.$rows['horas_certificado'].'
-                                            </p>
-                                        </address>
-                                    </div>
+                                   
 
-                                    <div class="col-md-3">
-                                        <address class="">
-                                            <p class="font-weight-bold">
-                                                Costo matricula
-                                            </p>
-                                            <p class="mb-2">
-                                            '.$rows['costo_matricula'].'
-                                            </p>
-                                            <p class="font-weight-bold">
-                                                Costo certificado
-                                            </p>
-                                            <p>
-                                            '.$rows['costo_certi'].'
-                                            </p>
-                                        </address>
-                                    </div>
 
-                                    <div class="col-md-3">
-                                        <address class="">
-                                            <p class="font-weight-bold">
-                                                Costo total
-                                            </p>
-                                            '; 
-                                             
-                                            $costototal=$rows['costo_matricula']+$rows['costo_certi'];
-                                            
-                                                $tarjeta .= '  <p class="mb-2">
-                                               '.$costototal.'
-                                            </p>';
-
-                                                   
-                                            $tarjeta .= '  
-                                          
-                                            <p class="font-weight-bold">
-                                                Costo Alternativo
-                                            </p>
-                                            <p>
-                                                '.$rows['costo_alternativo'].'
-                                            </p>
-                                        </address>
-                                    </div>
                                 </div>
                                 <div class="row ">
                                 ';
 
                                //ESTADOS
                                  //SECCION ESTADOS
-           
+                                 $te=0;
+                                 $estadoinicial=0;
+                                 $idespecialidad=$rows['idespecialidad'];
+                                 $datosInteress = $conexion->query("
+                                 SELECT COUNT(*) AS totalestado FROM interes WHERE idespecialidad='$idespecialidad'");
+                             $datosInteress = $datosInteress->fetchAll();
+                             foreach ($datosInteress as $rowsIntd) {
+                                 $te=$rowsIntd['totalestado'];
+                                 
+                             
+                         }
                                                     
-                          
+                                 $tarjeta .= '    
+                        
+
+                                  <div class="col-md-2 badge " style="background-color:#D14DFF;">
+                                  <form action="'.SERVERURL.'ajax/interesAjax.php" method="POST">    
+
+                                      <input type="hidden" name="idestado" value="'.$estadoinicial.'">
+                                   <button type="submit" name="estadoespecifico" class="btn" style="background-color:#D14DFF;" >
+                                   <div class="wrapper d-flex justify-content-between">
+                                      <div class="side-left">
+                                    
+                                          <p class="mb-2 ">Total</p>
+                                          <p class="display-3 mb-4 font-weight-light text-white" >'.$te.'</p>
+                                      </div>
+                                     
+                                  </div>
+                                  </button>
+
+                                  </form>
+                              </div>
+                                 ';
                                 //$estado=$rows['idestado'];
                                 $to=0;
                                 $datosEstado = $conexion->query("
                                 SELECT * FROM estado WHERE estado_actual=1");
                                 $datosEstado = $datosEstado->fetchAll();
-                                foreach ($datosEstado as $rowsEstado) {
+                                foreach ($datosEstado as $rowsEstado){ 
 
 
 
@@ -1373,6 +1291,7 @@ class cursoControlador extends cursoModelo
                                         //datos de interes 
                                             $t=80;
                                             $idestado=$rowsEstado['idestado'];
+                                       
                                             $idespecialidad=$rows['idespecialidad'];
                                             $datosInteres = $conexion->query("
                                             SELECT COUNT(*) AS totalestado FROM interes WHERE idespecialidad='$idespecialidad' AND idestado='$idestado'");
@@ -1385,15 +1304,25 @@ class cursoControlador extends cursoModelo
 
                                  
                                                         
-                                $tarjeta .= '   
-                                    <div class="col-md-2 badge " style="background-color:'.$rowsEstado['color'].';">
-                                        <div class="wrapper d-flex justify-content-between">
+                                $tarjeta .= '    
+                                   <div class="col-md-2 badge " style="background-color:'.$rowsEstado['color'].';">
+                                        <form action="'.SERVERURL.'ajax/interesAjax.php" method="POST">    
+
+                                            <input type="hidden" name="idestado" value="'.$idestado.'">
+                                         <button type="submit" name="estadoespecifico" class="btn" style="background-color:'.$rowsEstado['color'].';" >
+                                         <div class="wrapper d-flex justify-content-between">
                                             <div class="side-left">
+                                          
                                                 <p class="mb-2 ">'.$rowsEstado['nombre_estado'].'</p>
                                                 <p class="display-3 mb-4 font-weight-light text-white" >'.$t.'</p>
                                             </div>
+                                           
                                         </div>
-                                    </div>';
+                                        </button>
+
+                                        </form>
+                                    </div>
+                                   ';
                                 }
 
                                 $tarjeta .= '   
@@ -1621,6 +1550,176 @@ class cursoControlador extends cursoModelo
                          
                             ';
                         }
+        return $tarjeta;
+    }
+
+    public function tabla_interesados_estado_controlador()
+    {
+       //session_start(['name'=>'SRCP']);
+       //$categoria = mainModel::limpiar_cadena($_GET['Curso']);    
+        $idespecialidad=0;
+        $tarjeta = "";
+        $conexion = mainModel::conectar();
+        
+
+        //SELECIONADO CURSO
+        $usuario=$_SESSION['codigo_srcp'];
+
+      
+
+
+        $datosEs = $conexion->query("
+            SELECT * FROM especialidad WHERE sesion='$usuario' ");
+        $datosEs = $datosEs->fetchAll();
+        foreach ($datosEs as $rowsEs) {
+            $idespecialidad=$rowsEs['idespecialidad'];
+        }
+        if($_SESSION['idestado']==0){
+
+            $datosInteres = $conexion->query("
+            SELECT * FROM interes WHERE idespecialidad='$idespecialidad' ORDER by idestado ");
+        $datosInteres = $datosInteres->fetchAll();
+        foreach ($datosInteres as $rows) {
+            $interes_des=$rows['descri_estado'];
+    
+        //SELECIONAR cliente
+        $codigoCliente=$rows['codigocliente'];
+        $datosCliente = $conexion->query("
+        SELECT * FROM cliente WHERE codigocliente='$codigoCliente' ");
+        $datosCliente = $datosCliente->fetchAll();
+     
+        foreach ($datosCliente as $rowsCliente) {
+            $tarjeta .= '
+                    <tr>
+                        <td>'.$rows['codigocliente'].'</td>
+                        <td>'.$rowsCliente['nombres_cli'].'</td>
+                        <td>'.$rowsCliente['apellidos_cli'].'</td>
+    
+                        <td class="text-danger">
+                            <form action="'.SERVERURL.'ajax/clienteAjax.php" method="POST">
+                                <input type="hidden" name="enlacecliente" value="'.$rows['codigocliente'].'">
+                                <input type="hidden" name="idenestado" value="'.$rows['idestado'].'">
+                                <input type="hidden" name="idinterescontrol" value="'.$rows['idinteres'].'">
+                               
+                                    <button type="submit" name="vistacambioestado" class="btn btn-success  btn-sm">
+                                         Atender
+                                    </button>
+                              
+                            </form>
+                        </td>
+    
+    
+                        <td>
+                            <div class="btn-group dropdown float-right">';
+                          
+                            
+                    //SECCION ESTADOS
+                    $estado=$rows['idestado'];
+                    $datosEstado = $conexion->query("
+                    SELECT * FROM estado WHERE 	idestado='$estado' ");
+                    $datosEstado = $datosEstado->fetchAll();
+                    foreach ($datosEstado as $rowsEstado) {
+                     $tarjeta .= '<button type="button"  class="btn  btn-sm  " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                 '.$rowsEstado['nombre_estado'].'
+                                </button>
+    
+                                <button type="button" style="background-color:'.$rowsEstado['color'].';" class=" btn btn-inverse btn-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#'.$rowsEstado['idestado'].'">
+                             
+                                </button>
+    
+                            ';
+    
+                    }
+    
+                    $tarjeta .= '     
+                            </div>
+                        </td>
+                        <td>
+                        '.$rows['fecha_notificacion'].'
+                        </td>
+                        <td>
+                        '.$rows['fecha_cambio_estado'].'
+                        </td>
+                     
+                     </tr>';
+        }}
+            
+        }
+        else{
+            $estadoActual=$_SESSION['idestado'];
+                //SECCION INTERES
+        $datosInteres = $conexion->query("
+        SELECT * FROM interes WHERE idespecialidad='$idespecialidad' AND idestado=$estadoActual ORDER by idestado ");
+    $datosInteres = $datosInteres->fetchAll();
+    foreach ($datosInteres as $rows) {
+        $interes_des=$rows['descri_estado'];
+
+    //SELECIONAR cliente
+    $codigoCliente=$rows['codigocliente'];
+    $datosCliente = $conexion->query("
+    SELECT * FROM cliente WHERE codigocliente='$codigoCliente' ");
+    $datosCliente = $datosCliente->fetchAll();
+ 
+    foreach ($datosCliente as $rowsCliente) {
+        $tarjeta .= '
+                <tr>
+                    <td>'.$rows['codigocliente'].'</td>
+                    <td>'.$rowsCliente['nombres_cli'].'</td>
+                    <td>'.$rowsCliente['apellidos_cli'].'</td>
+
+                    <td class="text-danger">
+                        <form action="'.SERVERURL.'ajax/clienteAjax.php" method="POST">
+                            <input type="hidden" name="enlacecliente" value="'.$rows['codigocliente'].'">
+                            <input type="hidden" name="idenestado" value="'.$rows['idestado'].'">
+                            <input type="hidden" name="idinterescontrol" value="'.$rows['idinteres'].'">
+                           
+                                <button type="submit" name="vistacambioestado" class="btn btn-success  btn-sm">
+                                     Atender
+                                </button>
+                          
+                        </form>
+                    </td>
+
+
+                    <td>
+                        <div class="btn-group dropdown float-right">';
+                      
+                        
+                //SECCION ESTADOS
+                $estado=$rows['idestado'];
+                $datosEstado = $conexion->query("
+                SELECT * FROM estado WHERE 	idestado='$estado' ");
+                $datosEstado = $datosEstado->fetchAll();
+                foreach ($datosEstado as $rowsEstado) {
+                 $tarjeta .= '<button type="button"  class="btn  btn-sm  " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                             '.$rowsEstado['nombre_estado'].'
+                            </button>
+
+                            <button type="button" style="background-color:'.$rowsEstado['color'].';" class=" btn btn-inverse btn-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#'.$rowsEstado['idestado'].'">
+                         
+                            </button>
+
+                        ';
+
+                }
+
+                $tarjeta .= '     
+                        </div>
+                    </td>
+                    <td>
+                    '.$rows['fecha_notificacion'].'
+                    </td>
+                    <td>
+                    '.$rows['fecha_cambio_estado'].'
+                    </td>
+                 
+                 </tr>';
+    }}
+        }
+    
+
+       
+    
         return $tarjeta;
     }
 

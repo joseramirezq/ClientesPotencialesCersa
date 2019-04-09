@@ -98,6 +98,7 @@
                 </p>
                 <span class="badge badge-pill badge-warning float-right">Llamar a los clientes</span>
                 <span class="badge badge-pill badge-success float-right">Nuevos</span>
+                <span class="badge badge-pill badge-danger float-right">Sin llamar</span>
               </a>
                  <?php
                 require_once("./controladores/cursoControlador.php");

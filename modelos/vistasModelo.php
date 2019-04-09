@@ -43,6 +43,7 @@ class vistasModelo
             "sesioncurso",
             "vercurso",
             "sesionestados",
+            "sesionestadoactual",
 
             //otrasvistas
             "adcategoria",

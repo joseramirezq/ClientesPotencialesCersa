@@ -740,7 +740,7 @@ public function cliente_actualizacion_estado(){
                                                         <div class="form-group">
                                                         <div class="form-group">
                                                             <button type="submit" name="actualizarinteres" class="btn btn-success"><i class="fa fa-check"></i> Actualizar</button>
-                                                            <a href="'.SERVERURL.'sesioncurso" class="btn btn-info"><i class="fa fa-meh-o"></i> Cancel</a>
+                                                            <a href="'.SERVERURL.'sesionestadoactual" class="btn btn-info"><i class="fa fa-meh-o"></i> Cancel</a>
                                                         </div>
                                                         </div>
                                                     </div>

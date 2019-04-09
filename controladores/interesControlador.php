@@ -59,9 +59,13 @@ class interesControlador extends interesModelo
         $actualizarinteres = interesModelo::actualizar_interes_modelo($datosCurso);
         
         //if($actualizarinteres->rowCount()>=1){
-                 
-            $direccion=SERVERURL."sesioncurso";
-            header('location:'.$direccion);
+            if($_SESSION['idestado']==0){
+                $direccion=SERVERURL."sesioncurso";
+                header('location:'.$direccion);
+
+            } else{
+            $direccion=SERVERURL."sesionestadoactual";
+            header('location:'.$direccion);} 
         //}else{
          //   $a= "<script>console.log( 'No insertado' );</script>";
         //}
