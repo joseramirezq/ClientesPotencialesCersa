@@ -325,7 +325,7 @@ class cursoControlador extends cursoModelo
                             <h4 class="text-light text-center">
                                 <button class="btn btn-icons btn-rounded btn-light"><i class="fa fa-exclamation text-danger"></i></button>
 
-                                ¿Esta seguro de eliminar el estado</h4>
+                                ¿Esta seguro de eliminar este Curso</h4>
 
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true" class="text-white">×</span>

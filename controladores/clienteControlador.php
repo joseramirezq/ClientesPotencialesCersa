@@ -640,7 +640,7 @@ public function cliente_actualizacion_estado(){
                                             <div class="card">
                                             <div class="card-body">
                                                 
-                                                <form action="'.SERVERURL.'ajax/interesAjax.php" method="POST" class="forms-sample" 
+                                                <form action="'.SERVERURL.'ajax/interesAjax.php" method="POST" class="forms-sample"  
                                                 autocomplete="off" enctype="multipart/form-data">
                                                 <input type="hidden" name="idespecialidad" id="idespecialidad"  value="'.$idespecialidad.'">
                                                 <input type="hidden" name="codigousuario" id="codigousuario"  value="'.$usuario.'">

@@ -119,45 +119,9 @@
             <span class="menu-title">Configuraciones</span>
             <i class="menu-arrow"></i>
           </a>
-          <?php 
+       
           
-          if($_SESSION['privilegio_srcp']==3 || $_SESSION['privilegio_srcp']==2){
-          
-          
-          
-          ?>
-          <div class="collapse" id="menu-config">
-            <ul class="nav flex-column sub-menu">
-              
-              <li class="nav-item">
-                <a class="nav-link" href="<?php echo SERVERURL;?>listausuario" disabled="disabled">
-                  <i class="menu-icon  fa fa-vcard-o"></i> Usuarios</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="<?php echo SERVERURL;?>adestados" disabled="disabled">
-                  <i class="menu-icon  fa fa-cubes"></i>Estados</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="<?php echo SERVERURL;?>adpermisos" disabled="disabled">
-                  <i class="menu-icon  fa fa-key"></i>Permisos</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="<?php echo SERVERURL;?>adcategoria" disabled="disabled">
-                  <i class="menu-icon  fa fa-institution"></i>Categorias</a>
-              </li>
-            </ul>
-          </div>
-      
-          <?php  }
-          ?>
-
-          <?php 
-          
-          if($_SESSION['privilegio_srcp']==1){
-          
-          
-          
-          ?>
+        
           <div class="collapse" id="menu-config">
             <ul class="nav flex-column sub-menu">
              
@@ -171,7 +135,7 @@
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="<?php echo SERVERURL;?>adpermisos">
-                  <i class="menu-icon  fa fa-key"></i>Permisos</a>
+                  <i class="menu-icon  fa fa-key"></i>Cargos</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="<?php echo SERVERURL;?>adcategoria">
@@ -180,9 +144,6 @@
             </ul>
           </div>
         
-          <?php  }
-          ?>
-
           <style type="text/css">
             a[disabled="disabled"] {
                 pointer-events: none;

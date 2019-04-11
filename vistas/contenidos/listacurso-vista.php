@@ -1,3 +1,9 @@
+<?php
+
+if($_SESSION['privilegio_srcp']==1){
+ 
+?>
+
 <!--titulo del curso-->
 <div class="row ">
     <div class="col-md-12 grid-margin stretch-card">
@@ -77,68 +83,5 @@
 
 
 
-    <!--nodal de la tabla de curos-->
-    <div class="modal fade" id="nodalcurestado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <!--Header-->
-                <div class="modal-header bg-dark">
-                    <h3 class="text-light text-center">Detalle de clientes por estado</h3>
 
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true" class="text-white">×</span>
-                    </button>
-                </div>
-
-                <!--Body-->
-                <div class="modal-body">
-                    <div class="row ">
-                        <div class="col-md-3 badge badge-warning">
-                            <div class="wrapper d-flex justify-content-between">
-                                <div class="side-left">
-                                    <p class="mb-2">Estado 1</p>
-                                    <p class="display-3 mb-4 font-weight-light">40</p>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 badge badge-danger">
-                            <div class="wrapper d-flex justify-content-between">
-                                <div class="side-left">
-                                    <p class="mb-2">Estado 2</p>
-                                    <p class="display-3 mb-4 font-weight-light">45</p>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 badge badge-info">
-                            <div class="wrapper d-flex justify-content-between">
-                                <div class="side-left">
-                                    <p class="mb-2">Estado 3</p>
-                                    <p class="display-3 mb-4 font-weight-light">20</p>
-                                </div>
-
-                            </div>
-                        </div>
-
-
-                        <div class="col-md-3 badge badge-success">
-                            <div class="wrapper d-flex justify-content-between">
-                                <div class="side-left">
-                                    <p class="mb-2">Estado 4</p>
-                                    <p class="display-3 mb-4 font-weight-light">25</p>
-                                </div>
-
-                            </div>
-                        </div>
-                        
-                    </div>
-
-
-
-                </div>
-            </div>
-        </div>
-    </div> 
+    <?php }?>

@@ -10,9 +10,9 @@
 	<script src="vistas/js/material.min.js"></script>
 
  
-<!--jv de laplantilla-->
+
 <script src="vistas/js/vendor.bundle.base.js"></script>
-<script src="vistas/js/vendor.bundle.addons.js"></script>
+<!--jv de laplantilla<script src="vistas/js/vendor.bundle.addons.js"></script>-->
 
 <!--jv de los graficos -->
 <script src="vistas/js/off-canvas.js"></script>
@@ -25,7 +25,7 @@
 <script src="vistas/js/data-table/lib/data-table/dataTables.buttons.min.js"></script>
 <script src="vistas/js/data-table/lib/data-table/buttons.bootstrap.min.js"></script>
 <script src="vistas/js/data-table/lib/data-table/jszip.min.js"></script>
-<script src="vistas/js/data-table/lib/data-table/vfs_fonts.js"></script>
+<!--<script src="vistas/js/data-table/lib/data-table/vfs_fonts.js"></script>-->
 <script src="vistas/js/data-table/lib/data-table/buttons.html5.min.js"></script>
 <script src="vistas/js/data-table/lib/data-table/buttons.print.min.js"></script>
 <script src="vistas/js/data-table/lib/data-table/buttons.colVis.min.js"></script>

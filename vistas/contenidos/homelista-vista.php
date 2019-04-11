@@ -4,7 +4,10 @@
             
           
 
-              <div class="col-md-2">
+              <div class="col-md-12">
+              <h5 class="text-center text-dark"><i class="fa fa-bullhorn text-danger "></i> Se le recomienda que cierre sesión en un curso al terminar de atender a los clientes</h5>  
+               <a href="<?php SERVERURL ?>homelista"><button type="button" class="mb-0 btn btn-warning btn-fw"> <i class="fa fa-refresh"></i> Actualizar</button></a> 
+            
                <a href="<?php echo SERVERURL; ?>home"><button type="button" class="mb-0 btn btn-dark btn-fw"> <i class="fa fa-tablet"></i> Ver en Tarjetas</button></a> 
               </div>
 
