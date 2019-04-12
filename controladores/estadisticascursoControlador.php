@@ -594,6 +594,7 @@
 
 
               //funcion contar segundos por cada usuario
+              $cont=0;
               $contadorsegundo=0;
               $datoscontrol = $conexion->query("
               SELECT TIMESTAMPDIFF(SECOND, `fecha_inicio`,`fecha_fin`) as segundos
@@ -602,6 +603,7 @@
               foreach ($datoscontrol as $rowscontrol) {
             
                 $contadorsegundo=$contadorsegundo+$rowscontrol['segundos'];
+                $cont++;
               }
 
               $hours2=floor($contadorsegundo / 3600);
@@ -622,7 +624,7 @@
                 </td>
 
                 <td class="font-weight-medium">
-                '.$rowsusuario['nombre_us'].'
+                '.$cont.'
                 </td>
                 
                 <td>
@@ -666,6 +668,7 @@
 
           $conexion=mainModel::conectar();
           //contador de segundos en total
+         
           $contadortotal=0;
           $datostotal = $conexion->query("
           SELECT TIMESTAMPDIFF(SECOND, `fecha_inicio`,`fecha_fin`) as segundos
@@ -674,6 +677,7 @@
           foreach ($datostotal as $rowstotal) {
         
             $contadortotal=$contadortotal+$rowstotal['segundos'];
+            
           }
 
          
@@ -722,6 +726,7 @@
 
 
               //funcion contar segundos por cada usuario
+              $cont=0;
               $contadorsegundo=0;
               $datoscontrol = $conexion->query("
               SELECT TIMESTAMPDIFF(SECOND, `fecha_inicio`,`fecha_fin`) as segundos
@@ -730,6 +735,7 @@
               foreach ($datoscontrol as $rowscontrol) {
             
                 $contadorsegundo=$contadorsegundo+$rowscontrol['segundos'];
+                $cont++;
               }
 
               $hours2=floor($contadorsegundo / 3600);
@@ -750,7 +756,7 @@
                 </td>
 
                 <td class="font-weight-medium">
-                '.$rowsusuario['nombre_us'].'
+                '.$cont.'
                 </td>
                 
                 <td>

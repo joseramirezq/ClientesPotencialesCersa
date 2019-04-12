@@ -262,7 +262,7 @@
                             <h4 class="text-light text-center">
                                 <button class="btn btn-icons btn-rounded btn-light"><i class="fa fa-exclamation text-danger"></i></button>
 
-                                ¿Esta seguro de eliminar el estado</h4>
+                                ¿Esta seguro de eliminar este cargo</h4>
 
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true" class="text-white">×</span>
@@ -335,7 +335,7 @@
                             <h4 class="text-light text-center">
                                 <button class="btn btn-icons btn-rounded btn-light"><i class="fa fa-exclamation text-danger"></i></button>
 
-                                Usetd no puede editar ni eliminar esta seccion</h4>
+                                Usted no puede editar ni eliminar este registro</h4>
 
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true" class="text-white">×</span>

@@ -8,7 +8,7 @@ if($_SESSION['privilegio_srcp']==1){
   <div class="col-md-12 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
-        <h3 class="text-primary">Puestos
+        <h3 class="text-primary">Cargos
           <div class="btn-group dropdown float-right">
               <button type="button" class="btn btn-success btn-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#nuevocargo">
                             <i class="fa fa-plus"></i> Agregar Nuevo
@@ -70,36 +70,7 @@ if($_SESSION['privilegio_srcp']==1){
 
 <!--Eliminar-->
 
-<div class="modal fade" id="nusereliminar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <!--Header-->
-            <div class="modal-header bg-danger text-center">
-                <h4 class="text-light text-center">
-                    <button class="btn btn-icons btn-rounded btn-light"><i class="fa fa-exclamation text-danger"></i></button>
 
-                    ¿Esta seguro de eliminar el estado</h4>
-
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true" class="text-white">×</span>
-                </button>
-            </div>
-
-            <!--Body-->
-            <div class="modal-body bg-center">
-                <div class="row">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-8 form-group">
-                        <a href="" class="btn btn-success"><i class="fa fa-check"></i> Aceptar</a>
-                        <button class="btn btn-info"><i class="fa fa-meh-o"></i> Cancel</button>
-                    </div>
-                    <div class="col-md-2"></div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
@@ -114,7 +85,7 @@ if($_SESSION['privilegio_srcp']==1){
                 <h4 class="text-light text-center">
                     <button class="btn btn-icons btn-rounded btn-light"><i class="fa fa-plus text-success"></i></button>
 
-                    &nbsp;Insertar un nuevo Puesto </h4>
+                    &nbsp;Insertar un nuevo Cargo </h4>
 
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true" class="text-white">×</span>
