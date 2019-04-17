@@ -37,12 +37,13 @@
                         <thead>
                             <tr>
                                 <th>Cod</th>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
+                                <th>Nombres</th>
+                               
 
                               
 
                                 <th>Estado</th>
+                                <th>Descripcion</th>
                              
                                 <th>Fecha Cambio Estado</th>
                                 <th>Atendico por</th>

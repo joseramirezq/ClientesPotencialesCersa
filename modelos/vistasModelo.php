@@ -29,6 +29,9 @@ class vistasModelo
             "editarcurso",
             "estadisticascurso",
             "estadisticasestadoscurso",
+            "enviarcorreos",
+
+
             //vista usuarios
             "listausuario",
             "agregarusuario",
@@ -70,10 +73,46 @@ class vistasModelo
         } elseif($vistas == "informacion") {
             $contenido = "informacion";
         }
+
+        //cursos abril
         elseif($vistas == "obrasporimpuestos") {
             $contenido = "obrasporimpuestos";
-        }else if($vistas=="gracias"){
+
+
+        //cursos de mayo
+        } elseif($vistas == "analisisdisenoMayo") {
+            $contenido = "analisisdisenoMayo";
+        }
+        elseif($vistas == "autocadMayo") {
+            $contenido = "autocadMayo";
+        }
+
+        elseif($vistas == "edificacionesMayo") {
+            $contenido = "edificacionesMayo";
+        }
+        elseif($vistas == "hidraulicaMayo") {
+            $contenido = "hidraulicaMayo";
+        }
+        elseif($vistas == "valorizacionMayo") {
+            $contenido = "valorizacionMayo";
+        }
+        elseif($vistas == "pmbokMayo") {
+            $contenido = "pmbokMayo";
+        }
+        elseif($vistas == "saneamientoMayo") {
+            $contenido = "saneamientoMayo";
+        }
+        elseif($vistas == "sistemainfoMayo") {
+            $contenido = "sistemainfoMayo";
+        }
+        elseif($vistas == "supervicionobrasMayo") {
+            $contenido = "supervicionobrasMayo";
+        }
+
+        //gracias 
+        else if($vistas=="gracias"){
             $contenido = "gracias";
+
         } else if($vistas=="cursogracias"){
             $contenido = "cursogracias";
         }else{

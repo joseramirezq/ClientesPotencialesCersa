@@ -15,7 +15,7 @@
                     </div>
                      </div>
                    
-                            <h5 class="text-center">Diplomado en Seguridad y Salud Ocupacional </h5> <br>
+                            <h5 class="text-center">VALORIZACIÓN Y LIQUIDACIÓN DE OBRAS PÚBLICAS </h5> <br>
                             <p class="text-center mb-4 text-primary">Proporciona tus datos para obtener más información</p>
                    
               
@@ -61,7 +61,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input type="text" name="correo" class="form-control" placeholder="Correo Electrónico" required>
+                                            <input type="text" name="correo" class="form-control" placeholder="Correo Electronico" required>
                                             <div class="input-group-append">
                                                 <span class="input-group-text">
                                                     <i class="mdi mdi-check-circle-outline"></i>
@@ -75,7 +75,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input type="text" name="profesion" class="form-control" placeholder="Profesión" required>
+                                            <input type="text" name="profesion" class="form-control" placeholder="Profesión">
                                             <div class="input-group-append">
                                                 <span class="input-group-text">
                                                     <i class="mdi mdi-check-circle-outline"></i>
@@ -176,7 +176,7 @@
  if(isset($_POST['enviarformulario'])){
     require_once("./core/configgeneral.php");
      require_once("./controladores/clienteControlador.php");
-     $codigo=1;
+     $codigo=7;
      $instanciaLogin= new clienteControlador();
      echo   $instanciaLogin->agregar_informacion_controlador($codigo);
  }

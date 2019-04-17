@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
         <div class="col-2"></div>
-        <div class="col 8 p-4">
+        <div class="col-8 p-4">
 
 
             <div class="col-md-12">
@@ -17,9 +17,12 @@
                     <p class="text-center">
                        
                         Gracias por dejar tus datos, estaremos en contacto contigo. Que tengas buen día.
+                     
+
                     </p>
                     <div class="input-group">
-                        <a href="http://cersaingenieros.com/capacitaciones/armatupack/dipsaludaocupacional" class=" btn btn-primary submit-btn btn-block">Más información</a>
+                        
+                        <a href="https://cersa.org.pe/capacitaciones/?q=armatupack" class=" btn btn-primary submit-btn btn-block">Ver más Cursos</a>
                     </div>
 
                 </div>

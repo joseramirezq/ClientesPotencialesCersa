@@ -18,7 +18,60 @@ if($_SESSION['privilegio_srcp']==1){
             <div class="col-lg-12 grid-margin">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Lista de cursos con el porcentaje de interesados</h4>
+                  <h4 class="card-title">Lista de cursos con el porcentaje de interesados- MAYO</h4>
+                  <div class="table-responsive">
+                  <table class="table table-hover dataTable no-footer" id="bootstrap-data-table" role="grid" aria-describedby="bootstrap-data-table_info">
+                      <thead>
+                     
+                        <tr>
+                          <th>
+                            Posicion
+                          </th>
+                          <th>
+                            Codigo
+                          </th>
+                          <th>
+                            Categoria
+                          </th>
+                          <th>
+                            Nombre
+                          </th>
+                          <th>
+                            Interesados
+                          </th>            
+                          <th>
+                            Fecha de registro
+                          </th>
+                          <th>
+                            En línea
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      <?php
+                            require_once("./controladores/estadisticascursoControlador.php");
+                            //INSTANCIOAMOS LA CLASE//
+                            $mes=5;
+                            $insInteres = new estadisticascursoControlador();
+                        echo $insInteres->total_clientes_interes_controlador($mes);
+                        ?>
+                        
+                     
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+         
+</div>
+
+<div class="row">
+
+            <div class="col-lg-12 grid-margin">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Lista de cursos con el porcentaje de interesados- ABRIL</h4>
                   <div class="table-responsive">
                   <table class="table table-hover dataTable no-footer" id="bootstrap-data-table" role="grid" aria-describedby="bootstrap-data-table_info">
                       <thead>
@@ -53,8 +106,9 @@ if($_SESSION['privilegio_srcp']==1){
                       <?php
                             require_once("./controladores/estadisticascursoControlador.php");
                             //INSTANCIOAMOS LA CLASE//
+                            $mes=4;
                             $insInteres = new estadisticascursoControlador();
-                        echo $insInteres->total_clientes_interes_controlador();
+                        echo $insInteres->total_clientes_interes_controlador($mes);
                         ?>
                         
                      

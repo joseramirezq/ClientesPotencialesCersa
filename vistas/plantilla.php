@@ -99,19 +99,78 @@
         $vist= new vistasControlador();
         $vistasRespuesta=$vist->obtener_vistas_controlador();
 
-        if($vistasRespuesta=="login" || $vistasRespuesta=="404" || $vistasRespuesta=="informacion" || $vistasRespuesta=="obrasporimpuestos"   || $vistasRespuesta=="gracias" || $vistasRespuesta=="cursogracias"):
+        if($vistasRespuesta=="login" || $vistasRespuesta=="404" || 
+        
+        //cursos abril
+        $vistasRespuesta=="informacion" ||  //seguridad
+        $vistasRespuesta=="obrasporimpuestos" ||  
+
+        //cursos mayo
+        $vistasRespuesta=="analisisdisenoMayo" || 
+        $vistasRespuesta=="autocadMayo" ||   
+        $vistasRespuesta=="edificacionesMayo" ||  
+        $vistasRespuesta=="hidraulicaMayo" ||  
+        $vistasRespuesta=="valorizacionMayo" || 
+        $vistasRespuesta=="pmbokMayo" ||   
+        $vistasRespuesta=="saneamientoMayo" ||  
+        $vistasRespuesta=="sistemainfoMayo" || 
+        $vistasRespuesta=="supervicionobrasMayo" || 
+     
+        
+        
+        //gracias
+        $vistasRespuesta=="gracias" ||
+         $vistasRespuesta=="cursogracias"):
+
+
             if ($vistasRespuesta=="login" ) {
               require_once('./vistas/contenidos/login-vista.php');
-            } else if($vistasRespuesta=="informacion"){
+            } 
+            else if($vistasRespuesta=="informacion"){
               require_once('./vistas/contenidos/informacion/seguridadsalud-vista.php');
+            
             }else if($vistasRespuesta=="gracias"){
               require_once('./vistas/contenidos/informacion/gracias-vista.php');
+            
             }else if($vistasRespuesta=="cursogracias"){
               require_once('./vistas/contenidos/informacion/cursogracias-vista.php');
             }
-          else if($vistasRespuesta=="obrasporimpuestos"){
+          
+            else if($vistasRespuesta=="obrasporimpuestos"){
             require_once('./vistas/contenidos/informacion/obrasporimpuesto-vista.php');
           }
+
+          //cursos mayo
+          else if($vistasRespuesta=="analisisdisenoMayo"){
+            require_once('./vistas/contenidos/informacion/mayo-analisisdiseno-vista.php');
+          }
+          else if($vistasRespuesta=="autocadMayo"){
+            require_once('./vistas/contenidos/informacion/mayo-autocad-vista.php');
+          }
+          else if($vistasRespuesta=="edificacionesMayo"){
+            require_once('./vistas/contenidos/informacion/mayo-edificaciones-vista.php');
+          }
+          else if($vistasRespuesta=="hidraulicaMayo"){
+            require_once('./vistas/contenidos/informacion/mayo-hidraulica-vista.php');
+          }
+          else if($vistasRespuesta=="valorizacionMayo"){
+            require_once('./vistas/contenidos/informacion/mayo-valorizacion-vista.php');
+          }
+          else if($vistasRespuesta=="pmbokMayo"){
+            require_once('./vistas/contenidos/informacion/mayo-pmbok-vista.php');
+          }
+          else if($vistasRespuesta=="saneamientoMayo"){
+            require_once('./vistas/contenidos/informacion/mayo-saneamiento-vista.php');
+          }
+          else if($vistasRespuesta=="sistemainfoMayo"){
+            require_once('./vistas/contenidos/informacion/mayo-sistemainfo-vista.php');
+          }
+          else if($vistasRespuesta=="supervicionobrasMayo"){
+            require_once('./vistas/contenidos/informacion/mayo-supervicionobras-vista.php');
+          }
+
+
+          //error
           else{
               require_once('./vistas/contenidos/404-vista.php');
             }

@@ -642,14 +642,14 @@ class cursoControlador extends cursoModelo
 
         if($con==0){
         $datos = $conexion->query("
-            SELECT * FROM especialidad WHERE estado_actual=0  AND  fecha_fin > CURDATE() ORDER BY sesion<>'disponible' DESC,	fecha_inicio ");
+            SELECT * FROM especialidad WHERE estado_actual=0 AND  fecha_fin > CURDATE() ORDER BY sesion<>'disponible' DESC,	fecha_inicio ");
     
         $datos = $datos->fetchAll();
         foreach ($datos as $rows) {
 
 
             $tarjeta .= '
-            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 grid-margin stretch-card">
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 grid-margin stretch-card text-center bg-center">
             <div class="card card-statistics">
               <div class="card-body">
                 <div class="clearfix">
@@ -662,6 +662,9 @@ class cursoControlador extends cursoModelo
                           </p>
                           
                       </div>
+
+                    
+
                       <div class="d-flex flex-row align-items-center">
                           <i class="fa fa-money icon-sm text-danger"></i>
                           <p class="mb-0 ml-1">
@@ -1184,13 +1187,220 @@ class cursoControlador extends cursoModelo
     return $tarjeta;
    }
 
+   public function ver_sesion_curso_exitoso_controlador()
+   {
+      //session_start(['name'=>'SRCP']);
+      //$categoria = mainModel::limpiar_cadena($_GET['Curso']);    
+       $tarjeta = "";
+       $totalpre=0;
+       
+       $contadorestados=array();
+       $conexion = mainModel::conectar();
+       $usuario=$_SESSION['codigo_srcp'];
+       $datosd = $conexion->query("
+           SELECT * FROM especialidad WHERE sesion='$usuario' ");
+
+       $datosd = $datosd->fetchAll();
+       foreach ($datosd as $rows) {
+
+
+
+           $tarjeta .= '
+               ';
+
+               //Descripcion del curso 
+               $tarjeta .= '
+                   <div class="row">
+                   <div class="col-lg-12 grid-margin stretch-card">
+                       <div class="card">
+                           <div class="card-body">
+                               <div class="row ">
+                               ';
+
+                              //ESTADOS
+                                //SECCION ESTADOS
+                                $te=0;
+                                $estadoinicial=0;
+                                $idespecialidad=$rows['idespecialidad'];
+                                $datosInteress = $conexion->query("
+                                SELECT COUNT(*) AS totalestado FROM interes WHERE idespecialidad='$idespecialidad'");
+                            $datosInteress = $datosInteress->fetchAll();
+                            foreach ($datosInteress as $rowsIntd) {
+                                $te=$rowsIntd['totalestado'];
+                                
+                            
+                        }
+                                                   
+                                $tarjeta .= '    
+                       
+
+                                 <div class="col-md-2 badge " style="background-color:#D14DFF;">
+                                                                          <button type="submit" name="estadoespecifico" class="btn" style="background-color:#D14DFF;" >
+                                  <div class="wrapper d-flex justify-content-between">
+                                     <div class="side-left">
+                                   
+                                         <p class="mb-2 ">Total</p>
+                                         <p class="display-3 mb-4 font-weight-light text-white" >'.$te.'</p>
+                                     </div>
+                                    
+                                 </div>
+                                 </button>
+
+                               
+                             </div>
+
+
+                             
+                                ';
+                               //$estado=$rows['idestado'];
+                               $to=0;
+                               $datosEstado = $conexion->query("
+                               SELECT * FROM estado WHERE estado_actual=1");
+                               $datosEstado = $datosEstado->fetchAll();
+                               foreach ($datosEstado as $rowsEstado){ 
+
+
+
+
+                                       //datos de interes 
+                                           $t=80;
+                                           $idestado=$rowsEstado['idestado'];
+                                      
+                                           $idespecialidad=$rows['idespecialidad'];
+                                           $datosInteres = $conexion->query("
+                                           SELECT COUNT(*) AS totalestado FROM interes WHERE idespecialidad='$idespecialidad' AND idestado='$idestado'");
+                                       $datosInteres = $datosInteres->fetchAll();
+                                       foreach ($datosInteres as $rowsInt) {
+                                           $t=$rowsInt['totalestado'];
+
+                                           if( $idestado==8){
+                                            $totalpre=$t;
+                                        }
+                                           
+                                       
+                                   }
+
+                                
+                                                       
+                               $tarjeta .= '    
+                                  <div class="col-md-2 badge " style="background-color:'.$rowsEstado['color'].';">
+                                                   <button type="submit" name="estadoespecifico" class="btn" style="background-color:'.$rowsEstado['color'].';" >
+                                        <div class="wrapper d-flex justify-content-between">
+                                           <div class="side-left">
+                                         
+                                               <p class="mb-2 ">'.$rowsEstado['nombre_estado'].'</p>
+                                               <p class="display-3 mb-4 font-weight-light text-white" >'.$t.'</p>
+                                           </div>
+                                          
+                                       </div>
+                                       </button>
+
+                                      
+                                   </div>
+                                  ';
+                               }
+                               $preinscritos=$te-$totalpre;
+                               $tarjeta .= ' 
+                               <div class="col-md-2 badge-center " style="background-color:#5DE87A;">
+                              
+                                   <div class="wrapper d-flex justify-content-between ">
+                                       <div class="side-left">
+                                       
+                                           <p class="mb-2 ">Preinscritos</p>
+                                           <p class=" display-3 mb-4 font-weight-light text-white" > '.$preinscritos.'</p>
+                                       </div>
+                                   </div>                                                               
+                               </div>
+                             
+                         
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>';
+       }
+       return $tarjeta;
+   }
+   public function mostrar_correos()
+   {
+    $correos = "";
+    $emails="";
+    $conexion = mainModel::conectar();
+    $usuario=$_SESSION['codigo_srcp'];
+
+    $datosd = $conexion->query("
+    SELECT * FROM especialidad WHERE sesion='$usuario' ");
+    $datosd = $datosd->fetchAll();
+    foreach ($datosd as $rows) {
+
+        $idespecialidad=$rows['idespecialidad'];
+        
+        $datosInteress = $conexion->query("
+        SELECT codigocliente FROM interes WHERE idespecialidad='$idespecialidad'");
+        $datosInteress = $datosInteress->fetchAll();
+        foreach ($datosInteress as $rowsIntd) {
+           
+
+
+        $codigoCliente=$rowsIntd['codigocliente'];
+        $datosCliente = $conexion->query("
+        SELECT correo_cli FROM cliente WHERE codigocliente='$codigoCliente' and correo_cli LIKE '%@%' ");
+        $datosCliente = $datosCliente->fetchAll();
+     
+        foreach ($datosCliente as $rowsCliente) {
+           // $emails=$rowsCliente['correo_cli'];
+            $correos .=''.$rowsCliente['correo_cli'].'<br>';
+        }
+    }
+
+
+    }
+    return $correos;
+   }
+
+   public function mostrar_correos_dos()
+   {
+    $correos = "";
+    $emails="";
+    $conexion = mainModel::conectar();
+    $usuario=$_SESSION['codigo_srcp'];
+
+    $datosd = $conexion->query("
+    SELECT * FROM especialidad WHERE sesion='$usuario' ");
+    $datosd = $datosd->fetchAll();
+    foreach ($datosd as $rows) {
+
+        $idespecialidad=$rows['idespecialidad'];
+        
+        $datosInteress = $conexion->query("
+        SELECT codigocliente FROM interes WHERE idespecialidad='$idespecialidad'");
+        $datosInteress = $datosInteress->fetchAll();
+        foreach ($datosInteress as $rowsIntd) {
+           
+
+
+        $codigoCliente=$rowsIntd['codigocliente'];
+        $datosCliente = $conexion->query("
+        SELECT correo_cli FROM cliente WHERE codigocliente='$codigoCliente' and correo_cli LIKE '%@%' ");
+        $datosCliente = $datosCliente->fetchAll();
+     
+        foreach ($datosCliente as $rowsCliente) {
+           // $emails=$rowsCliente['correo_cli'];
+            $correos .=''.$rowsCliente['correo_cli'].',';
+        }
+    }
+
+
+    }
+    return $correos;
+   }
 
     public function sesion_curso_exitoso_controlador()
     {
        //session_start(['name'=>'SRCP']);
        //$categoria = mainModel::limpiar_cadena($_GET['Curso']);    
         $tarjeta = "";
-        
+        $totalpre=0;
         $contadorestados=array();
         $conexion = mainModel::conectar();
         $usuario=$_SESSION['codigo_srcp'];
@@ -1207,6 +1417,12 @@ class cursoControlador extends cursoModelo
                         <button type="button" class="btn btn-success" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#agregarcli">
                             Agregar Cliente
                         </button>
+                            
+                            <a href="'.SERVERURL.'enviarcorreos" name="cerrarcurso" class="btn btn-dark" aria-haspopup="true" aria-expanded="false" >
+                                Enviar Correos
+                            </a>
+                        
+
 
                         <button type="button" class="btn btn-primary dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             En línea
@@ -1260,23 +1476,29 @@ class cursoControlador extends cursoModelo
                                  $tarjeta .= '    
                         
 
-                                  <div class="col-md-2 badge " style="background-color:#D14DFF;">
-                                  <form action="'.SERVERURL.'ajax/interesAjax.php" method="POST">    
+                                  <div class="col-md-2 badge " style="background-color:#A100C0;">
+                                        <form action="'.SERVERURL.'ajax/interesAjax.php" method="POST">    
 
-                                      <input type="hidden" name="idestado" value="'.$estadoinicial.'">
-                                   <button type="submit" name="estadoespecifico" class="btn" style="background-color:#D14DFF;" >
-                                   <div class="wrapper d-flex justify-content-between">
-                                      <div class="side-left">
-                                    
-                                          <p class="mb-2 ">Total</p>
-                                          <p class="display-3 mb-4 font-weight-light text-white" >'.$te.'</p>
-                                      </div>
-                                     
-                                  </div>
-                                  </button>
+                                        <input type="hidden" name="idestado" value="'.$estadoinicial.'">
+                                        <button type="submit" name="estadoespecifico" class="btn" style="background-color:#A100C0;" >
+                                       
+                                        <div class="wrapper d-flex justify-content-between">
+                                            <div class="side-left">
+                                            
+                                                <p class="mb-2 ">Total</p>
+                                                <p class="display-3 mb-4 font-weight-light text-white" >'.$te.'</p>
+                                            </div>
+                                        </div>
 
-                                  </form>
-                              </div>
+                                        </button>
+
+                                        </form>
+                                 </div>
+
+                                 
+
+
+                              
                                  ';
                                 //$estado=$rows['idestado'];
                                 $to=0;
@@ -1289,7 +1511,7 @@ class cursoControlador extends cursoModelo
 
 
                                         //datos de interes 
-                                            $t=80;
+                                            $t=0;
                                             $idestado=$rowsEstado['idestado'];
                                        
                                             $idespecialidad=$rows['idespecialidad'];
@@ -1299,7 +1521,9 @@ class cursoControlador extends cursoModelo
                                         foreach ($datosInteres as $rowsInt) {
                                             $t=$rowsInt['totalestado'];
                                             
-                                        
+                                        if( $idestado==8){
+                                            $totalpre=$t;
+                                        }
                                     }
 
                                  
@@ -1324,8 +1548,19 @@ class cursoControlador extends cursoModelo
                                     </div>
                                    ';
                                 }
+                                $preinscritos=$te-$totalpre;
+                                $tarjeta .= ' 
+                                <div class="col-md-2 badge-center " style="background-color:#5DE87A;">
+                               
+                                    <div class="wrapper d-flex justify-content-between ">
+                                        <div class="side-left">
+                                        
+                                            <p class="mb-2 ">Preinscritos</p>
+                                            <p class=" display-3 mb-4 font-weight-light text-white" > '.$preinscritos.'</p>
+                                        </div>
+                                    </div>                                                               
+                                </div>
 
-                                $tarjeta .= '   
                           
                                 </div>
                             </div>
@@ -1576,73 +1811,10 @@ class cursoControlador extends cursoModelo
         }
         if($_SESSION['idestado']==0){
 
-            $datosInteres = $conexion->query("
-            SELECT * FROM interes WHERE idespecialidad='$idespecialidad' ORDER by idestado ");
-        $datosInteres = $datosInteres->fetchAll();
-        foreach ($datosInteres as $rows) {
-            $interes_des=$rows['descri_estado'];
-    
-        //SELECIONAR cliente
-        $codigoCliente=$rows['codigocliente'];
-        $datosCliente = $conexion->query("
-        SELECT * FROM cliente WHERE codigocliente='$codigoCliente' ");
-        $datosCliente = $datosCliente->fetchAll();
-     
-        foreach ($datosCliente as $rowsCliente) {
-            $tarjeta .= '
-                    <tr>
-                        <td>'.$rows['codigocliente'].'</td>
-                        <td>'.$rowsCliente['nombres_cli'].'</td>
-                        <td>'.$rowsCliente['apellidos_cli'].'</td>
-    
-                        <td class="text-danger">
-                            <form action="'.SERVERURL.'ajax/clienteAjax.php" method="POST">
-                                <input type="hidden" name="enlacecliente" value="'.$rows['codigocliente'].'">
-                                <input type="hidden" name="idenestado" value="'.$rows['idestado'].'">
-                                <input type="hidden" name="idinterescontrol" value="'.$rows['idinteres'].'">
-                               
-                                    <button type="submit" name="vistacambioestado" class="btn btn-success  btn-sm">
-                                         Atender
-                                    </button>
-                              
-                            </form>
-                        </td>
-    
-    
-                        <td>
-                            <div class="btn-group dropdown float-right">';
-                          
-                            
-                    //SECCION ESTADOS
-                    $estado=$rows['idestado'];
-                    $datosEstado = $conexion->query("
-                    SELECT * FROM estado WHERE 	idestado='$estado' ");
-                    $datosEstado = $datosEstado->fetchAll();
-                    foreach ($datosEstado as $rowsEstado) {
-                     $tarjeta .= '<button type="button"  class="btn  btn-sm  " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                 '.$rowsEstado['nombre_estado'].'
-                                </button>
-    
-                                <button type="button" style="background-color:'.$rowsEstado['color'].';" class=" btn btn-inverse btn-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#'.$rowsEstado['idestado'].'">
-                             
-                                </button>
-    
-                            ';
-    
-                    }
-    
-                    $tarjeta .= '     
-                            </div>
-                        </td>
-                        <td>
-                        '.$rows['fecha_notificacion'].'
-                        </td>
-                        <td>
-                        '.$rows['fecha_cambio_estado'].'
-                        </td>
-                     
-                     </tr>';
-        }}
+            $direccion=SERVERURL."sesioncurso";
+            header('location:'.$direccion);
+
+
             
         }
         else{
@@ -1665,7 +1837,7 @@ class cursoControlador extends cursoModelo
                 <tr>
                     <td>'.$rows['codigocliente'].'</td>
                     <td>'.$rowsCliente['nombres_cli'].'</td>
-                    <td>'.$rowsCliente['apellidos_cli'].'</td>
+                 
 
                     <td class="text-danger">
                         <form action="'.SERVERURL.'ajax/clienteAjax.php" method="POST">
@@ -1705,6 +1877,9 @@ class cursoControlador extends cursoModelo
 
                 $tarjeta .= '     
                         </div>
+                    </td>
+                    <td>
+                    '.$interes_des.'
                     </td>
                     <td>
                     '.$rows['fecha_notificacion'].'
@@ -1759,7 +1934,7 @@ class cursoControlador extends cursoModelo
                     <tr>
                         <td>'.$rows['codigocliente'].'</td>
                         <td>'.$rowsCliente['nombres_cli'].'</td>
-                        <td>'.$rowsCliente['apellidos_cli'].'</td>
+                      
 
                         <td class="text-danger">
                             <form action="'.SERVERURL.'ajax/clienteAjax.php" method="POST">
@@ -1773,7 +1948,7 @@ class cursoControlador extends cursoModelo
                               
                             </form>
                         </td>
-
+                       
 
                         <td>
                             <div class="btn-group dropdown float-right">';
@@ -1800,6 +1975,8 @@ class cursoControlador extends cursoModelo
                     $tarjeta .= '     
                             </div>
                         </td>
+                        <td>SI</td>
+                        <td>'.$interes_des.'</td>
                         <td>
                         '.$rows['fecha_notificacion'].'
                         </td>
@@ -1849,8 +2026,8 @@ class cursoControlador extends cursoModelo
             $tarjeta .= '
                     <tr>
                         <td>'.$rows['codigocliente'].'</td>
-                        <td>'.$rowsCliente['nombres_cli'].'</td>
-                        <td>'.$rowsCliente['apellidos_cli'].'</td>
+                        <td>'.$rowsCliente['nombres_cli'].' '.$rowsCliente['apellidos_cli'].'</td>
+                     
                         <td>
                             <div class="btn-group dropdown float-right">';
                           
@@ -1865,40 +2042,16 @@ class cursoControlador extends cursoModelo
                                  '.$rowsEstado['nombre_estado'].'
                                 </button>
 
-                                <button type="button" style="background-color:'.$rowsEstado['color'].';" class=" btn btn-inverse btn-sm" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#'.$rowsEstado['idestado'].'">
-                                      <i class="fa fa-comments-o"></i>
-                                </button>
-
-                                <!--NODAL DESCRIPCION DE ESTADO ACTUAL-->
-
-                                <div class="modal fade" id="'.$rowsEstado['idestado'].'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <!--Header-->
-                                        <div class="modal-header " style="background-color:'.$rowsEstado['color'].';">
-                                            <h3 class="text-white text-center">Estado 1</h3>
-
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true" class="white-text">×</span>
-                                            </button>
-                                        </div>
-
-                                        <!--Body-->
-                                        <div class="modal-body">
-                                            <div class="form-group">
-                                                <p class="text-center">Fecha 01/02/2019</p>
-                                                <hr />
-                                                <p>'.$rows['descri_estado'].'
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>';
+                               
+';
 
                     }
 
                     $tarjeta .= '     
                             </div>
+                        </td>
+                        <td>
+                        '.$rows['descri_estado'].'
                         </td>
                        
                         <td>

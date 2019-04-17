@@ -38,14 +38,15 @@
                             <tr>
                                 <th>Cod</th>
                                 <th>Nombre</th>
-                                <th>Apellido</th>
+                               
 
                                 <th>Acción</th>
 
                                 <th>Estado</th>
+                                <th>Descripcion</th>
                                 <th>Fecha programada</th>
                                 <th>Fecha Cambio Estado</th>
-
+                              
 
                             </tr>
                         </thead>

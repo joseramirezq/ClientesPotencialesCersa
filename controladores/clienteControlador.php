@@ -10,10 +10,10 @@
 
         class clienteControlador extends clienteModelo{
 
-            public function agregar_informacion_controlador(){
+            public function agregar_informacion_controlador($codigos){
 
-                $cursointeres=1;
-                $codigodeusuario="Facebook";
+                $cursointeres=$codigos;
+               
         
                 $conexion=mainModel::conectar();
                 $datosEs = $conexion->query("
@@ -85,9 +85,10 @@
                 $guardarCliente=clienteModelo::agregar_cliente_modelo($datosCliente);
         
                 if($guardarCliente->rowCount()>=1){
-                 
-                    $direccion="https://sistema.cersa.org.pe/gracias";
+                    $direccion=SERVERURL."gracias";
                     header('location:'.$direccion);
+     
+                  
                 }else{
                     $a= "<script>console.log( 'No insertado' );</script>";
                 }
@@ -98,10 +99,16 @@
         
             }
 
+            public function gracias(){
+               // $table="";
+                //$table.="<p>Te quiero yo y tu ami</p>";
+          
+            }
+
             public function agregar_informacion2_controlador(){
 
                 $cursointeres=2;
-                $codigodeusuario="Facebook";
+              
         
                 $conexion=mainModel::conectar();
                 $datosEs = $conexion->query("
@@ -391,7 +398,7 @@ public function cliente_actualizacion_estado(){
        
         foreach($datosCliente as $rows){
             $tarjetaEstado.='
-            <h3 class="text-primary">Cliente:'.$rows['nombres_cli'].' '.$rows['apellidos_cli'].'
+            <h3 class="text-primary text-center">'.$rows['nombres_cli'].' '.$rows['apellidos_cli'].'
             
             <div class="btn-group dropdown float-right">
                         <button type="button" class="btn btn-success" aria-haspopup="true" aria-expanded="false" data-toggle="modal" data-target="#'.$rows['codigocliente'].'">
@@ -400,7 +407,8 @@ public function cliente_actualizacion_estado(){
               </div>
               </h3>
             <br><hr>
-                <div class="btn-group dropdown ">
+           <p class=""><u><strong>Datos del Estado Actual</strong></u></p>
+                <div class="row">
                     ';
 
 
@@ -410,27 +418,63 @@ public function cliente_actualizacion_estado(){
                     SELECT * FROM estado WHERE 	idestado='$estado' ");
                     $datosEstado = $datosEstado->fetchAll();
                     foreach ($datosEstado as $rowsEstado) {
-                        $tarjetaEstado.=' <mark style="color:'.$rowsEstado['color'].';"><i class="menu-icon  fa fa-cubes"></i>'.$rowsEstado['nombre_estado'].' </mark>&nbsp; 
-                         <mark class="text-white bg-primary">  &nbsp; &nbsp; <i class="fa fa-clipboard"></i> '.$descriestado.'</mark>&nbsp; 
-                         <mark class="text-white bg-primary" > &nbsp; &nbsp; <i class="fa fa-calendar"></i> '.$fechacambio.'</mark>&nbsp; 
-                         <mark class="text-white bg-primary">  &nbsp; &nbsp; <i class="fa fa-bell-o"></i>  '.$fechanotifi.'</mark>&nbsp; 
-                         <mark class="text-white bg-primary">  &nbsp; &nbsp; <i class="fa fa-user"></i> '.$idusuario.'</mark>';
+                        $tarjetaEstado.='
+                         
+                    <div class="col-md-6">
+                      <address class="text-dark">
+                        <p class="font-weight-bold">
+                        <i class="menu-icon  fa fa-cubes"></i> Estado 
+                        </p>
+                        <p class="mb-2" >
+                        '.$rowsEstado['nombre_estado'].' 
+                        </p>
+                        <p class="font-weight-bold">
+                        <i class="fa fa-clipboard"></i> Descripcion
+                        </p>
+                        <p>
+                        '.$descriestado.'
+                        </p>
+                      </address>
+                    </div>
+
+
+                    <div class="col-md-6">
+                    <address class="text-dark">
+                      <p class="font-weight-bold">
+                      <i class="fa fa-calendar"></i> Fecha de Cambio de estado
+                      </p>
+                      <p class="mb-2">
+                      '.$fechacambio.'
+                      </p>
+                      <p class="font-weight-bold">
+                      <i class="fa fa-bell-o"></i>   Fecha de Notificacion 
+                      </p>
+                      <p>
+                      '.$fechanotifi.'
+                      </p>
+                    </address>
+                  </div>
+
+                
+                  
+                  ';
                     } 
                     $tarjetaEstado.='
                 </div>
                 <hr>
                   <!--infomacion del contacto-->
+                  <p class=""><u><strong>Datos del Cliente</strong></u></p>
                   <div class="row">
                         <div class="col-md-3">
                             <address class="">
-                                <p class="font-weight-bold">
-                                    Correo
+                                <p class="font-weight-bold text-dark">
+                                <i class="fa fa-circle "></i>  Correo
                                 </p>
                                 <p class="mb-2">
                                 '.$rows['correo_cli'].'
                                 </p>
-                                <p class="font-weight-bold">
-                                    Telefono
+                                <p class="font-weight-bold text-dark">
+                                <i class="fa fa-circle "></i>   Telefono
                                 </p>
                                 <p>
                                 '.$rows['telefono_cli'].'
@@ -441,14 +485,14 @@ public function cliente_actualizacion_estado(){
     
                         <div class="col-md-3">
                             <address class="">
-                                <p class="font-weight-bold">
-                                    Profesión
+                                <p class="font-weight-bold text-dark">
+                                <i class="fa fa-circle "></i>   Profesión
                                 </p>
                                 <p class="mb-2">
                                 '.$rows['profesion_cli'].'
                                 </p>
-                                <p class="font-weight-bold">
-                                    Grado
+                                <p class="font-weight-bold text-dark">
+                                <i class="fa fa-circle "></i>    Grado
                                 </p>
                                 <p>
                                 '.$rows['grado_cli'].'
@@ -459,14 +503,14 @@ public function cliente_actualizacion_estado(){
     
                         <div class="col-md-3">
                             <address class="">
-                                <p class="font-weight-bold">
-                                    Pais
+                                <p class="font-weight-bold text-dark">
+                                <i class="fa fa-circle "></i>   Pais
                                 </p>
                                 <p class="mb-2">
                                 '.$rows['pais_cli'].'
                                 </p>
-                                <p class="font-weight-bold">
-                                    Departamento
+                                <p class="font-weight-bold text-dark">
+                                <i class="fa fa-circle "></i>    Departamento
                                 </p>
                                 <p>
                                 '.$rows['departamento_cli'].'
@@ -477,14 +521,14 @@ public function cliente_actualizacion_estado(){
     
                         <div class="col-md-3">
                             <address class="">
-                                <p class="font-weight-bold">
-                                    Distrito
+                                <p class="font-weight-bold text-dark">
+                                <i class="fa fa-circle "></i>    Distrito
                                 </p>
                                 <p class="mb-2">
                                 '.$rows['distrito_cli'].'
                                 </p>
-                                <p class="font-weight-bold">
-                                Dirección
+                                <p class="font-weight-bold text-dark">
+                                <i class="fa fa-circle "></i> Dirección
                                 </p>
                                 <p>
                                 '.$rows['direccion_cli'].'
@@ -697,14 +741,18 @@ public function cliente_actualizacion_estado(){
                                                             <div class="card-body">
                                                             <!--fecha-->
                                                             <div class="form-group">
+                                                            <label>Fecha de notificación</label><br>
                                                                 <div class="input-group">
+                                                                
                                                                 
                                                                     <input type="datetime-local"  class="form-control" name="fechanotificacion" id="fechanotificacion">
                                                              
                                                                 </div>
                                                             </div>
                                                             <!--descripcion-->
+                                                            <br>
                                                             <div class="form-group">
+                                                            <label>Descripción del Estado</label>
                                                                 <div class="input-group">
                                                                 <div class="input-group-prepend bg-primary border-primary">
                                                                     <span class="input-group-text bg-transparent">
@@ -715,17 +763,7 @@ public function cliente_actualizacion_estado(){
                                                                 </div>
                                                             </div>
                                                             <!--baucher-->
-                                                            <div class="form-group">
-                                                            
-                                                                <div class="input-group">
-                                                                    <input class="form-control" type="file" name="imagen" id="imagen>
-                                                                    <div class="input-group-append bg-primary border-primary">
-                                                                        <span class="input-group-text bg-transparent">
-                                                                        <i class="fa fa-file-text-o text-white"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+                                                          
                         
                                                             
                                                         
@@ -1188,13 +1226,15 @@ public function cliente_actualizacion_estado(){
                 <thead class="bg bg-primary text-white">
                     <tr>
                         <th>Codigo</th>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
+                        <th>Nombres y Apellidos</th>
+                       
                         <th>Correo</th>
                       
-                        <th>Ciudad</th>
-                         <th>Detalle</th>
-                         <th>Detalle</th>
+                        <th>Celular</th>
+                        <th>Departamento</th>
+                        <th>Profesión</th>
+                         <th>Fecha de registro</th>
+                      
                     </tr>
                 </thead>
                 <tbody>
@@ -1207,121 +1247,18 @@ public function cliente_actualizacion_estado(){
                 $table.='
                 <tr>
                 <td>'.$rows['codigocliente'].'</td>
-                <td>'.$rows['nombres_cli'].'</td>
-                <td>'.$rows['apellidos_cli'].'</td>
+                <td>'.$rows['nombres_cli'].' '.$rows['apellidos_cli'].'</td>
+           
                 <td>'.$rows['correo_cli'].'</td>
                 
+                <td>'.$rows['telefono_cli'].'</td>
                 <td>'.$rows['departamento_cli'].'</td>
+                <td>'.$rows['profesion_cli'].'</td>
                 <td>'.$rows['fecha_registro'].'</td>
-                <td>
-                    <button type="button" class="btn btn-inverse-dark" aria-haspopup="true" aria-expanded="false"
-                        data-toggle="modal" data-target="#'.$rows['codigocliente'].'">
-                        <i class="fa fa-drivers-license-o"></i> Ver
-                    </button>
-                </td>
+               
             </tr>
 
-            <!--DETALLE-->  
-            <div class="modal fade" id="'.$rows['codigocliente'].'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-              aria-hidden="true">
-              <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                  <!--Header-->
-                  <div class="modal-header bg-dark">
-                      <h4 class="text-light text-center"> <i class="fa fa-child text-white icon-lg"></i> Cliente: &nbsp;'.$rows['nombres_cli'].'</h4>
-
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true" class="text-white">×</span>
-                      </button>
-                  </div>
-
-                  <!--Body-->
-                  <div class="modal-body">
-                      <div class="card">
-                      <div class="card-body">
-                          <div class="row">
-                          <div class="col-md-6">
-                              <address class="">
-                              <p class="font-weight-bold">
-                              Nombres
-                              </p>
-                              <p class="mb-2">
-                              '.$rows['nombres_cli'].' &nbsp; '.$rows['apellidos_cli'].'
-                              </p>
-                              <p class="font-weight-bold">
-                                  Correo
-                              </p>
-                              <p>
-                              '.$rows['correo_cli'].'
-                              </p>
-                              </address>
-                          </div>
-
-
-                          <div class="col-md-6">
-                              <address class="">
-                              <p class="font-weight-bold">
-                             Teléfono
-                              </p>
-                              <p class="mb-2">
-                              '.$rows['telefono_cli'].'
-                              </p>
-                              <p class="font-weight-bold">
-                                  Profesion
-                              </p>
-                              <p>
-                              '.$rows['profesion_cli'].'
-                              </p>
-                              </address>
-                          </div>
-
-                          <div class="col-md-6">
-                                <address class="">
-                                <p class="font-weight-bold">
-                                Grado
-                                </p>
-                                <p class="mb-2">
-                                '.$rows['grado_cli'].'
-                                </p>
-                                <p class="font-weight-bold">
-                                   Departamento
-                                </p>
-                                <p>
-                                '.$rows['departamento_cli'].'
-                                </p>
-                                </address>
-                            </div> 
-                            
-                            <div class="col-md-6">
-                                <address class="">
-                                <p class="font-weight-bold">
-                                Distrito
-                                </p>
-                                <p class="mb-2">
-                                '.$rows['distrito_cli'].'
-                                </p>
-                                <p class="font-weight-bold">
-                                Direccion
-                                </p>
-                                <p>
-                                '.$rows['direccion_cli'].'
-                                </p>
-                                </address>
-                            </div>   
-
-
-
-                         
-
-
-                          </div>
-                      </div>
-                      </div>
-                  </div>
-                  </div>
-              </div>
-           </div>
-           <!--FINDETALLE--> 
+      
 
                 ';
             }

@@ -15,7 +15,7 @@
                     </div>
                      </div>
                    
-                            <h5 class="text-center">Diplomado en Seguridad y Salud Ocupacional </h5> <br>
+                            <h5 class="text-center">DIPLOMADO EN GESTIÓN, RESIDENCIA Y SUPERVISIÓN DE OBRAS </h5> <br>
                             <p class="text-center mb-4 text-primary">Proporciona tus datos para obtener más información</p>
                    
               
@@ -176,7 +176,7 @@
  if(isset($_POST['enviarformulario'])){
     require_once("./core/configgeneral.php");
      require_once("./controladores/clienteControlador.php");
-     $codigo=1;
+     $codigo=12;
      $instanciaLogin= new clienteControlador();
      echo   $instanciaLogin->agregar_informacion_controlador($codigo);
  }

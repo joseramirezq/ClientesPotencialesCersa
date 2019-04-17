@@ -4,18 +4,13 @@
 <div class="row ">
     <div class="col-md-12 grid-margin stretch-card">
         <div class="card">
-            <div class="card-body">
-                
+            <div class="card-body">               
                     <?php
                         require_once("./controladores/cursoControlador.php");
-                        $insCurso = new cursoControlador();
-                     
+                        $insCurso = new cursoControlador();                    
                        // $variable=1;
                     echo $insCurso->sesion_curso_exitoso_controlador();
-
-                    ?>
-                 
-                    
+                    ?>                   
              </div>
         </div>
     </div>
@@ -37,13 +32,12 @@
                         <thead class="bg bg-primary text-white">
                             <tr>
                                 <th>Cod</th>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
-
+                                <th>Nombre</th> 
                                 <th>Acción</th>
-
-                                <th>Estado</th>
-                                <th>Fecha programada</th>
+                                 <th>Estado</th>
+                                 <th><i class="fa fa-envelope-o icon-sm"></i></th>
+                                <th>Descripción</th>
+                               <th>Fecha programada</th>
                                 <th>Fecha Cambio Estado</th>
 
 

@@ -12,32 +12,44 @@
 
            
 
-        public function total_clientes_interes_controlador()
+        public function total_clientes_interes_controlador($mes)
         {
                     $porcentaje=0;
                     $table="";
+                    $contador=0;
+                    $cantidadpormes=0;
                     
                     $conexion=mainModel::conectar();
 
                     //cantidad de clientes en total
+
+
+                    $datosparaInteres = $conexion->query("
+                    SELECT *  FROM especialidad  where estado_actual=0 and MONTH(fecha_inicio)=$mes and fecha_fin>curdate()");
+                    $datosparaInteres = $datosparaInteres->fetchAll();
+                    foreach ($datosparaInteres as $rowsparainteres) {
+                      $idespecialidades=$rowsparainteres['idespecialidad'];
+
+                      
+
             
-            $contador=0;
+           
             //cantidad total de interesados
             $cantTotal=0;
             $datoscantestado = $conexion->query("
-            SELECT COUNT(*) AS total FROM interes where fincurso>curdate()");
+            SELECT COUNT(*) AS total FROM interes where idespecialidad=$idespecialidades");
             $datoscantestado = $datoscantestado->fetchAll();
             foreach ($datoscantestado as $rowsestadocant) {
             $cantTotal=$rowsestadocant['total'];
             }
+            $cantidadpormes=$cantidadpormes+ $cantTotal;
 
-           
-
+                }
 
             //estados de cada interes
             $idcat=0;
             $datosespe = $conexion->query("
-            SELECT *  FROM especialidad  where estado_actual=0 and fecha_fin>curdate()");
+            SELECT *  FROM especialidad  where estado_actual=0 and MONTH(fecha_inicio)=$mes and fecha_fin>curdate()");
             $datosespe = $datosespe->fetchAll();
             foreach ($datosespe as $rowsespecialidad) {
             $idespecialidad=$rowsespecialidad['idespecialidad'];
@@ -65,8 +77,8 @@
             foreach ($datosinteres as $rowsinteres) {
             $totalinterescurso=$rowsinteres['totalint'];
             }
-
-            $porcentaje=(($totalinterescurso*100)/$cantTotal);
+            if($cantidadpormes>0){
+            $porcentaje=(($totalinterescurso*100)/$cantidadpormes);}
         
            
                //USUARIO EN LINEA
@@ -108,7 +120,7 @@
                 </td>
 
                 <td>
-                '.$totalinterescurso.' de '.$cantTotal.' --->   '.round($porcentaje,2).'
+                '.$totalinterescurso.' de '.$cantidadpormes.' --->   '.round($porcentaje,2).' %
                   <div class="progress">
                      <div class="progress-bar bg-success progress-bar-striped" role="progressbar" style="width: '.$porcentaje.'%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                   </div>
@@ -131,8 +143,8 @@
 
         }
 
-        public function total_estados_interes_controlador()
-        {
+        public function total_estados_interes_controlador($mes)
+        {            $prematri=0;
                     $porcentaje=0;
                     $table="";
                     
@@ -165,9 +177,13 @@
             //estados de cada interes
 
             $table.=' 
+            <th>
+                Pre Inscritos
+                </th>
                 <th>
                 Total
                 </th>
+                
               </tr>
             </thead>
             <tbody>';
@@ -176,7 +192,7 @@
             $idcat=0;
            
             $datosespe = $conexion->query("
-            SELECT *  FROM especialidad  where estado_actual=0 and fecha_fin>curdate()");
+            SELECT *  FROM especialidad  where estado_actual=0 and MONTH(fecha_inicio)=$mes and fecha_fin>curdate()");
             $datosespe = $datosespe->fetchAll();
             foreach ($datosespe as $rowsespecialidad) {
             $sumadeestados=0;
@@ -204,14 +220,22 @@
             $datosinteres = $datosinteres->fetchAll();
             foreach ($datosinteres as $rowsinteres) {
               $cantidadestado=$rowsinteres['totalint'];
+              if($idestado==8){
+                $prematri= $cantidadestado;
+
+              }
               $sumadeestados+= $cantidadestado;
+              $total=$sumadeestados-$prematri;
+              $prematri=0;
 
 
               $table.='
            
               <td class="font-weight-medium">
               '.$cantidadestado.'
-            </td>';
+            </td>
+           
+          ';
             
             }
            }
@@ -219,10 +243,14 @@
   
             $table.='
            
-            
+                <td class="font-weight-medium">
+                '.$total.'
+              </td>
+
                 <td class="bg">
                 '.$sumadeestados.'
                   </td>
+                 
           </tr> 
           ';
             

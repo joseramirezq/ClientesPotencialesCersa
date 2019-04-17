@@ -70,4 +70,15 @@ class interesControlador extends interesModelo
          //   $a= "<script>console.log( 'No insertado' );</script>";
         //}
     }
+
+    public function actualizar_estado_interes()
+    {  
+        session_start(['name'=>'SRCP']);
+        $_SESSION['idestado']=$_POST['idestado'];
+
+        $direccion=SERVERURL."sesionestadoactual";
+        header('location:'.$direccion);} 
+     
+
+
  }

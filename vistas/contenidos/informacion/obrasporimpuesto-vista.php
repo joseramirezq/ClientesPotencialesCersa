@@ -44,7 +44,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input type="text" name="telefono" class="form-control" placeholder="Número de teléfono" >
+                                            <input type="text" name="telefono" class="form-control" placeholder="Número de teléfono" required >
                                             <div class="input-group-append">
                                                 <span class="input-group-text">
                                                     <i class="mdi mdi-check-circle-outline"></i>
@@ -61,7 +61,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input type="text" name="correo" class="form-control" placeholder="Correo Electronico" required>
+                                            <input type="text" name="correo" class="form-control" placeholder="Correo Electrónico" required>
                                             <div class="input-group-append">
                                                 <span class="input-group-text">
                                                     <i class="mdi mdi-check-circle-outline"></i>
@@ -75,7 +75,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <input type="text" name="profesion" class="form-control" placeholder="Profesión">
+                                            <input type="text" name="profesion" class="form-control" placeholder="Profesión" required>
                                             <div class="input-group-append">
                                                 <span class="input-group-text">
                                                     <i class="mdi mdi-check-circle-outline"></i>
