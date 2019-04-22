@@ -136,6 +136,20 @@ class cursoControlador extends cursoModelo
 
     }
 
+    public function cambiar_correos_sino()
+    {
+       // $arrayidinteres =$_POST['array'];
+        $idespecialidad = mainModel::limpiar_cadena($_POST['especialidad']);
+     
+        $ActualizarArray = cursoModelo::cambiar_estado_correos($idespecialidad);
+           $direccion=SERVERURL."enviarcorreos";
+          header('location:'.$direccion);
+
+
+
+
+    }
+
 
     //mostrar tabla estados
     public function leer_cursos_controlador()
@@ -1321,6 +1335,43 @@ class cursoControlador extends cursoModelo
        }
        return $tarjeta;
    }
+   public function mostrar_correos_yaenviados()
+   {
+    $correos = "";
+    $emails="";
+    $conexion = mainModel::conectar();
+    $usuario=$_SESSION['codigo_srcp'];
+
+    $datosd = $conexion->query("
+    SELECT * FROM especialidad WHERE sesion='$usuario' ");
+    $datosd = $datosd->fetchAll();
+    foreach ($datosd as $rows) {
+
+        $idespecialidad=$rows['idespecialidad'];
+        
+        $datosInteress = $conexion->query("
+        SELECT codigocliente FROM interes WHERE idespecialidad='$idespecialidad' AND envio_correo=1");
+        $datosInteress = $datosInteress->fetchAll();
+        foreach ($datosInteress as $rowsIntd) {
+           
+
+
+        $codigoCliente=$rowsIntd['codigocliente'];
+        $datosCliente = $conexion->query("
+        SELECT correo_cli FROM cliente WHERE codigocliente='$codigoCliente' and correo_cli LIKE '%@%' ");
+        $datosCliente = $datosCliente->fetchAll();
+     
+        foreach ($datosCliente as $rowsCliente) {
+           // $emails=$rowsCliente['correo_cli'];
+            $correos .=''.$rowsCliente['correo_cli'].'<br>';
+        }
+    }
+
+
+    }
+    return $correos;
+   }
+
    public function mostrar_correos()
    {
     $correos = "";
@@ -1336,7 +1387,7 @@ class cursoControlador extends cursoModelo
         $idespecialidad=$rows['idespecialidad'];
         
         $datosInteress = $conexion->query("
-        SELECT codigocliente FROM interes WHERE idespecialidad='$idespecialidad'");
+        SELECT codigocliente FROM interes WHERE idespecialidad='$idespecialidad' and envio_correo=0");
         $datosInteress = $datosInteress->fetchAll();
         foreach ($datosInteress as $rowsIntd) {
            
@@ -1373,7 +1424,7 @@ class cursoControlador extends cursoModelo
         $idespecialidad=$rows['idespecialidad'];
         
         $datosInteress = $conexion->query("
-        SELECT codigocliente FROM interes WHERE idespecialidad='$idespecialidad'");
+        SELECT codigocliente FROM interes WHERE idespecialidad='$idespecialidad' and envio_correo=0");
         $datosInteress = $datosInteress->fetchAll();
         foreach ($datosInteress as $rowsIntd) {
            
@@ -1388,12 +1439,56 @@ class cursoControlador extends cursoModelo
            // $emails=$rowsCliente['correo_cli'];
             $correos .=''.$rowsCliente['correo_cli'].',';
         }
+
+
     }
+
+    $correos.='';
 
 
     }
     return $correos;
    }
+
+   public function cambiar_correo_enviado()
+   {
+    $correos = "";
+    $theVariable = array();
+    $emails="";
+    $conexion = mainModel::conectar();
+    $usuario=$_SESSION['codigo_srcp'];
+    $cont=0;
+
+    function array_envia($array) { 
+        $tmp = serialize($array); 
+        $tmp = urlencode($tmp); 
+        return $tmp; 
+    }
+
+    $datosd = $conexion->query("
+    SELECT * FROM especialidad WHERE sesion='$usuario' ");
+    $datosd = $datosd->fetchAll();
+    foreach ($datosd as $rows) {
+
+        $idespecialidad=$rows['idespecialidad'];      
+    
+    $correos.=' 
+    <form class="forms-sample" action="'.SERVERURL.'ajax/cursoAjax.php" method="POST">
+        <div class="form-group"> 
+            <input type="hidden" name="especialidad" value="'.$idespecialidad.'">  
+            <button type="submit" name="enviar_correos" class="btn btn-primary mr-2">Ya envie correos</button>
+        </div>
+    </form>
+    <a href="'.SERVERURL.'sesionestadoactual" class="btn btn-dark mr-2">Cancelar</a>
+     
+   
+    ';
+
+
+    }
+    return $correos;
+   }
+
 
     public function sesion_curso_exitoso_controlador()
     {
@@ -1825,6 +1920,7 @@ class cursoControlador extends cursoModelo
     $datosInteres = $datosInteres->fetchAll();
     foreach ($datosInteres as $rows) {
         $interes_des=$rows['descri_estado'];
+        $interes_correo=$rows['envio_correo'];
 
     //SELECIONAR cliente
     $codigoCliente=$rows['codigocliente'];
@@ -1876,19 +1972,24 @@ class cursoControlador extends cursoModelo
                 }
 
                 $tarjeta .= '     
-                        </div>
-                    </td>
-                    <td>
-                    '.$interes_des.'
-                    </td>
-                    <td>
-                    '.$rows['fecha_notificacion'].'
-                    </td>
-                    <td>
-                    '.$rows['fecha_cambio_estado'].'
-                    </td>
-                 
-                 </tr>';
+                </div>
+            </td>';
+        if($interes_correo==1){
+            $tarjeta .= '<td class="text-success">SI</td>';
+        }
+        else{
+            $tarjeta .= '<td class="text-danger">NO</td>';
+        }
+
+      $tarjeta .= '        <td >'.$interes_des.'</td>
+            <td>
+            '.$rows['fecha_notificacion'].'
+            </td>
+            <td>
+            '.$rows['fecha_cambio_estado'].'
+            </td>
+         
+         </tr>';
     }}
         }
     
@@ -1922,6 +2023,7 @@ class cursoControlador extends cursoModelo
         $datosInteres = $datosInteres->fetchAll();
         foreach ($datosInteres as $rows) {
             $interes_des=$rows['descri_estado'];
+            $interes_correo=$rows['envio_correo'];
 
         //SELECIONAR cliente
         $codigoCliente=$rows['codigocliente'];
@@ -1974,9 +2076,15 @@ class cursoControlador extends cursoModelo
 
                     $tarjeta .= '     
                             </div>
-                        </td>
-                        <td>SI</td>
-                        <td>'.$interes_des.'</td>
+                        </td>';
+                    if($interes_correo==1){
+                        $tarjeta .= '<td class="text-success">SI</td>';
+                    }
+                    else{
+                        $tarjeta .= '<td class="text-danger">NO</td>';
+                    }
+
+                  $tarjeta .= '        <td >'.$interes_des.'</td>
                         <td>
                         '.$rows['fecha_notificacion'].'
                         </td>

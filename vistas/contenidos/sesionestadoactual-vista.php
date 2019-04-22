@@ -43,6 +43,7 @@
                                 <th>Acción</th>
 
                                 <th>Estado</th>
+                                <th><i class="fa fa-envelope-o icon-sm"></i></th>
                                 <th>Descripcion</th>
                                 <th>Fecha programada</th>
                                 <th>Fecha Cambio Estado</th>

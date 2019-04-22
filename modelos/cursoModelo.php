@@ -80,6 +80,25 @@ class cursoModelo  extends mainModel
         $sql->execute();
         return $sql;
     }
+
+    protected function cambiar_estado_correos($datos)
+    {   
+       
+        //$total= $datos['Total'];
+        $Idespecialidad= $datos;
+        
+      
+        $sql=self::conectar()->prepare("UPDATE interes SET
+        envio_correo=1 WHERE envio_correo=0 AND idespecialidad=$Idespecialidad");
+
+       
+      ;
+   
+
+        $sql->execute();
+        return $sql;
+    }
+
     protected function agregar_sesion_curso_modelo($datos){
 
         $sql=self::conectar()->prepare("UPDATE especialidad SET sesion=:Usuario WHERE idespecialidad=:Curso");

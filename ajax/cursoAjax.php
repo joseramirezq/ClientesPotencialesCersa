@@ -53,6 +53,20 @@ else if(isset($_POST['agregarcursobd'])){
    }
 
  }
+else if(isset($_POST['enviar_correos'])){
+
+   require_once("../controladores/cursoControlador.php");
+     
+   //INSTANCIOAMOS LA CLASE
+   $instanciaCurso= new cursoControlador();
+  //valida los campos requeridos
+   if(isset($_POST['especialidad'])){
+      echo  $instanciaCurso->cambiar_correos_sino();
+   }else{
+
+   }
+
+ }
 
  else if(isset($_POST['eliminar_curso'])){
 

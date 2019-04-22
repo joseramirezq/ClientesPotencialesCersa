@@ -41,6 +41,7 @@ class vistasModelo
 
             //vistas reportes
             "graficos",
+            "reportesgenerales",
 
             //sesiones
             "sesioncurso",

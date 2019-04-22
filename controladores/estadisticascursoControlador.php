@@ -143,6 +143,233 @@
 
         }
 
+        public function reporte_general_curso($mes)
+        {            $prematri=0;
+                    $porcentaje=0;
+                    $table="";
+                    
+                    $conexion=mainModel::conectar();
+
+            $idcat=0;
+            $cantidadestado=0;
+            $cantidatotal=0;
+            $cantidadestadoMatriculados=0;
+           
+            $datosespe = $conexion->query("
+            SELECT *  FROM especialidad  where estado_actual=0 and MONTH(fecha_inicio)=$mes and fecha_fin>curdate()");
+            $datosespe = $datosespe->fetchAll();
+            foreach ($datosespe as $rowsespecialidad) {
+            $sumadeestados=0;
+            $idespecialidad=$rowsespecialidad['idespecialidad'];
+            $idcat=$rowsespecialidad['idcategoria'];
+
+            $table.='
+            <tr>
+              <td class="font-weight-medium">
+              '.$rowsespecialidad['fecha_inicio'].'
+              </td>
+
+              <td class="font-weight-medium" style="width:50px">
+                '.$rowsespecialidad['nombre_es'].'
+              </td>';
+
+
+              //RESERVA
+            $datosEstado = $conexion->query("
+            SELECT * FROM estado WHERE idestado=4"); 
+             $datosEstado = $datosEstado->fetchAll();
+            foreach ($datosEstado as $rowsEstado) {
+              $idestado=$rowsEstado['idestado'];
+        
+                $totalinterescurso=0;
+                $datosinteres = $conexion->query("
+                SELECT COUNT(*) AS totalint FROM interes WHERE idespecialidad='$idespecialidad' AND idestado=$idestado");
+                $datosinteres = $datosinteres->fetchAll();
+
+                foreach ($datosinteres as $rowsinteres) {
+                  $cantidadReserva=$rowsinteres['totalint'];
+                  $table.='
+                  <td class="font-weight-medium">
+                  '.$cantidadReserva.'
+                  </td>';
+                }
+
+              }
+
+
+              //MATRICULADOS
+              $datosEstado = $conexion->query("
+              SELECT * FROM estado WHERE idestado=3"); 
+               $datosEstado = $datosEstado->fetchAll();
+              foreach ($datosEstado as $rowsEstado) {
+                $idestado=$rowsEstado['idestado'];
+          
+                  $totalinterescurso=0;
+                  $datosinteres = $conexion->query("
+                  SELECT COUNT(*) AS totalint FROM interes WHERE idespecialidad='$idespecialidad' AND idestado=$idestado");
+                  $datosinteres = $datosinteres->fetchAll();
+                  
+                  foreach ($datosinteres as $rowsinteres) {
+                    $cantidadestadoMatriculados=$rowsinteres['totalint'];
+                    $table.='
+                    <td class="font-weight-medium">
+                    '.$cantidadestadoMatriculados.'
+                    </td>';
+                  }
+  
+                }
+
+             
+
+                //total
+              
+                    $datosinteres = $conexion->query("
+                    SELECT COUNT(*) AS totalint FROM interes WHERE idespecialidad='$idespecialidad'");
+                    $datosinteres = $datosinteres->fetchAll();
+                    foreach ($datosinteres as $rowsinteres) {
+                      $cantidatotal=$rowsinteres['totalint'];      
+                    }
+    
+         
+
+                //correo
+                $datosEstado = $conexion->query("
+                SELECT * FROM estado WHERE idestado=8"); 
+                 $datosEstado = $datosEstado->fetchAll();
+                foreach ($datosEstado as $rowsEstado) {
+                  $idestado=$rowsEstado['idestado'];
+            
+                    $totalinterescurso=0;
+                    $datosinteres = $conexion->query("
+                    SELECT COUNT(*) AS totalint FROM interes WHERE idespecialidad='$idespecialidad' AND idestado=$idestado");
+                    $datosinteres = $datosinteres->fetchAll();
+                    
+                    foreach ($datosinteres as $rowsinteres) {
+                      $cantidadcorreo=$rowsinteres['totalint'];
+                     
+                    }
+                      
+                  }
+                  $preinscritos= $cantidatotal-$cantidadcorreo;
+                  $meta=$preinscritos/5;
+
+                 if($cantidadestadoMatriculados!=0){
+                  $porcentajeaance=($cantidadestadoMatriculados*100)/$meta;}
+                 else{
+                 $porcentajeaance=0;
+                 }
+
+                 //Porcentaje de preinscritos con respecto a los matriculados
+                 if($cantidadestadoMatriculados!=0){
+                 $preinscritosmatricu=($cantidadestadoMatriculados*100)/$preinscritos;}
+                 else{
+                  $preinscritosmatricu=0;
+                  }
+
+
+                  //colores
+                  
+
+
+                  $table.='
+                  <td class="font-weight-medium" ';
+                  
+                  if($porcentajeaance<=60){
+                    $table.='bgcolor="red"';
+                  }
+
+                  else if($porcentajeaance>=61 && $porcentajeaance<=85){
+                    $table.='bgcolor="#FFE633"';
+                  }
+
+                  else if($porcentajeaance>=86 && $porcentajeaance<=100){
+                    $table.='bgcolor="#09C81A"';
+                  }else{
+                    $table.='bgcolor="#7533FF"';
+                  }
+                  
+                  
+                  
+                  $table.='>
+                  '.round($porcentajeaance,2).' %
+                  </td>
+                  <td class="font-weight-medium">
+                  '.round($meta).'
+                  </td>
+                  ';
+
+
+                  $table.='
+                  <td class="font-weight-medium">
+                   '.$preinscritos.'
+                  </td>';
+
+                  $table.='
+                  <td class="font-weight-medium">
+                  '.$cantidadcorreo.'
+                  </td>';
+
+                  $table.='
+                  <td class="font-weight-medium" ';
+                  
+                  if($preinscritosmatricu<=60){
+                    $table.='bgcolor="red"';
+                  }
+
+                  else if($preinscritosmatricu>=61 && $preinscritosmatricu<=85){
+                    $table.='bgcolor="#FFE633"';
+                  }
+
+                  else if($preinscritosmatricu>=86 && $preinscritosmatricu<=100){
+                    $table.='bgcolor="#09C81A"';
+                  }else{
+                    $table.='bgcolor="#7533FF"';
+                  }
+                  
+
+                  $table.='
+                  >
+                  '.round($preinscritosmatricu,2).' %
+                  </td>';
+
+                  
+
+   
+
+
+                 // if($idestado==8){
+                 //   $prematri= $cantidadestado; }
+
+
+             // $sumadeestados+= $cantidadestado;
+             // $total=$sumadeestados-$prematri;
+              //$prematri=0;
+
+
+          
+            
+           
+  
+            $table.='
+           
+                <td class="font-weight-medium">
+               
+              </td>
+
+                <td class="bg">
+              
+                  </td>
+                 
+          </tr> 
+          ';
+            
+        }
+            
+                return $table;
+
+        }
+
+        
         public function total_estados_interes_controlador($mes)
         {            $prematri=0;
                     $porcentaje=0;
